@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.ReferenceTypeFlatMapper">
+	
+	<resultMap id="resMap" type="ReferenceTypeFlat">
+		<id 	property="idReferenceType" 	column="REFT_id_reference_type" />
+		<result property="code" 			column="REFT_code" />
+		<result property="managedBy" 		column="REFT_managed_by" />
+		<result property="fkName" 			column="REFT_fk_name" />
+		<result property="name" 			column="REFT_name" />
+		<result property="fkDescription" 	column="REFT_fk_description" />
+		<result property="description" 		column="REFT_description" />
+
+	</resultMap>
+	
+	<sql id="fields">
+		id_reference_type 					AS REFT_id_reference_type,
+		code								AS REFT_code,
+		managed_by							AS REFT_managed_by,
+		reference_type.fk_name				AS REFT_fk_name,
+		reference_type.fk_description		AS REFT_fk_description,
+		tr_type_name.default_value 			AS REFT_name,
+		tr_type_desc.default_value			AS REFT_description
+	</sql>
+	
+	<sql id="baseSelect">
+		SELECT		<include refid="fields" />
+		FROM 		reference_type
+		LEFT OUTER JOIN translation tr_type_name ON tr_type_name.id_translation = reference_type.fk_name
+		LEFT OUTER JOIN translation tr_type_desc ON tr_type_desc.id_translation = reference_type.fk_description
+	</sql>
+	
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE 		reference_type.id_reference_type = #{idReferenceType}
+		ORDER BY 	tr_type_name.default_value
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		ORDER BY 	tr_type_name.default_value
+	</select>
+	
+	<select id="findByCode" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE 		reference_type.code = #{code}
+		ORDER BY 	tr_type_name.default_value
+	</select>
+	
+	
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO reference_type(
+			code,
+			managed_by,
+			fk_name,
+			fk_description
+		) VALUES (
+			#{code},
+			#{managedBy},
+			#{fkName},
+			#{fkDescription}
+		)
+		<selectKey   resultType="long" keyProperty="idReferenceType"    keyColumn="id_reference_type"   order="BEFORE" >		
+		select next from _sequences where name = 'ID_REFERENCE_TYPE_SEQ'
+		</selectKey>	
+	</insert>
+
+	
+	<update id="updateByPrimaryKey" keyProperty="idReferenceType">
+		UPDATE reference_type 
+		SET 
+			code = #{code},
+			fk_name 		= #{fkName},
+			fk_description 	= #{fkDescription}
+		WHERE 
+			id_reference_type = #{idReferenceType}
+	</update>
+	
+	
+	<select id="exsistReferenceTypeCode" resultType="boolean" parameterType="map">
+		SELECT  COUNT(id_reference_type) AS result 
+		FROM  reference_type 
+		WHERE code = #{code}
+			<if test="idToExclude != null">
+				AND reference_type.id_reference_type != #{idToExclude}
+			</if>
+	</select>
+
+
+</mapper>

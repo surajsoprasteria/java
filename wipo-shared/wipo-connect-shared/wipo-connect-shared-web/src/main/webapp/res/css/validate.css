@@ -1,0 +1,126 @@
+
+/* VALIDATION */
+input.error,
+select.error,
+select.error + label + div.bootstrap-select button.selectpicker,
+textarea.error,
+input.error + label + div.bootstrap-tagsinput,
+select.error + label + div.bootstrap-tagsinput,
+.bootstrap-select > select.error ~ .dropdown-toggle {
+	border-color: #E87352;
+	background-color: #EEBFB2;
+}
+
+div.toggle input[type=checkbox].error + label + .toggle-group .toggle-on,
+div.toggle input[type=checkbox].error + label + .toggle-group .toggle-off{
+	border-color: #E87352;
+	background-color: #EEBFB2;
+	color: #333;
+}
+
+input.error[readonly]{
+	border-color: #E87352;
+	background-color: #EEBFB2;
+}
+
+input.error:FOCUS,
+select.error:FOCUS,
+select.error + label.error + div.bootstrap-select button.selectpicker,
+textarea.error:FOCUS {
+	border-color: #E87352 !important;
+	-webkit-box-shadow: none !important;
+  	-moz-box-shadow: none !important;
+  	box-shadow: none !important;
+}
+
+input + label.error{
+	display:inline-block;
+	position: absolute;
+	bottom:2px;
+	right:8px;
+	cursor: help;
+	z-index: 999;
+	width: auto !important;
+}
+
+input.text-right + label.error {
+	left:8px;
+	right:auto;
+}
+
+.input-group input + label.error{
+    right:33px;
+}
+
+textarea + label.error{
+	display:inline-block;
+	position: absolute;
+	bottom:2px;
+	right:25px;
+	cursor: help;
+	z-index: 999;
+	width: auto !important;
+}
+
+input.input-sm + label.error{
+	bottom:0px;
+	right:6px;
+}
+
+input.input-sm.text-right + label.error{
+	left:6px;
+	right:auto;
+}
+
+select + label.error{
+	display:inline-block;
+	position: absolute;
+	bottom:2px;
+	right:20px;
+	cursor: help;
+	z-index: 999;
+	width: auto !important;
+}
+
+div.toggle input[type=checkbox].error + label{
+	color: #333;
+	right: 13px;
+}
+
+.input-group.date input + label.error{
+	display:inline-block;
+	position: absolute;
+	bottom:2px;
+	right:33px;
+	cursor: help;
+	z-index: 999;
+	width: auto !important;
+}
+
+div.panel.manual-panel-error .panel-heading,
+div.panel.panel-error .panel-heading,
+div.multi-panel-container.panel-error div.panel .panel-heading{
+	background-color: #EEBFB2;
+	/*border-color:#E87352;*/
+}
+
+
+ul.nav.nav-tabs li a.tab-error{
+	background-color: #EEBFB2;
+	border-color:#E87352;
+}
+ul.nav.nav-tabs li.active a.tab-error {
+	color: #555;
+	background-color: transparent;
+	border: 1px solid #ddd;
+}
+
+/* LOGIN FORM VALIDATION */
+
+.form-signin input.error + label.error,
+.form-signin select.error + label.error{
+	position: absolute;
+	top: 14px;
+	right: 10px;
+	cursor: help;
+}

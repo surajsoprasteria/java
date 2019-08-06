@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper">
+	<sql id="fields">
+		derived_view.id_derived_view AS DEW_id_derived_view ,
+		derived_view.fk_work AS DEW_fk_work,
+		derived_view.territory_formula
+	</sql>
+
+	<sql id="fieldsDerivedViewName">
+		derived_view_name.id_derived_view_name AS DEWN_id_derived_view_name ,
+		derived_view_name.fk_derived_view AS DEWN_fk_derived_view ,
+		derived_view_name.fk_name AS DEWN_fk_name ,
+		derived_view_name.fk_role AS DEWN_fk_role ,
+		derived_view_name.creator_ref_index AS DEWN_creator_ref_index,
+		derived_view_name.fk_source_type AS DEWN_fk_source_type,
+		derived_view_name.ref_index AS DEWN_ref_index
+	</sql>
+
+	<sql id="fieldsDerivedViewNameShare">
+		derived_view_name_share.id_derived_view_name_share AS DEWNS_id_dvns ,
+		derived_view_name_share.fk_derived_view_name AS DEWNS_fk_derived_view_name ,
+		derived_view_name_share.fk_right_type AS DEWNS_fk_right_type ,
+		derived_view_name_share.share_value AS DEWNS_share,
+		right_type.code AS DEWNSRT_code
+	</sql>
+
+	<resultMap id="resMap" type="DerivedView">
+		<id property="idDerivedView" column="DEW_id_derived_view" />
+		<result property="fkWork" column="DEW_fk_work" />
+		<result property="territoryFormula" column="territory_formula" />
+		<collection property="derivedViewNameList" ofType="DerivedViewName" resultMap="resMapDerivedViewName" />
+	</resultMap>
+
+	<resultMap id="resMapDerivedViewName" type="DerivedViewName">
+		<id property="idDerivedViewName" column="DEWN_id_derived_view_name" />
+		<result property="fkDerivedView" column="DEWN_fk_derived_view" />
+		<result property="fkRole" column="DEWN_fk_role" />
+		<result property="roleCode" column="R_code" />
+		<result property="fkSourceType" column="DEWN_fk_source_type" />
+		<result property="sourceTypeCode" column="R_source_type" />
+		<result property="creatorRefIndex" column="DEWN_creator_ref_index" />
+		<result property="refIndex" column="DEWN_ref_index" />
+		<result property="fkSourceType" column="DEWN_fk_source_type" />
+		<result property="sourceType" column="TRAUX_source_type" />
+		<association property="name" resultMap="org.wipo.connect.shared.persistence.mapping.NameMapper.resMap" javaType="Name" />
+		<collection property="derivedViewNameShareList" ofType="DerivedViewNameShare" resultMap="resMapDerivedViewNameShare" />
+	</resultMap>
+
+	<resultMap id="resMapDerivedViewNameShare" type="DerivedViewNameShare">
+		<id property="idDerivedViewNameShare" column="DEWNS_id_dvns" />
+		<result property="fkDerivedViewName" column="DEWNS_fk_derived_view_name" />
+		<result property="fkRightType" column="DEWNS_fk_right_type" />
+		<result property="rightTypeCode" column="DEWNSRT_code" />
+		<result property="shareValue" column="DEWNS_share" />
+		<result property="rightTypeCmoAcronym" column="DEWNS_cmo_acronym" />
+	</resultMap>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" /> ,
+			<include refid="fieldsDerivedViewName" /> ,
+			<include refid="fieldsDerivedViewNameShare" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.NameMapper.fields" />,
+			ref_source_type.code AS R_source_type,
+			tr_aux.default_value AS TRAUX_source_type
+		FROM derived_view
+		LEFT OUTER JOIN derived_view_name ON derived_view_name.fk_derived_view = derived_view.id_derived_view
+		LEFT OUTER JOIN name ON derived_view_name.fk_name = name.id_name
+		LEFT OUTER JOIN reference as reference_cmo ON derived_view_name.fk_source_type = reference_cmo.id_reference
+		LEFT OUTER JOIN translation as tr_aux ON reference.fk_value = tr_aux.id_translation
+    	LEFT OUTER JOIN derived_view_name_share ON derived_view_name_share.fk_derived_view_name = derived_view_name.id_derived_view_name
+    	LEFT OUTER JOIN right_type on right_type.id_right_type = derived_view_name_share.fk_right_type
+    	LEFT OUTER JOIN reference ref_source_type ON ref_source_type.id_reference = derived_view_name.fk_source_type
+
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			derived_view.id_derived_view = #{idDerivedView}
+	</select>
+
+	<select id="findByWork" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			derived_view.fk_work = #{idWork}
+	</select>
+
+	<select id="findDerivedViewNameByDerivedView" resultMap="resMapDerivedViewName">
+		SELECT
+			<include refid="fieldsDerivedViewName" />
+		FROM derived_view_name
+		WHERE fk_derived_view = #{idDerivedView}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO derived_view(
+		   fk_work,
+		   territory_formula
+		) VALUES (
+		   #{fkWork},
+		   #{territoryFormula}
+		)
+		<selectKey   resultType="long" keyProperty="idDerivedView"    keyColumn="id_derived_view"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_DERIVED_VIEW_SEQ'
+		</selectKey>	
+	</insert>
+
+	<insert id="insertDerivedViewName" useGeneratedKeys="true">
+		INSERT INTO derived_view_name(fk_derived_view, fk_name, fk_role,
+		creator_ref_index  ,  ref_index , fk_source_type)
+		VALUES (#{fkDerivedView}, #{name.idName}, #{fkRole},
+		#{creatorRefIndex} , #{refIndex},#{fkSourceType})
+		
+		<selectKey   resultType="long" keyProperty="idDerivedViewName"    keyColumn="id_derived_view_name"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_DERIVED_VIEW_NAME_SEQ'
+		</selectKey>	
+	</insert>
+
+	<insert id="insertDerivedViewNameShare" useGeneratedKeys="true">
+		INSERT INTO derived_view_name_share(fk_derived_view_name,
+		                                    fk_right_type,
+		                                    share_value)
+		VALUES (#{fkDerivedViewName},
+				<choose>
+					<when test="fkRightType != null">
+						#{fkRightType},
+					</when>
+					<otherwise>
+						(SELECT id_right_type FROM right_type WHERE code = #{rightTypeCode}),
+					</otherwise>
+				</choose>
+		 		#{shareValue})
+		<selectKey   resultType="long" keyProperty="idDerivedViewNameShare"    keyColumn="id_derived_view_name_share"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_DERIVED_VIEW_NAME_SHARE_SEQ'
+		</selectKey>
+				
+	</insert>
+
+	<update id="updateByPrimaryKey">
+		UPDATE derived_view
+		   SET fk_work = #{fkWork},
+		   		territory_formula=#{territoryFormula}
+		 WHERE id_derived_view = #{idDerivedView}
+	</update>
+
+	<update id="updateDerivedViewName">
+		UPDATE derived_view_name
+		SET
+	       fk_derived_view = #{fkDerivedView},
+	       fk_name = #{name.idName},
+	       fk_role = #{fkRole},
+		   creator_ref_index = #{creatorRefIndex} ,
+		   ref_index = #{refIndex}
+	    WHERE id_derived_view_name = #{idDerivedViewName}
+	</update>
+
+	<update id="updateDerivedViewNameShare">
+		UPDATE derived_view_name_share
+		SET
+			fk_derived_view_name = #{fkDerivedViewName},
+		    fk_right_type = #{fkRightType},
+		    share_value = #{shareValue},
+		WHERE id_derived_view_name_share = #{idDerivedViewNameShare}
+	</update>
+
+	<delete id="deleteByPrimaryKey">
+		DELETE FROM derived_view  WHERE id_derived_view = #{idDerivedView}
+	</delete>
+
+	<delete id="deleteDerivedViewNameByDerivedView">
+		DELETE FROM derived_view_name WHERE fk_derived_view = #{idDerivedView}
+	</delete>
+
+	<delete id="deleteDerivedViewNameById">
+		DELETE FROM derived_view_name WHERE id_derived_view_name = #{idDerivedViewName}
+	</delete>
+
+	<delete id="deleteDerivedViewNameShareByDerivedViewName">
+		DELETE FROM derived_view_name_share WHERE fk_derived_view_name = #{idDerivedViewName}
+	</delete>
+
+<!-- 	
+	    <select id ="isExistsByNameId" resultType="boolean">
+		SELECT CASE WHEN EXISTS(SELECT *
+								FROM 	derived_view_name
+								inner 	join DERIVED_VIEW on derived_view_name.FK_DERIVED_VIEW=DERIVED_VIEW.ID_DERIVED_VIEW
+								inner 	join work on DERIVED_VIEW.FK_WORK=work.ID_WORK
+								WHERE 	fk_name = #{fkName}
+								and 	exists(	select 0
+												from 	work work_temp
+												where 	work_temp.ID_WORK=WORK.ID_WORK
+												and 	work_temp.fk_status NOT IN(SELECT id_work_status from work_status aux_work_status where aux_work_status.code = '${@org.wipo.connect.shared.exchange.enumerator.WorkStatusEnum@DELETED.toString()}')
+										)
+								)
+     				THEN 1
+     				ELSE 0
+   				END
+		FROM dual result
+	</select> -->
+	<select id ="isExistsByNameId" resultType="boolean">
+		SELECT CASE WHEN EXISTS(SELECT *
+								FROM 	derived_view_name
+								inner 	join DERIVED_VIEW on derived_view_name.FK_DERIVED_VIEW=DERIVED_VIEW.ID_DERIVED_VIEW
+								inner 	join work on DERIVED_VIEW.FK_WORK=work.ID_WORK
+								WHERE 	fk_name = #{fkName}
+								and 	exists(	select 0
+												from 	work work_temp
+												where 	work_temp.ID_WORK=WORK.ID_WORK
+												and 	work_temp.fk_status NOT IN(SELECT id_work_status from work_status aux_work_status where aux_work_status.code = '${@org.wipo.connect.shared.exchange.enumerator.WorkStatusEnum@DELETED.toString()}')
+										)
+								)
+     				THEN 1
+     				ELSE 0
+   				END
+		FROM dual
+	</select>
+
+	<select id ="findIdNameInWorkByNameMainId" resultType="java.lang.Long">
+		select derived_view_name.fk_name
+			from derived_view
+			join derived_view_name on derived_view_name.fk_derived_view=derived_view.id_derived_view
+			where derived_view_name.fk_name =(
+			SELECT name.id_name
+
+			FROM			name
+	        where 			name.main_id=#{mainId})
+
+	</select>
+
+	<update id="updateNameRefDerivedViewName">
+		UPDATE derived_view_name
+		SET
+	       fk_name = #{newIdName},
+	    WHERE id_derived_view_name = #{oldIdName}
+	</update>
+
+</mapper>

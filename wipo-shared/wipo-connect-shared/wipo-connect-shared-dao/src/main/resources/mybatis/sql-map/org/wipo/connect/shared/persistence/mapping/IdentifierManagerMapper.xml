@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.IdentifierManagerMapper">
+
+	<sql id="fields">
+		id_identifier_manager,
+		ref_table,
+		last_val
+	</sql>
+
+	<resultMap id="resMap" type="IdentifierManager">
+		<id property="idIdentifierManager" column="id_identifier_manager" />
+		<result property="lastVal" column="last_val" />
+        <result property="refTable" column="ref_table" />
+	</resultMap>
+
+	<select id="selectAndLock" resultMap="resMap">
+		SELECT		<include refid="fields" />
+		FROM 		identifier_manager
+		WHERE		ref_table = #{refTable}
+		FOR UPDATE
+	</select>
+
+	<update id="createNewCounter" >
+		INSERT INTO identifier_manager (ref_table, last_val)
+		VALUES (#{refTable},0)
+	</update>
+
+	<update id="update" >
+		UPDATE 		identifier_manager
+		SET			last_val = #{newVal}
+		WHERE		ref_table = #{refTable}
+	</update>
+
+	 <select id="checkIdUniqueness" resultType="boolean">
+		SELECT COUNT(*) FROM DUAL WHERE NOT EXISTS(
+		
+			SELECT 0 FROM ${refTable}
+			
+			<if test="refTable.equals('name') and idsToExclude != null and idsToExclude.size  > 0">
+				LEFT OUTER JOIN	interested_party_name ON interested_party_name.fk_name = name.id_name
+			</if>
+			
+				WHERE main_id = #{mainId} 
+				AND (deleted IS NULL OR deleted = 0)
+			<if test="refTable.equals('name') and idsToExclude != null and idsToExclude.size  > 0">
+				AND interested_party_name.fk_interested_party NOT IN
+				<foreach collection="idsToExclude" item="id" open="(" close=")" separator="" index="idx">
+					#{id}
+					<choose>
+						<when test="(idx > 0) and (idsToExclude.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+							) AND interested_party_name.fk_interested_party IN (
+						</when>
+						<when test="idsToExclude.size - idx - 1 == 0">
+	
+						</when>
+						<otherwise>
+							,
+						</otherwise>
+					</choose>
+		        </foreach>
+			</if>
+		)
+		
+	</select>
+
+
+</mapper>

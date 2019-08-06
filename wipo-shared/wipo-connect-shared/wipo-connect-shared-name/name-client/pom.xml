@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.wipo.suite.modules.name</groupId>
+		<artifactId>wipo-name</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>name-client</artifactId>
+	<packaging>jar</packaging>
+
+	<!-- More Project Information -->
+	<name>Modules name - client</name>
+
+	<description>WIPO Suite Modules name client provides REST Client for module name..  
+	</description>
+
+	<dependencies>		
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<projectNameTemplate>name-client</projectNameTemplate>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

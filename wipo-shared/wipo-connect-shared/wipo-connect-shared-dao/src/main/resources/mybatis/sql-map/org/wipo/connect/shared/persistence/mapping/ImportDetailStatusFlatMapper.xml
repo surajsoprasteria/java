@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.ImportDetailStatusFlatMapper">
+
+	<resultMap id="resMap" type="ImportDetailStatusFlat">
+		<id property="idImportDetailStatus" column="id_import_detail_status" />
+        <result property="value" column="default_value" />
+        <result property="code" column="code" />
+        <result property="sortOrder" column="sort_order" />
+	</resultMap>
+
+	<sql id="fields">
+		import_detail_status.id_import_detail_status,
+		import_detail_status.code,
+      	translation.default_value AS default_value,
+        import_detail_status.sort_order 
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT		<include refid="fields" />
+		FROM 		import_detail_status
+       	INNER JOIN 	translation ON translation.id_translation = import_detail_status.fk_value
+	</sql>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		ORDER BY import_detail_status.sort_order
+	</select>
+	
+	<select id="findByCode" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE import_detail_status.code = #{code}
+	</select>
+</mapper>

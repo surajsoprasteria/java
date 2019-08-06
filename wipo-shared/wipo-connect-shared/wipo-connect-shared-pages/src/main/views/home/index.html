@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WIPO Connect home</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/png" href="./img/icon.png">
+	<link rel="icon" type="image/png" href="./img/icon.png">
+	
+
+	<!-- wipo connect -->	
+	<link href="./css/bootstrap.css" rel="stylesheet"/>
+	<link href="./css/template-default.css" rel="stylesheet"/>
+	<link href="./css/wipo.css" rel="stylesheet"/>
+	
+
+	<!-- angular -->
+	<link  href="./lib/angular-material.css" rel="stylesheet"/>
+	<script type="text/javascript" src="./lib/angular.js"></script> 
+	<script type="text/javascript" src="./lib/angular-animate.js"></script> 
+	<script type="text/javascript" src="./lib/angular-aria.js"></script> 
+	<script type="text/javascript" src="./lib/angular-material.js"></script> 
+	<script type="text/javascript" src="./lib/angular-sanitize.js"></script> 
+	
+
+	<!-- antipod -->
+	<script type="text/javascript" src="./lib/a.js"></script>
+
+
+	<!-- custom -->
+	<script type="text/javascript" src="./lib/connect.js"></script>
+	<script type="text/javascript" src="./modules/help/help.js"></script>
+
+
+	<STYLE>
+		
+		.section-card {background-color: rgba(255,255,255,0);}
+
+	</STYLE>
+
+
+    <script type='text/javascript'>
+		
+		// angular application
+		var helpApplication = angular.module('helpApplication', ['ngMaterial', 'ngSanitize', 'ngAnimate']);
+
+		// controller
+		helpApplication.controller('helpController', function($scope, $timeout,$sce, $mdDialog, $mdSidenav, $location) {
+	
+			$scope.page = null;
+
+			$scope.navbar = false;
+
+			$scope.toggle = function(show) {if(show === undefined||($scope.navbar && !show)||(!$scope.navbar && show)) {$mdSidenav('nav-bar').toggle();$scope.navbar = !$scope.navbar;}};
+   
+			$scope.GetHTMLHeader = function(title,url) {return $sce.trustAsHtml(connect.GetHTMLHeader(title,url));}
+
+			// entry point when the page is loaded and angular ready
+			angular.element(document).ready(function () {
+				
+			});
+
+		});
+		
+			
+	</script>
+  </head>
+  
+	<body>
+		<div ng-app="helpApplication" ng-controller="helpController" class='a-main'>
+
+			<div ng-bind-html='GetHTMLHeader("WIPO Connect Home","./index.html")'></div>
+			
+			<md-button ng-click="toggle()" class="md-raised nav-button" aria-label="nav bar"><span class="glyphicon glyphicon-menu-hamburger"></md-button>
+
+			<md-sidenav class="md-sidenav-right wipo" md-component-id="nav-bar" md-disable-backdrop="" md-whiteframe="4">
+				<md-toolbar style="background-color: #0085C1;color:white;min-height:40px;padding-left: 0px;padding-top:13px;padding-bottom:13px;margin-bottom:5px;text-align:center;">
+					HOME
+				</md-toolbar>
+				<md-content>
+					<md-button ng-click='toggle(false)' class='nav-bar-item'>
+						<span class="glyphicon glyphicon-home nav-bar-icon"></span>
+						wipo connect home
+					</md-button>
+					<md-button onclick='location.href="/connect/mvc/common/home";' class='nav-bar-item'>
+						<span class="glyphicon glyphicon-log-in nav-bar-icon"></span>
+						login
+					</md-button>
+					<md-button onclick='location.href="/connect/mvc/sign-up/user-info";' class='nav-bar-item'>
+						<span class="glyphicon glyphicon-pencil nav-bar-icon"></span>
+						sign-up
+					</md-button>
+					<hr/>
+					<md-button ng-href='./modules/help/help.html' class='nav-bar-item'>
+						<span class="glyphicon glyphicon-question-sign nav-bar-icon"></span>
+						wipo connect help
+					</md-button>
+					
+					<!--
+					<md-button ng-click="Navigate('CWR');" class='nav-bar-item'>
+						<span class="glyphicon glyphicon-import nav-bar-icon"></span>
+						CWR Conversion
+					</md-button>
+					<md-button ng-click="Navigate('IPI');" class='nav-bar-item'>
+						<span class="glyphicon glyphicon-import nav-bar-icon"></span>
+						IPI Conversion
+					</md-button>
+					<md-button ng-click="Navigate('WIPOCOS');" class='nav-bar-item'>
+						<span class="glyphicon glyphicon-import nav-bar-icon"></span>
+						WIPOCOS Conversion
+					</md-button>					
+					<hr/>
+					-->
+				</md-content>
+			</md-sidenav>
+
+			<div ng-if='page === null' class='bg-table'></div>
+			<div ng-if='page === null'  class='table'>
+				<div class='help-left'>					
+					<b>WIPO Connect</b><br/> brings your collective management operations to the next level<br/><br/>
+					<span class='button login' onclick='location.href="/connect/mvc/common/home";'>LOG IN</span>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class='button register' onclick='location.href="/connect/mvc/sign-up/user-info";'>SIGN-IN</span>
+					
+				</div>
+				<div class='help-right'>
+					
+				</div>
+			</div>
+
+			<div class='help-bottom' ng-if='page === null'>
+			<br/>
+			<md-content layout="row" flex class='section-card' layout-margin>
+
+				<div flex='33'>
+					<md-card md-theme="default" style='margin-left: 3vw;margin-right: 1vw;'>
+						<md-card-content>
+							<span class="glyphicon glyphicon-question-sign" style='font-size:40px;color:#808080;'></span>
+							<br/><br/><span style="font-size: 18px;">discover the latest<br/><b>&laquo; how tos &raquo;</b><br/>in the help section</span><br/>
+							<br/>
+							<span class='button-small login' onclick='location.href="./modules/help/help.html";'>JUMP IN&nbsp;&nbsp;<span class="glyphicon glyphicon-share-alt" style='font-size:13px;color:#ffffff;'></span></span>
+							<br/><br/>
+						</md-card-content>
+					</md-card>
+				</div>
+
+				<div flex='33'>
+					<md-card md-theme="default" style='margin-left: 2vw;margin-right: 2vw;'>
+						<md-card-content>
+							<span class="glyphicon glyphicon-book" style='font-size:40px;color:#808080;'></span>
+							<br/><br/><span style="font-size: 18px;">fan of novels?<br/>read the full</br><b>user manual</b></span><br/>
+							<br/>
+							<span class='button-small login' onclick='window.open("./docs/user-manual.pdf");'>&nbsp;&nbsp;GET IT&nbsp;&nbsp;<span class="glyphicon glyphicon-download-alt" style='font-size:13px;color:#ffffff;'></span></span>
+							<br/><br/>
+						</md-card-content>
+					</md-card>
+				</div>
+
+				<div flex='33'>
+					<md-card md-theme="default" style='margin-left: 1vw;margin-right: 3vw;'>
+						<md-card-content>
+							<span class="glyphicon glyphicon-globe" style='font-size:40px;color:#808080;'></span>
+							<br/><br/><span style="font-size: 18px;">browse international <br/>repertoires in</br><b>wipo connect <i>shared</i></b></span><br/>
+							<br/>
+							<span class='button-small login' onclick='location.href="https://www3.wipo.int/wipo-connect-shared-web/#top";'>LOG IN&nbsp;&nbsp;<span class="glyphicon glyphicon-log-in" style='font-size:13px;color:#ffffff;'></span></span>
+							<br/><br/>
+						</md-card-content>
+					</md-card>
+				</div>
+
+				
+			</md-content>
+
+				<br/><br/><br/>
+				
+
+
+				<a href='terms-and-conditions.html'>terms and conditions</a>
+			</div>
+
+			
+					
+		</div>
+	</body>	
+</html>

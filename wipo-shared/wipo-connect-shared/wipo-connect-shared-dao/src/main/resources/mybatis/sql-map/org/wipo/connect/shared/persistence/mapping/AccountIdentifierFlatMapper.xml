@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.AccountIdentifierFlatMapper">
+
+	<resultMap id="resMap" type="AccountIdentifierFlat">
+		<id property="idAccountIdentifier" column="AIDFL_id_account_identifier" />
+
+		<result property="fkAccount" column="AIDFL_fk_account" />
+		<result property="fkIdentifier" column="AIDFL_fk_identifier" />
+		<result property="value" column="AIDFL_value" />
+		<result property="code" column="AIDFL_code" />
+	</resultMap>
+
+	<sql id="fields">
+		account_identifier.id_account_identifier AIDFL_id_account_identifier,
+        account_identifier.fk_account AIDFL_fk_account,
+        account_identifier.fk_identifier AIDFL_fk_identifier,
+        account_identifier.value AIDFL_value,
+        identifier.code AIDFL_code
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" />
+
+		  FROM account_identifier
+		  INNER JOIN identifier ON identifier.id_identifier = account_identifier.fk_identifier
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			account_identifier.id_account_identifier = #{idAccountIdentifier}
+	</select>
+
+	<select id="findByAccount" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			account_identifier.fk_account = #{idAccount}
+			<if test="code != null">
+				AND identifier.code = #{code}
+			</if>
+	</select>
+
+
+
+	<insert id="insert">
+		INSERT INTO account_identifier(fk_account, fk_identifier, value)
+		VALUES (#{idAccount},
+		        (SELECT id_identifier FROM identifier WHERE code = #{type}),
+		        #{value})
+	</insert>
+	<delete id="deleteAccountIdentidierByIdAccount">
+	 	DELETE
+	 	FROM 		account_identifier
+	 	WHERE 		account_identifier.fk_account = #{idAccount}
+	 </delete>
+
+</mapper>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.IdentifierMapper">
+	<sql id="fields">
+		identifier.id_identifier AS IDEN_id_identifier,
+		identifier.fk_label AS IDEN_fk_label,
+		identifier.acronym AS IDEN_acronym,
+		identifier.code AS IDEN_code,
+		identifier.hide_from_ui AS IDEN_hide
+	</sql>
+
+	<resultMap id="resMap" type="Identifier">
+		<id property="idIdentifier" column="IDEN_id_identifier" />
+        <result property="fkLabel" column="IDEN_fk_label" />
+        <result property="acronym" column="IDEN_acronym" />
+        <result property="code" column="IDEN_code" />
+        <result property="hideFromUi" column="IDEN_hide" />
+	</resultMap>
+
+	<select id="findByCode" resultMap="resMap">
+		SELECT
+		<include refid="fields" />
+		FROM
+		identifier
+		WHERE identifier.code = #{code}
+	</select>
+
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		SELECT
+		<include refid="fields" />
+		FROM
+		identifier
+		WHERE
+		identifier.id_identifier = #{idIdentifier}
+	</select>
+
+	<update id="updateByPrimaryKey" keyProperty="idIdentifier">
+		UPDATE identifier
+		SET
+		fk_label = #{fkLabel},
+		acronym = #{acronym},
+		code = #{code}
+		WHERE
+		identifier.id_identifier = #{idIdentifier}
+	</update>
+
+	<insert id="insertIdentifier" keyProperty="idIdentifier" useGeneratedKeys="true">
+		INSERT INTO identifier(
+		fk_label,
+		acronym,
+		code
+		)
+		VALUES (#{fkLabel},
+		#{acronym},
+		#{code})
+
+	</insert>
+
+	<select id="selectAllIdentifier" resultMap="resMap">
+		SELECT
+		<include refid="fields" />
+		FROM
+		identifier
+	</select>
+</mapper>

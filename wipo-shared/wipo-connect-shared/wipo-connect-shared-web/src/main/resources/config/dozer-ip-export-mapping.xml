@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.InterestedParty
+		</class-a>
+		<class-b>org.wipo.connect.shared.exchange.vo.IpExportModel</class-b>
+
+		<field>
+			<a>nameList</a>
+			<b>nameList</b>
+		</field>
+
+		<field>
+			<a>affiliationList</a>
+			<b>affiliationList</b>
+		</field>
+
+
+		<field>
+			<a>type</a>
+			<b>ipType</b>
+		</field>
+
+		<field>
+			<a>sex</a>
+			<b>sex</b>
+		</field>
+		<field>
+			<a>birthDate</a>
+			<b>dateOfBirth</b>
+		</field>
+		<field>
+			<a>deathDate</a>
+			<b>dateOfDeath</b>
+		</field>
+		<field>
+			<a>citizenshipIdList[0]</a>
+			<b>nationality</b>
+		</field>
+		<field>
+			<a>birthPlace</a>
+			<b>placeOfBirth</b>
+		</field>
+		<field>
+			<a>fkBirthCountry</a>
+			<b>stateOfBirth</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.Affiliation
+		</class-a>
+		<class-b>org.wipo.connect.shared.exchange.vo.AffiliationExport
+		</class-b>
+
+		<field>
+			<a>affiliationDomainList</a>
+			<b>affiliationExportDomains</b>
+		</field>
+
+		<field>
+			<a>startDate</a>
+			<b>validFromDate</b>
+		</field>
+		<field>
+			<a>endDate</a>
+			<b>validToDate</b>
+		</field>
+		<field>
+			<a>signatureDate</a>
+			<b>dateSignature</b>
+		</field>
+		<field>
+			<a>shareValue</a>
+			<b>membershipShare</b>
+		</field>
+		 <field>
+			<a>territoryFormula</a>
+			<b>territoryFormula</b>
+		</field>
+
+	</mapping>
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.AffiliationDomain
+		</class-a>
+		<class-b>org.wipo.connect.shared.exchange.vo.AffiliationExportDomain
+		</class-b>
+
+		<field>
+			<a>fkCreationClass</a>
+			<b>fkCreationClass</b>
+		</field>
+
+		<field>
+			<a>fkIpiRole</a>
+			<b>fkRole</b>
+		</field>
+
+		<field>
+			<a>fkIpiRightType</a>
+			<b>fkRights</b>
+		</field>
+	</mapping>
+	<!-- <mapping> <class-a>org.wipo.connect.shared.exchange.dto.impl.AffiliationDomain
+		</class-a> <class-b>org.wipo.connect.shared.exchange.vo.AffiliationExport
+		</class-b> <field> <a>creationClassCode</a> <b>creationClass</b> </field>
+		<field> <a>roleCode</a> <b>role</b> </field> <field> <a>rightTypeCode</a>
+		<b>rights</b> </field> </mapping> -->
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.Name</class-a>
+		<class-b>org.wipo.connect.shared.exchange.vo.IpNameExport</class-b>
+		<field>
+			<a>name</a>
+			<b>familyName</b>
+		</field>
+		<field>
+			<a>firstName</a>
+			<b>firstName</b>
+		</field>
+		<field>
+			<a>nameType</a>
+			<b>nameType</b>
+		</field>
+	</mapping>
+</mappings>

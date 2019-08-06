@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			xmlns="http://types.echoService.connect.wipo.org"
+			attributeFormDefault="unqualified"
+			xmlns:common-input="http://input.common.connect.wipo.org"
+			xmlns:common-output="http://output.common.connect.wipo.org"
+			elementFormDefault="qualified"
+			targetNamespace="http://types.echoService.connect.wipo.org">
+
+	<xsd:import namespace="http://input.common.connect.wipo.org" schemaLocation="../common-input.xsd" />
+	<xsd:import namespace="http://output.common.connect.wipo.org" schemaLocation="../common-output.xsd" />
+
+
+	<xsd:element name="EchoRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element minOccurs="1" maxOccurs="1" name="context" nillable="false" type="common-input:ContextType" />
+				<xsd:element minOccurs="1" maxOccurs="1" name="request" nillable="false">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="msgIn" type="xsd:string" />
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="EchoResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element minOccurs="1" maxOccurs="1" name="response" nillable="false">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="msgOut" type="xsd:string" />
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element minOccurs="0" name="Error" nillable="false" type="common-output:ErrorType" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<!-- <configuration> <stop-on-errors>true</stop-on-errors> <date-format>MM/dd/yyyy
+		HH:mm</date-format> <wildcard>true</wildcard> </configuration> -->
+
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.InterestedParty
+		</class-a>
+		<class-b>org.wipo.connect.interestedparty.response.IpLookupResponse.InterestedPartyListResponse
+		</class-b>
+		<field>
+			<a>interestedPartyIdentifierFlatList</a>
+			<b is-accessible="true">identifierList</b>
+		</field>
+		<field>
+			<a>nameList</a>
+			<b is-accessible="true">nameList</b>
+		</field>
+		<field>
+			<a>affiliatedCmos</a>
+			<b is-accessible="true">affiliatedCmos</b>
+		</field>
+		<field>
+			<a>birthDate</a>
+			<b>birthFoundationDate</b>
+		</field>
+		<field>
+			<a>creationClassCodeList</a>
+			<b is-accessible="true">creationClassCodeList</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.InterestedPartyIdentifierFlat
+		</class-a>
+		<class-b>org.wipo.connect.interestedparty.response.FlatType</class-b>
+		<field>
+			<a>code</a>
+			<b>code</b>
+		</field>
+		<field>
+			<a>value</a>
+			<b>value</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.Name</class-a>
+		<class-b>org.wipo.connect.interestedparty.response.IpNamesType</class-b>
+		<field>
+			<a>firstName</a>
+			<b>firstName</b>
+		</field>
+		<field>
+			<a>name</a>
+			<b>name</b>
+		</field>
+		<field>
+			<a>nameType</a>
+			<b>nameType</b>
+		</field>
+		<field>
+			<a>mainId</a>
+			<b>mainId</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.InterestedParty
+		</class-a>
+		<class-b>org.wipo.connect.interestedparty.response.IpDetailsResponse.IpResponse
+		</class-b>
+		<field>
+			<a>interestedPartyIdentifierFlatList</a>
+			<b is-accessible="true">identifierList</b>
+		</field>
+		<field>
+			<a>nameList</a>
+			<b is-accessible="true">nameList</b>
+		</field>
+		<field>
+			<a>citizenshipCodeList</a>
+			<b is-accessible="true">citizenshipCodeList</b>
+		</field>
+		<field>
+			<a>birthDate</a>
+			<b>birthFoundationDate</b>
+		</field>
+		<field>
+			<a>sex</a>
+			<b>gender</b>
+		</field>
+		<field>
+			<a>affiliationList</a>
+			<b is-accessible="true">affiliationList</b>
+		</field>
+		<field>
+			<a>affiliatedCmos</a>
+			<b is-accessible="true">affiliatedCmos</b>
+		</field>
+		<field>
+			<a>dateUpdate</a>
+			<b>dateUpdate</b>
+		</field>
+		<field>
+			<a>creationClassCodeList</a>
+			<b is-accessible="true">creationClassCodeList</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.BaseDTO</class-a>
+		<class-b>org.wipo.connect.interestedparty.response.IpDetailsResponse.IpResponse</class-b>
+		<field>
+			<a>dateUpdate</a>
+			<b>dateUpdate</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.Affiliation</class-a>
+		<class-b>org.wipo.connect.interestedparty.response.AffiliationType</class-b>
+		<field>
+			<a>cmo.code</a>
+			<b is-accessible="true">cmoCode</b>
+		</field>
+		<field>
+			<a>affiliationDomainList</a>
+			<b is-accessible="true">affiliationDomainList</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.IpTaskItemDetail
+		</class-a>
+		<class-b>org.wipo.connect.interestedparty.request.InternationallyRegisterRequest.TaskItemRequest.IpTaskItemDetail
+		</class-b>
+		<field>
+			<a>nameList</a>
+			<b is-accessible="true">nameList</b>
+		</field>
+		<field>
+			<a>affiliationList</a>
+			<b is-accessible="true">affiliationList</b>
+		</field>
+		<field>
+			<a>citizenshipCodeList</a>
+			<b is-accessible="true">citizenshipCodeList</b>
+		</field>
+		<field>
+			<a>interestedPartyIdentifierFlatList</a>
+			<b is-accessible="true">interestedPartyIdentifierFlatList</b>
+		</field>
+	</mapping>
+	
+	
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.NameVO
+		</class-a>
+		<class-b>org.wipo.connect.interestedparty.response.NameLookupResponse.NameListResponse
+		</class-b>
+		<field>
+			<a>affiliatedCmos</a>
+			<b is-accessible="true">affiliatedCmos</b>
+		</field>
+		<field>
+			<a>creationClassCodeList</a>
+			<b is-accessible="true">creationClassCodeList</b>
+		</field>
+	</mapping>
+	
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.InterestedParty
+		</class-a>
+		<class-b>org.wipo.connect.shared.exchange.restvo.external.InterestedPartyRestVOResponse
+		</class-b>
+		<field>
+			<a>interestedPartyIdentifierFlatList</a>
+			<b is-accessible="true">interestedPartyIdentifierList</b>
+		</field>		
+	</mapping>
+	
+
+</mappings>

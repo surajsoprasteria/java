@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<!-- <configuration> <stop-on-errors>true</stop-on-errors> <date-format>MM/dd/yyyy
+		HH:mm</date-format> <wildcard>true</wildcard> </configuration> -->
+
+	<mapping>
+		<class-a>org.wipo.connect.work.request.InternationallyRegisterRequest.TaskItemRequest.WorkTaskDetail</class-a>
+		<class-b>org.wipo.connect.shared.exchange.dto.impl.WorkTaskDetail</class-b>
+		<field>
+			<a is-accessible="true">titleList</a>
+			<b>titleList</b>
+		</field>
+		<field>
+			<a is-accessible="true">instrumentCodeList</a>
+			<b>instrumentCodeList</b>
+		</field>
+		<field>
+			<a is-accessible="true">identifierList</a>
+			<b>workIdentifierList</b>
+		</field>
+		<field>
+			<a is-accessible="true">workPerformerList</a>
+			<b>workPerformerList</b>
+		</field>
+		<field>
+			<a is-accessible="true">derivedViewList</a>
+			<b>derivedViewList</b>
+		</field>
+		<field>
+			<a is-accessible="true">derivedWorkList</a>
+			<b>derivedWorkList</b>
+		</field>
+	</mapping>
+	
+	<mapping>
+		<class-a>org.wipo.connect.work.request.DerivedWork</class-a>
+		<class-b>org.wipo.connect.shared.exchange.dto.impl.WorkTaskDetailDerivedWork</class-b>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.work.request.DerivedViewType</class-a>
+		<class-b>org.wipo.connect.shared.exchange.dto.impl.WorkTaskDetailDv</class-b>
+		<field>
+			<a is-accessible="true">territoryFormula</a>
+			<b>territoryFormula</b>
+		</field>
+		<field>
+			<a is-accessible="true">derivedViewNameList</a>
+			<b>derivedViewNameList</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.work.request.DerivedViewNameList</class-a>
+		<class-b>org.wipo.connect.shared.exchange.dto.impl.WorkTaskDetailDvName</class-b>
+		<field>
+			<a is-accessible="true">derivedViewNameShareList</a>
+			<b>derivedViewNameShareList</b>
+		</field>
+	</mapping>
+
+
+	<mapping>
+		<class-a>org.wipo.connect.work.request.DerivedViewNameShare</class-a>
+		<class-b>org.wipo.connect.shared.exchange.dto.impl.WorkTaskDetailDvShare</class-b>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.work.request.TitleType</class-a>
+		<class-b>org.wipo.connect.shared.exchange.dto.impl.WorkTaskDetailTitle</class-b>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.Work</class-a>
+		<class-b>org.wipo.connect.work.response.WorkDetailResponse.WorkResponse
+		</class-b>
+		<field>
+			<a>workPerformerList</a>
+			<b is-accessible="true">workPerformerList</b>
+		</field>
+		<field>
+			<a>derivedWorkList</a>
+			<b is-accessible="true">derivedWorkList</b>
+		</field>
+		<field>
+			<a>derivedWorkParentList</a>
+			<b is-accessible="true">derivedWorkParentList</b>
+		</field>
+		<field>
+			<a>instrumentCodeList</a>
+			<b is-accessible="true">instrumentCodeList</b>
+		</field>
+		<field>
+			<a>workIdentifierList</a>
+			<b is-accessible="true">identifierList</b>
+		</field>
+		<field>
+			<a>titleList</a>
+			<b is-accessible="true">titleList</b>
+		</field>
+		<field>
+			<a>derivedViewList</a>
+			<b is-accessible="true">derivedViewList</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.DerivedView</class-a>
+		<class-b>org.wipo.connect.work.response.DerivedViewType</class-b>
+		<field>
+			<a>territoryFormula</a>
+			<b is-accessible="true">territoryFormula</b>
+		</field>
+		<field>
+			<a>derivedViewNameList</a>
+			<b is-accessible="true">derivedViewNameList</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.DerivedViewName
+		</class-a>
+		<class-b>org.wipo.connect.work.response.DerivedViewNameList</class-b>
+		<field>
+			<a>derivedViewNameShareList</a>
+			<b is-accessible="true">derivedViewNameShareList</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.DerivedViewNameShare</class-a>
+		<class-b>org.wipo.connect.work.response.DerivedViewNameShare</class-b>
+
+		<field>
+			<a>cmoList</a>
+			<b is-accessible="true">cmoList</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.Name</class-a>
+		<class-b>org.wipo.connect.work.response.NameType</class-b>
+	</mapping>
+
+	<mapping>
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.Work</class-a>
+		<class-b>org.wipo.connect.work.response.WorkListResponse.WorkResponse
+		</class-b>
+		<field>
+			<a>workIdentifierList</a>
+			<b is-accessible="true">identifierList</b>
+		</field>
+		<field>
+			<a>titleList</a>
+			<b is-accessible="true">titleList</b>
+		</field>
+		<field>
+			<a>derivedViewList</a>
+			<b is-accessible="true">derivedViewList</b>
+		</field>
+	</mapping>
+
+</mappings>

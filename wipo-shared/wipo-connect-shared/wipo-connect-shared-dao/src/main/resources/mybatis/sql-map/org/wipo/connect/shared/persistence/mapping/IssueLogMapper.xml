@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.IssueLogMapper">
+
+	<sql id="fields">
+		id_issue_log,
+		message,
+		server_date,
+		date_insert
+	</sql>
+
+	<resultMap id="resMap" type="IssueLog">
+		<id property="idIssueLog" column="id_issue_log" />
+        <result property="message" column="message" />
+        <result property="stackTrace" column="stack_trace" />
+        <result property="serverDate" column="server_date" />
+        <result property="dateInsert" column="date_insert" />
+	</resultMap>
+
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO issue_log
+		(message, stack_trace, server_date, date_insert)
+			VALUES
+		(#{message}, #{stackTrace}, #{serverDate}, now())
+		<selectKey   resultType="long" keyProperty="id"    keyColumn="id_issue_log"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_ISSUE_LOG_SEQ'
+		</selectKey>	
+	</insert>
+
+	<select id="findAll" resultMap="resMap">
+		SELECT
+			<include refid="fields" />,
+			null AS stack_trace
+		FROM issue_log
+		ORDER BY id_issue_log DESC
+	</select>
+
+	<select id="find" resultMap="resMap">
+		SELECT
+			<include refid="fields" />,
+			stack_trace
+		FROM issue_log
+		WHERE id_issue_log = #{idIssueLog}
+	</select>
+
+	<delete id="deleteAll">
+		DELETE FROM issue_log
+		WHERE id_issue_log &gt; 0
+	</delete>
+
+	<delete id="deleteOld">
+		DELETE FROM issue_log
+		WHERE date_insert &lt; #{minDate}
+	</delete>
+
+</mapper>

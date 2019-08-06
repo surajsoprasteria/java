@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.DerivedWorkMapper">
+
+	<resultMap id="resMap" type="DerivedWork">
+		<id property="idDerivedWork" column="id_derived_work" />
+		<result property="fkWork" column="fk_work" />
+		<result property="fkParentWork" column="fk_parent_work" />
+		<result property="weight" column="weight" />
+		<result property="trackNumber" column="track_number" />
+
+		<association property="work" javaType="Work">
+			<id property="idWork" column="WRK_id_work" />
+
+			<result property="mainId" column="WRK_main_id" />
+			<result property="fkStatus" column="WRK_fk_status" />
+			<result property="statusCode" column="WRKS_code" />
+			<result property="fkCreationClass" column="WRK_cc" />
+			<result property="creationClassCode" column="WRK_creation_class_code" />
+			<result property="cmoOriginCode" column="WRK_cmo_origin_code" />
+
+			<collection property="titleList" ofType="Title" resultMap="org.wipo.connect.shared.persistence.mapping.TitleMapper.resMap" />
+			<collection property="derivedViewList" ofType="DerivedView" resultMap="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.resMap" />
+			<collection property="workIdentifierList" ofType="WorkIdentifierFlat" resultMap="org.wipo.connect.shared.persistence.mapping.WorkIdentifierFlatMapper.resMap" />
+		</association>
+	</resultMap>
+
+	<sql id="fields">
+		derived_work.id_derived_work ,
+		derived_work.fk_work ,
+		derived_work.fk_parent_work ,
+		derived_work.weight,
+		derived_work.track_number
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.WorkMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.TitleMapper.fields" />,
+			<include refid="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.fieldsDerivedViewName" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.fieldsDerivedViewNameShare" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.NameMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.WorkIdentifierFlatMapper.fields" /> ,
+			ref_titletype.code AS TITY_code,
+			role.code as R_code,
+			creation_class.code as WRK_creation_class_code
+		  FROM derived_work
+		  LEFT OUTER JOIN work ON derived_work.fk_work = work.id_work
+		  LEFT OUTER JOIN work_title ON work_title.fk_work = work.id_work
+		  LEFT OUTER JOIN title ON title.id_title = work_title.fk_title
+		  LEFT OUTER JOIN reference ref_titletype ON ref_titletype.id_reference = title.fk_type
+		  LEFT OUTER JOIN work_identifier ON work_identifier.fk_work = work.id_work
+		  LEFT OUTER JOIN identifier ON identifier.id_identifier = work_identifier.fk_identifier
+		  LEFT OUTER JOIN work_status ON work_status.id_work_status = work.fk_status
+		  LEFT OUTER JOIN derived_view ON derived_view.fk_work = work.id_work
+		  LEFT OUTER JOIN derived_view_name ON derived_view_name.fk_derived_view = derived_view.id_derived_view
+		  LEFT OUTER JOIN name ON derived_view_name.fk_name = name.id_name
+		  LEFT OUTER JOIN role ON derived_view_name.fk_role = role.id_role
+		  LEFT OUTER JOIN derived_view_name_share ON derived_view_name_share.fk_derived_view_name = derived_view_name.id_derived_view_name
+		  LEFT OUTER JOIN right_type on right_type.id_right_type = derived_view_name_share.fk_right_type
+		  LEFT OUTER JOIN interested_party_name ON interested_party_name.fk_name = derived_view_name.fk_name
+		  LEFT OUTER JOIN interested_party ON interested_party_name.fk_interested_party = interested_party.id_interested_party
+		  LEFT OUTER JOIN cmo cmo_orig ON work.fk_cmo = cmo_orig.id_cmo
+		  LEFT OUTER JOIN creation_class ON work.fk_creation_class = creation_class.id_creation_class
+	</sql>
+
+	<sql id="baseSelectParent">
+		SELECT
+			<include refid="fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.WorkMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.TitleMapper.fields" />,
+			<include refid="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.fieldsDerivedViewName" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.fieldsDerivedViewNameShare" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.NameMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.WorkIdentifierFlatMapper.fields" /> ,
+			ref_titletype.code AS TITY_code,
+			role.code as R_code,
+			creation_class.code as WRK_creation_class_code
+		  FROM derived_work
+		  LEFT OUTER JOIN work ON derived_work.fk_parent_work = work.id_work
+		  LEFT OUTER JOIN work_title ON work_title.fk_work = work.id_work
+		  LEFT OUTER JOIN title ON title.id_title = work_title.fk_title
+		  LEFT OUTER JOIN reference ref_titletype ON ref_titletype.id_reference = title.fk_type
+		  LEFT OUTER JOIN work_identifier ON work_identifier.fk_work = work.id_work
+		  LEFT OUTER JOIN identifier ON identifier.id_identifier = work_identifier.fk_identifier
+		  LEFT OUTER JOIN work_status ON work_status.id_work_status = work.fk_status
+		  LEFT OUTER JOIN derived_view ON derived_view.fk_work = work.id_work
+		  LEFT OUTER JOIN derived_view_name ON derived_view_name.fk_derived_view = derived_view.id_derived_view
+		  LEFT OUTER JOIN name ON derived_view_name.fk_name = name.id_name
+		  LEFT OUTER JOIN role ON derived_view_name.fk_role = role.id_role
+		  LEFT OUTER JOIN derived_view_name_share ON derived_view_name_share.fk_derived_view_name = derived_view_name.id_derived_view_name
+		  LEFT OUTER JOIN right_type on right_type.id_right_type = derived_view_name_share.fk_right_type
+		  LEFT OUTER JOIN interested_party_name ON interested_party_name.fk_name = derived_view_name.fk_name
+		  LEFT OUTER JOIN interested_party ON interested_party_name.fk_interested_party = interested_party.id_interested_party
+		  LEFT OUTER JOIN cmo cmo_orig ON work.fk_cmo = cmo_orig.id_cmo
+		  LEFT OUTER JOIN creation_class ON work.fk_creation_class = creation_class.id_creation_class
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			derived_work.id_derived_work = #{idDerivedWork}
+	</select>
+
+	<select id="findByChild" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			derived_work.fk_work = #{idWork}
+	</select>
+
+	<select id="findByParent" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			derived_work.fk_parent_work = #{idWork}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO derived_work
+				(fk_work, fk_parent_work, weight, track_number)
+					VALUES
+				(#{fkWork}, #{fkParentWork}, #{weight}, #{trackNumber})
+				
+		<selectKey   resultType="long" keyProperty="idDerivedWork"    keyColumn="id_derived_work"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_DERIVED_WORK_SEQ'
+		</selectKey>					
+
+	</insert>
+
+	<update id="updateByPrimaryKey" useGeneratedKeys="true" keyProperty="idDerivedWork"  keyColumn="id_derived_work">
+		update	derived_work
+		set
+				fk_work=#{fkWork},
+				fk_parent_work=#{fkParentWork},
+				weight=#{weight},
+				track_number=#{trackNumber}
+		WHERE
+			derived_work.id_derived_work = #{idDerivedWork}
+	</update>
+
+	<delete id="deleteByParent">
+		DELETE FROM derived_work
+		WHERE fk_parent_work = #{fkParentWork}
+	</delete>
+
+	<delete id="deleteByPrimaryKey">
+		DELETE FROM derived_work
+		WHERE id_derived_work = #{idDerivedWork}
+	</delete>
+
+	<select id="findParentWorkByIdChildWork" resultMap="resMap">
+		<include refid="baseSelectParent" />
+
+		WHERE
+			derived_work.fk_work = #{idWork}
+	</select>
+
+<!--  	
+	<select id="checkWorkIsComponentByMainId"  resultType="boolean">
+		SELECT CASE WHEN EXISTS (
+			SELECT  *
+			FROM 	derived_work
+			LEFT JOIN work ON work.id_work= derived_work.fk_work
+			WHERE work.main_id = #{mainId} AND work.deleted = 0
+		  ) THEN 1 ELSE 0
+		  END
+		  FROM dual result
+
+	</select> -->
+		<select id="checkWorkIsComponentByMainId"  resultType="boolean">
+		SELECT CASE WHEN EXISTS (
+			SELECT  *
+			FROM 	derived_work
+			LEFT JOIN work ON work.id_work= derived_work.fk_work
+			WHERE work.main_id = #{mainId} AND work.deleted = 0
+		  ) THEN 1 ELSE 0
+		  END
+		  FROM dual
+	</select>
+
+<!-- 	
+	<select id="checkWorkIsComponentByIdWork"  resultType="boolean">
+		SELECT CASE WHEN EXISTS (
+			SELECT  *
+			FROM 	derived_work
+			LEFT JOIN work ON work.id_work= derived_work.fk_work
+			WHERE derived_work.fk_work = #{idWork} AND work.deleted = 0
+		  ) THEN 1 ELSE 0
+		  END
+		  FROM dual result
+	</select> -->
+	<select id="checkWorkIsComponentByIdWork"  resultType="boolean">
+		SELECT CASE WHEN EXISTS (
+			SELECT  *
+			FROM 	derived_work
+			LEFT JOIN work ON work.id_work= derived_work.fk_work
+			WHERE derived_work.fk_work = #{idWork} AND work.deleted = 0
+		  ) THEN 1 ELSE 0
+		  END
+		  FROM dual
+	</select>
+
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.ExternalSiteMapper">
+<!-- 	<sql id="fields">
+		external_site.id_external_site 									AS ES_id_external_site,
+		external_site.host 												AS ES_host,
+		external_site.port 												AS ES_port,
+		external_site.user_name 										AS ES_user_name,
+		external_site.pass 												AS ES_password,
+		DECODE(external_site.code, null, #{code},external_site.code) 	AS ES_code
+	</sql> -->
+	<sql id="fields">
+		external_site.id_external_site 									AS ES_id_external_site,
+		external_site.host 												AS ES_host,
+		external_site.port 												AS ES_port,
+		external_site.user_name 										AS ES_user_name,
+		external_site.pass 												AS ES_password,
+		CASE   WHEN external_site.code is null THEN  'IP_IMPORT_SFTP' ELSE external_site.code END  AS ES_code
+	</sql>
+	
+	<resultMap id="resMap" type="ExternalSite">
+		<id property="idExternalSite" column="ES_id_external_site" />
+		<result property="host" column="ES_host" />
+		<result property="port" column="ES_port" />
+		<result property="user" column="ES_user_name"/>
+		<result property="password" column="ES_password" />
+		<result property="code" column="ES_code" />
+	</resultMap>
+
+	<select id="selectExternalSiteByCode" resultMap="resMap">
+		SELECT <include refid="fields" />
+		FROM external_site
+		WHERE external_site.code = #{code}
+	</select>
+	
+
+	<update id="updateExternalSiteByCode">
+		UPDATE external_site
+		SET
+			host = #{host},
+			port = #{port},
+			user_name = #{user}
+		WHERE code = #{code}
+	</update>
+
+
+	<update id="updateExternalSitePassword">
+		UPDATE external_site
+		SET pass = #{password}
+		WHERE external_site.code = #{code}
+	</update>
+
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.IpIndexQueueMapper">
+	<sql id="fields">
+		id_ip_index_queue AS IIQ_id,
+		fk_interested_party AS IIQ_fk_ip ,
+		action AS IIQ_action
+	</sql>
+
+	<resultMap id="resMap" type="IpIndexQueue">
+		<id property="id_ip_index_queue" column="IIQ_id" />
+		<result property="fk_interested_party" column="IIQ_fk_ip" />
+		<result property="action" column="IIQ_action" />
+	</resultMap>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" />
+		FROM ip_index_queue
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect"/>
+		WHERE id_ip_index_queue = #{idIpIndexQueue}
+	</select>
+
+	<select id="findIpByAction" resultType="java.lang.Long">
+		SELECT distinct fk_interested_party AS IIQ_fk_ip
+		FROM ip_index_queue
+		WHERE action = #{action}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO ip_index_queue(fk_interested_party, action)
+		VALUES (#{fkInterestedParty}, #{action})
+	</insert>
+
+	<delete id="deleteByIp">
+		DELETE FROM ip_index_queue
+		WHERE fk_interested_party IN
+		<foreach collection="idList" item="id" open="(" close=")" separator=",">
+             #{id}
+        </foreach>
+	</delete>
+
+
+</mapper>

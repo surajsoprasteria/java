@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.TerritoryMapper">
+
+	<sql id="fieldsTerritory">
+		territory.id_territory 			AS TERR_id_territory,
+		territory.code 					AS TERR_code,
+		territory.fk_type 				AS TERR_fk_type,
+		territory.start_date 			AS TERR_start_date,
+		territory.end_date 				AS TERR_end_date
+	</sql>
+
+
+	<resultMap id="resMapTerritory" type="Territory">
+		<id property="idTerritory" 		column="TERR_id_territory" />
+		<result property="code" 		column="TERR_code" />
+		<result property="fkType" 		column="TERR_fk_type" />
+		<result property="startDate" 	column="TERR_start_date" />
+		<result property="endDate" 		column="TERR_end_date"/>
+
+		<result property="name" 		column="TN_name"/>
+		<result property="tisa" 		column="TN_tisa"/>
+	</resultMap>
+
+
+	<select id="selectByPrimaryKey" resultMap="resMapTerritory">
+	
+		SELECT <include refid="fieldsTerritory" />,
+		(	SELECT tni.value
+			FROM territory_name 
+			LEFT OUTER JOIN territory_name_identifier tni ON tni.fk_territory_name = territory_name.id_territory_name
+         	LEFT OUTER JOIN identifier i1 ON i1.id_identifier = tni.fk_identifier
+      		WHERE territory_name.fk_territory = territory.id_territory
+      		AND territory_name.end_date = (	SELECT MAX(tn1.end_date) AS max_end_date
+ 												FROM territory_name tn1
+ 												WHERE tn1.fk_territory = territory.id_territory )
+      		AND i1.code = '${@org.wipo.connect.shared.exchange.enumerator.IdentifierTypeEnum@TISA.name()}'
+      	) AS TN_tisa
+		FROM territory
+		WHERE territory.id_territory = #{id}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" >		
+		INSERT INTO territory(
+			code,
+			fk_type,
+			start_date,
+			end_date
+		) VALUES (
+			#{code},
+			#{fkType},
+			#{startDate},
+			#{endDate}
+		)
+		
+		<selectKey   resultType="long" keyProperty="idTerritory"    keyColumn="id_territory"   order="BEFORE" >		
+		select next from _sequences where name = 'ID_TERRITORY_SEQ'
+		</selectKey>		
+	</insert>
+
+	<update id="updateByPrimaryKey" keyProperty="idTerritory">
+		UPDATE territory
+		SET
+			start_date 		= #{startDate},
+			end_date		= #{endDate}
+		WHERE
+			id_territory	= #{idTerritory}
+	</update>
+
+
+	<select id="exsistTisnCode" resultType="boolean" parameterType="map">
+		SELECT  COUNT(id_territory_identifier) AS result
+		FROM  territory_identifier
+		WHERE value = #{code}
+			<if test="idToExclude != null">
+				AND territory_identifier.fk_territory != #{idToExclude}
+			</if>
+	</select>
+
+
+	<select id="findAllTerritory" resultMap="resMapTerritory">
+		SELECT <include refid="fieldsTerritory" />,
+			t1.default_value 	AS TN_name,
+			tni.value			AS TN_tisa
+		FROM territory
+			LEFT JOIN territory_name ON territory_name.fk_territory = territory.id_territory
+				<!-- AND (territory_name.start_date IS NULL OR territory_name.start_date &lt;= now())
+				AND (territory_name.end_date IS NULL OR territory_name.end_date &gt;= now()) -->
+			LEFT OUTER JOIN territory_name_identifier tni ON (tni.fk_territory_name = territory_name.id_territory_name)
+			LEFT OUTER JOIN translation t1 on (t1.id_translation = territory_name.fk_name)
+		WHERE territory_name.end_date =  (	SELECT MAX(tn1.end_date) AS max_end_date
+ 											FROM territory_name tn1
+ 											WHERE tn1.fk_territory = territory.id_territory
+ 										 )
+		ORDER BY TERR_code
+	</select>
+
+	<select id="findTerritoryNamesById" resultMap="resMap">
+		SELECT
+			<include refid="fieldsWithTerritoryNameDate" />
+		FROM territory
+		INNER JOIN territory_name ON territory_name.fk_territory = territory.id_territory
+		LEFT OUTER join translation t1 on (t1.id_translation = territory_name.fk_name)
+		LEFT OUTER join translation t2 on (t2.id_translation = territory_name.fk_official_name)
+		LEFT OUTER join translation t3 on (t3.id_translation = territory_name.fk_abbreviated_name)
+		LEFT OUTER join translation t4 on (t4.id_translation = territory_name.fk_unofficial_name)
+
+		WHERE territory.id_territory = #{idTerritory}
+
+		ORDER BY CODE_TISA
+	</select>
+
+
+
+
+
+
+
+	<!-- OTHER OLD METHOD -->
+
+
+
+
+
+
+
+
+
+	<sql id="fields">
+	territory.id_territory AS TERR_id_territory ,
+	territory.code AS TERR_code,
+	territory.fk_type AS TERR_fk_type ,
+	territory.start_date AS TERR_start_date ,
+	territory.end_date AS TERR_end_date ,
+	territory.user_insert AS TERR_user_insert ,
+	territory.date_insert AS TERR_date_insert ,
+	territory.user_update AS TERR_user_update ,
+	territory.date_update AS TERR_date_update ,
+	territory.managed_by_cmo AS TERR_managed_by_cmo,
+	territory_name.fk_name AS TERA_fk_name,
+	territory_name.fk_official_name AS TERA_fk_official_name,
+	territory_name.fk_abbreviated_name AS TERA_fk_abbreviated_name,
+	territory_name.fk_unofficial_name AS TERA_fk_unofficial_name,
+	t1.default_value as TRASL_name,
+	t2.default_value as TRASL_official_name,
+	t3.default_value as TRASL_abbreviated_name,
+	t4.default_value as TRASL_unofficial_name,
+    (SELECT tni.value
+                   FROM territory_name_identifier tni INNER JOIN identifier i1 ON i1.id_identifier = tni.fk_identifier
+      WHERE tni.fk_territory_name = territory_name.id_territory_name AND i1.code = 'TISA') as CODE_TISA
+   <!--  ,(SELECT tni.value
+                   FROM territory_name_identifier tni INNER JOIN identifier i1 ON i1.id_identifier = tni.fk_identifier
+      WHERE tni.fk_territory_name = territory_name.id_territory_name AND i1.code = 'TISAE') as CODE_TISAEXT -->
+	</sql>
+
+	<sql id="fieldsWithTerritoryNameDate">
+	territory.id_territory AS TERR_id_territory ,
+	territory.code AS TERR_code,
+	territory.fk_type AS TERR_fk_type ,
+	territory_name.start_date AS TERR_start_date ,
+	territory_name.end_date AS TERR_end_date ,
+	territory_name.fk_name AS TERA_fk_name,
+	territory_name.fk_official_name AS TERA_fk_official_name,
+	territory_name.fk_abbreviated_name AS TERA_fk_abbreviated_name,
+	territory_name.fk_unofficial_name AS TERA_fk_unofficial_name,
+	t1.default_value as TRASL_name,
+	t2.default_value as TRASL_official_name,
+	t3.default_value as TRASL_abbreviated_name,
+	t4.default_value as TRASL_unofficial_name,
+    (SELECT tni.value
+                   FROM territory_name_identifier tni INNER JOIN identifier i1 ON i1.id_identifier = tni.fk_identifier
+      WHERE tni.fk_territory_name = territory_name.id_territory_name AND i1.code = 'TISA') as CODE_TISA
+   <!--  ,(SELECT tni.value
+                   FROM territory_name_identifier tni INNER JOIN identifier i1 ON i1.id_identifier = tni.fk_identifier
+      WHERE tni.fk_territory_name = territory_name.id_territory_name AND i1.code = 'TISAE') as CODE_TISAEXT -->
+	</sql>
+
+
+
+
+
+	<resultMap id="resMapCitizenship" type="java.lang.Long" >
+    	<result property="citizenshipIdList" column="fk_territory"/>
+	</resultMap>
+
+
+
+	<resultMap id="resMap" type="Territory">
+		<id property="idTerritory" column="TERR_id_territory" />
+		<result property="code" column="TERR_code" />
+		<result property="fkType" column="TERR_fk_type" />
+		<result property="startDate" column="TERR_start_date" />
+		<result property="endDate" column="TERR_end_date"/>
+		<result property="userInsert" column="TERR_user_insert" />
+		<result property="dateInsert" column="TERR_date_insert" />
+		<result property="userUpdate" column="TERR_user_update" />
+		<result property="dateUpdate" column="TERR_date_update" />
+		<result property="isManagedByCmo" column="TERR_managed_by_cmo" />
+		<result property="idTerritoryName" column="TERNA_id_territory_name" />
+		<result property="fkName" column="TERA_fk_name" />
+		<result property="fkOfficialName" column="TERA_fk_official_name" />
+		<result property="fkAbbreviatedName" column="TERA_fk_abbreviated_name" />
+		<result property="fkUnofficialName" column="TERA_fk_unofficial_name" />
+		<result property="name" column="TRASL_name" />
+		<result property="officialName" column="TRASL_official_name" />
+		<result property="abbreviatedName" column="TRASL_abbreviated_name" />
+		<result property="unofficialName" column="TRASL_unofficial_name" />
+		<result property="identifierValue" column="TERR_id_value" />
+		<result property="tisa" column="CODE_TISA" />
+		<result property="typeCode" column="TYPE_CODE" />
+		<!-- <result property="tisaExt" column="CODE_TISAEXT" /> -->
+	</resultMap>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" />,
+			type_ref.code AS TYPE_CODE
+		FROM territory
+		INNER JOIN territory_name ON territory_name.fk_territory = territory.id_territory
+		LEFT OUTER join translation t1 on (t1.id_translation = territory_name.fk_name)
+		LEFT OUTER join translation t2 on (t2.id_translation = territory_name.fk_official_name)
+		LEFT OUTER join translation t3 on (t3.id_translation = territory_name.fk_abbreviated_name)
+		LEFT OUTER join translation t4 on (t4.id_translation = territory_name.fk_unofficial_name)
+		LEFT OUTER JOIN reference type_ref on type_ref.id_reference = territory.fk_type
+	</sql>
+
+
+
+
+
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+	</select>
+
+
+
+
+
+	<select id="findAllTerritoryManaged" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE ((territory_name.start_date IS NULL OR territory_name.start_date &lt;= now())
+		        AND
+		        (territory_name.end_date IS NULL OR territory_name.end_date &gt;= now()))
+		        AND managed_by_cmo = 1
+
+		ORDER BY TRASL_name
+	</select>
+
+	<select id="findAllTerritoryWithIdValue" resultMap="resMap">
+		SELECT
+		<include refid="fields" />,
+		territory_name_identifier.value AS TERR_id_value
+		FROM territory
+		       INNER JOIN territory_name ON territory_name.fk_territory = territory.id_territory
+		       INNER JOIN territory_name_identifier on territory_name_identifier.fk_territory_name=territory_name.id_territory_name
+		       LEFT OUTER join translation t1 on (t1.id_translation = territory_name.fk_name)
+			   LEFT OUTER join translation t2 on (t2.id_translation = territory_name.fk_official_name)
+			   LEFT OUTER join translation t3 on (t3.id_translation = territory_name.fk_abbreviated_name)
+			   LEFT OUTER join translation t4 on (t4.id_translation = territory_name.fk_unofficial_name)
+		WHERE ((territory_name.start_date IS NULL OR territory_name.start_date &lt;= now())
+		        AND
+		        (territory_name.end_date IS NULL OR territory_name.end_date &gt;= now()))
+		ORDER BY TRASL_name
+	</select>
+
+
+	<select id="findCountriesFromTerritory" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		INNER 	JOIN reference ON territory.fk_type=reference.id_reference
+
+		WHERE 	reference.code = '${@org.wipo.connect.common.utils.ConstantUtils@REFERENCE_CODE_COUNTRY}'
+
+        ORDER BY TRASL_name
+	</select>
+
+
+	<select id="findCountriesFromTerritoryWithWorld" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		INNER 	JOIN reference ON territory.fk_type=reference.id_reference
+
+		WHERE
+		(reference.code = '${@org.wipo.connect.common.utils.ConstantUtils@REFERENCE_CODE_COUNTRY}' OR territory.code = '${@org.wipo.connect.common.utils.ConstantUtils@WORLD_TERRITORY_CODE}')
+		and 	((territory_name.start_date IS NULL OR territory_name.start_date &lt;= now())
+		        AND
+		        (territory_name.end_date IS NULL OR territory_name.end_date &gt;= now()))
+
+        ORDER BY TRASL_name
+	</select>
+
+
+
+	<select id="selectTerritoryChild" resultType="java.lang.Long" parameterType="java.lang.Long">
+		SELECT 		territory_hierarchy.fk_child_territory
+		FROM 		territory_hierarchy
+		WHERE 		territory_hierarchy.fk_territory=#{fkTerritory}
+	</select>
+
+	<select id="findTerritoryByTisa" resultMap="resMap">
+		<include refid="baseSelect" />
+		INNER JOIN territory_name_identifier  on territory_name_identifier.FK_TERRITORY_NAME = territory_name.id_TERRITORY_NAME
+        INNER JOIN identifier aux_i on aux_i.ID_IDENTIFIER = territory_name_identifier.FK_IDENTIFIER
+		WHERE aux_i.CODE='TISA' AND territory_name_identifier.VALUE=#{code}
+		AND territory.start_DATE &lt;= now() AND  territory.end_DATE &gt;= now()
+	</select>
+
+	<select id="findTerritoryByParentTisa" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE territory.id_territory in (SELECT aux_th.fk_child_territory
+											FROM territory_hierarchy aux_th
+											INNER JOIN territory aux_t ON aux_t.id_territory = aux_th.fk_territory
+						                    INNER JOIN territory_name aux_tn on aux_tn.FK_TERRITORY = aux_t.id_territory
+						                    INNER JOIN territory_name_identifier aux_tni on aux_tni.FK_TERRITORY_NAME = aux_tn.id_TERRITORY_NAME
+						                    INNER JOIN identifier aux_i on aux_i.ID_IDENTIFIER = aux_tni.FK_IDENTIFIER
+											WHERE aux_i.CODE='TISA' AND aux_tni.VALUE=#{parentCode}
+											AND territory.start_DATE &lt;= now() AND  territory.end_DATE &gt;= now()
+                      )
+	</select>
+
+</mapper>

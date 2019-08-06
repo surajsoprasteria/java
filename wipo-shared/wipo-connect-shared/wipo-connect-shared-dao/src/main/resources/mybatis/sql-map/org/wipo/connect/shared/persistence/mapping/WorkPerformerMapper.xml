@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.WorkPerformerMapper">
+
+	<resultMap id="resMap" type="WorkPerformer">
+
+		<id property="idWorkPerformer" column="id_work_performer" />
+		<result property="fkWork" column="fk_work" />
+		<result property="performerName" column="performer_name" />
+	</resultMap>
+
+	<sql id="fields">
+		work_performer.id_work_performer,
+		work_performer.fk_work,
+		work_performer.performer_name
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" />
+
+		  FROM work_performer
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			work_performer.id_work_performer = #{idWorkPerformer}
+	</select>
+
+	<select id="findByWork" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			work_performer.fk_work = #{idWork}
+	</select>
+
+
+
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO work_performer
+			(fk_work, performer_name )
+		VALUES
+			(#{fkWork}, #{performerName})
+			
+		<selectKey   resultType="long" keyProperty="idWorkPerformer"    keyColumn="id_work_performer"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_WORK_PERFORMER_SEQ'
+		</selectKey>			
+	</insert>
+
+	<update id="update" useGeneratedKeys="true" keyProperty="idWorkPerformer"  keyColumn="id_work_performer">
+		update	work_performer
+		set
+				fk_work=#{fkWork},
+				performer_name=#{performerName}
+		WHERE
+			work_performer.id_work_performer = #{idWorkPerformer}
+	</update>
+
+	<delete id="deleteByPrimaryKey">
+		DELETE FROM work_performer
+		WHERE id_work_performer = #{idWorkPerformer}
+	</delete>
+
+
+</mapper>

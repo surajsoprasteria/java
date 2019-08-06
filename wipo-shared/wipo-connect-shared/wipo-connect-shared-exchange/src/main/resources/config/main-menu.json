@@ -1,0 +1,130 @@
+[
+	{
+		"name": "ro-menu",
+		"cssClass": "interested-party",
+		"i18n": "functions.interestedParty",
+		"menuItemList": [
+			{
+				"url": "/interestedParty/search",
+				"i18n": "functions.interestedParty-list"
+			},
+			{
+				"url": "/groupManagement/search",
+				"i18n": "functions.group-list"
+			},
+			{
+				"url": "/interestedPartyImport/search",
+				"i18n": "functions.ip-import"
+			},
+			{
+				"id": "ipFullExport",
+				"url": "/interestedParty/fullExport.json?fileFormat=CSV",
+				"i18n": "functions.ip-full-export"
+			}
+		]
+	},
+	{
+		"name": "work-menu",
+		"cssClass": "work",
+		"i18n": "functions.work",
+		"menuItemList": [
+			{
+				"url": "/work/search",
+				"i18n": "functions.work-list"
+			},
+			{
+				"url": "/workImport/search",
+				"i18n": "functions.work-import"
+			},
+			{
+				"id": "workFullExport",
+				"url": "/work/fullExport.json?fileFormat=CSV",
+				"i18n": "functions.work-full-export"
+			}
+		]
+	},
+	{
+		"name": "reference-menu",
+		"cssClass": "reference",
+		"i18n": "functions.reference",
+		"menuItemList": [
+			{
+				"url": "/reference/cmo/search",
+				"i18n": "reference.cmo"
+			},
+			{
+				"url": "/reference/territories/search",
+				"i18n": "reference.territories"
+			},
+			{
+				"url": "/reference/referenceTable/search",
+				"i18n": "reference.reference-table"
+			},
+			{
+				"url": "/reference/identifiers/search",
+				"i18n": "reference.identifiers"
+			},
+			{
+				"url": "/reference/otherReferences/search",
+				"i18n": "reference.other-references"
+			}
+		]
+	},
+	{
+		"name": "business-intelligence-menu",
+		"cssClass": "business-intelligence",
+		"i18n": "functions.bi-query",
+		"menuItemList": [
+			{
+				"url": "/businessIntelligence/search",
+				"i18n": "functions.bi-query"
+			}
+		]
+	},
+	{
+		"name": "administration-menu",
+		"cssClass": "administration",
+		"i18n": "functions.administration",
+		"menuItemList": [
+			{
+				"url": "/administration/externalSite/detail",
+				"i18n": "functions.external-site"
+			},
+			{
+				"url": "/administration/dataAccess/start",
+				"i18n": "functions.data-access"
+			},
+			{
+				"url": "/administration/parametersManagement/detail",
+				"i18n": "functions.params-manag"
+			},
+			{
+				"url": "/administration/issueLog/search",
+				"i18n": "functions.issue-log"
+			}
+		]
+	},
+	{
+		"name": "debug-menu",
+		"cssClass": "debug",
+		"i18n": "functions.debug",
+		"menuItemList": [
+			{
+				"url": "/administration/technicalSettings/debug",
+				"i18n": "functions.debug-information"
+			},
+			{
+				"url": "/administration/technicalSettings/rebuildIPIndex.json",
+				"cssClass": "debug",
+				"data": "target='_blank'",
+				"i18n": "functions.rebuild-ip-solr-index"
+			},
+			{
+				"url": "/administration/technicalSettings/rebuildWorkIndex.json",
+				"cssClass": "debug",
+				"data": "target='_blank'",
+				"i18n": "functions.rebuild-work-solr-index"
+			}
+		]
+	}
+]

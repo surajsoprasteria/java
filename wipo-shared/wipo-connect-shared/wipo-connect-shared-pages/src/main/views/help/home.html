@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<HTML>
+	<HEAD>
+		<meta charset="utf-8"/>
+		<TITLE>WIPO Connect</TITLE>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="shortcut icon" type="image/png" href="/connect/res/img/icon.png">
+		<link rel="icon" type="image/png" href="/connect/res/img/icon.png">
+		<!-- CSS -->
+		<link href="/connect/res/css/bootstrap.css" rel="stylesheet"/>
+		<link href="/connect/res/css/lobibox.css" rel="stylesheet"/>
+		<link href="/connect/res/css/login.css" rel="stylesheet"/>
+		<link href="/connect/res/css/font-awesome.css" rel="stylesheet"/>
+		<link href="/connect/res/css/custom-fonts.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-dialog.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-select.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-toggle.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-datepicker.css" rel="stylesheet"/>
+		<link href="/connect/res/css/jquery.dataTables.css" rel="stylesheet"/>
+		<link href="/connect/res/css/dataTables.bootstrap.css" rel="stylesheet"/>
+		<link href="/connect/res/css/scroller.dataTables.min.css" rel="stylesheet"/>
+		<link href="/connect/res/css/scroller.bootstrap.css" rel="stylesheet"/>
+		<link href="/connect/res/css/dataTables-custom.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-custom.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-wizard.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-tagsinput.css" rel="stylesheet"/>
+		<link href="/connect/res/css/codemirror.css" rel="stylesheet"/>
+		<link href="/connect//res/css/collapsible-panel.css" rel="stylesheet"/>
+		<link href="/connect/res/css/template-default.css" rel="stylesheet"/>
+		<link href="/connect/res/css/validate.css" rel="stylesheet"/>
+		<link href="/connect/res/css/base.css" rel="stylesheet"/>
+		<link href="/connect/res/css/wipo.css" rel="stylesheet"/>
+		<link href="/connect/mvc/common/external.css" rel="stylesheet"/>
+
+		<SCRIPT>
+			
+
+		</SCRIPT>
+
+		
+
+		<STYLE>
+
+			html, body {
+				height: 100%;
+			}
+
+			td.empty {
+				background: rgba(255,255,255,0);
+			}
+
+			td.link {
+				background:rgba(64, 81, 118, 0.75);
+				
+			}
+
+			td.link, td.empty {
+				vertical-align: top;
+				text-align: center;
+				width: 200px;
+				color: rgba(255,255,255,0.8);
+				font-size: 18px;
+				text-transform: uppercase;
+				font-weight: 400;
+				border-radius: 54px;
+				transition:0.3s;
+			}
+
+			/*td.link:hover {
+				background: rgba(117,131,154,1);
+				cursor: pointer;
+				transition:0.3s;
+			}*/
+
+			td.spacer: { width: *;}
+
+			tr.spacer { height: 5%; }
+			tr.link { height: 27.5%; }
+
+
+			hr {
+				width: 185px;
+				text-align: center;
+				border-top: 2px solid rgba(255,255,255,0.8);
+				
+			}
+			
+			a.chapter {
+				color: rgba(255,255,255,0.8);
+				font-size: 13px;
+				text-transform: uppercase;
+			}
+			
+			a.chapter:hover {
+				color: rgba(255,255,255,1);
+				text-decoration: none;
+			}
+			
+
+			table.full-table {
+				border: none;
+    			border-collapse: collapse;
+				bottom: 0;
+    			top: 0;
+    			left: 0;
+    			right: 0;
+				padding-top: 5%;
+				padding-bottom: 5%;
+    			height:90%;
+    			width:100%;
+			}
+		</STYLE>
+	</HEAD>
+
+	<BODY>
+		<NAV CLASS="navbar navbar-default navbar-fixed-top" ROLE="navigation">
+			<DIV CLASS="navbar-first-row">
+				<DIV CLASS="container">
+					<DIV CLASS="navbar-header">
+						<P CLASS="navbar-text brand">
+							<A HREF="/connect/mvc/common/home">
+								<IMG ALT="wipo-wcc" CLASS="logo-brand" SRC="/connect/res/img/shuffle.png">
+							</A>
+							<A HREF="/connect/mvc/common/home">
+								<SPAN STYLE="overflow: hidden;height: 186px;position: absolute;top: -81px;left: -165px;">
+									<IMG SRC="/connect/mvc/terms/wipo.svg" STYLE="height: 363px;opacity: 0.1;-ms-transform: rotate(-15deg); -webkit-transform: rotate(-15deg);transform: rotate(-15deg);"/>
+								</SPAN>
+								WIPO Connect Guide
+							</A>
+						</P>
+						<DIV CLASS="clear"></DIV>
+					</DIV>
+				</DIV>
+			</DIV>
+			<DIV CLASS="navbar-second-row">
+				<DIV CLASS="container">
+					<DIV CLASS="collapse navbar-collapse" id="navbar-collapse">
+						<P CLASS="navbar-text page-info">table of contents</P>
+					</DIV>
+				</DIV>
+			</DIV>
+		</NAV>
+ 
+		<TABLE CLASS='full-table'>
+			<TR CLASS='spacer'><TD COLSPAN='7'>&nbsp;</TD></TR>
+
+			<TR CLASS='link'>
+				<TD CLASS='spacer'>&nbsp;</TD>
+
+				<TD CLASS='link'>					
+					<BR/><IMG SRC="icons/members.png" STYLE="height: 40px;opacity: 0.8;"/><BR/>
+					<!-- 
+					<A HREF='ro-0.html' CLASS='chapter'><B>what is a right owner (RO)?</B></A>
+					-->
+					<HR>
+					
+					<A HREF='ro-1.html' CLASS='chapter'>looking for ROS</A><BR/>
+					<A HREF='ro-2.html' CLASS='chapter'>registering ROS</A><BR/>
+					<!--
+					<A HREF='ro-3.html' CLASS='chapter'>synchronizing ROS</A><BR/>
+					-->
+					<BR/>
+				</TD>
+
+				<TD CLASS='spacer'>&nbsp;</TD>
+
+				<TD CLASS='link'>					
+					<BR/><IMG SRC="icons/works.png" STYLE="height: 40px;opacity: 0.8;"/>
+					<BR/>
+					<!-- 
+					<A HREF='ro-0.html' CLASS='chapter'><B>what is a work?</B></A>
+					-->
+					<HR>
+					COMMING SOON
+					<!-- 
+					<A HREF='wo-1.html' CLASS='chapter'>looking for works</A><BR/>
+					<A HREF='wo-2.html' CLASS='chapter'>registering works</A><BR/>
+					<A HREF='wo-3.html' CLASS='chapter'>synchronizing works</A><BR/>
+					-->
+					<BR/>
+				</TD>
+
+				<TD CLASS='spacer'>&nbsp;</TD>
+
+				<TD CLASS='link'>					
+					<BR/><IMG SRC="icons/agreements.png" STYLE="height: 40px;opacity: 0.8;"/><BR/>
+					<!-- 
+					<A HREF='ro-0.html' CLASS='chapter'><B>what is an agreement?</B></A>
+					-->
+					<HR>
+					COMMING SOON
+					<!-- 
+					<A HREF='ag-1.html' CLASS='chapter'>looking for agreements</A><BR/>
+					<A HREF='ag-2.html' CLASS='chapter'>registering agreements</A><BR/>
+					-->
+				</TD>
+
+				<TD CLASS='spacer'>&nbsp;</TD>
+			</TR>
+
+			<TR CLASS='spacer'><TD COLSPAN='7'><BR/><BR/></TD></TR>
+
+			<TR CLASS='link'>
+				
+				<TD CLASS='spacer'>&nbsp;</TD>
+
+				<TD CLASS='link'>					
+					<BR/><IMG SRC="icons/licenses.png" STYLE="height: 40px;opacity: 0.8;"/><BR/>
+					<!-- 
+					<A HREF='ro-0.html' CLASS='chapter'><B>what is a license?</B></A>
+					-->
+					<HR>
+					COMMING SOON
+					<!-- 
+					<A HREF='ro-0.html' CLASS='chapter'><B>what is a user?</B></A><BR/>
+					<A HREF='ro-0.html' CLASS='chapter'><B>what is a tariff?</B></A><BR/>
+					<A HREF='ag-1.html' CLASS='chapter'>looking for users</A><BR/>
+					<A HREF='ag-2.html' CLASS='chapter'>registering users</A><BR/>
+					<A HREF='ag-2.html' CLASS='chapter'>looking for license</A><BR/>
+					<A HREF='ag-2.html' CLASS='chapter'>registering licenses</A><BR/>
+					-->
+					<BR/>
+				</TD>
+
+				<TD CLASS='spacer'>&nbsp;</TD>
+
+				<TD CLASS='link'>					
+					<BR/><IMG SRC="icons/distributions.png" STYLE="height: 40px;opacity: 0.8;"/><BR/>
+					<!-- 
+					<A HREF='ro-0.html' CLASS='chapter'><B>what is a distribution?</B></A>
+					-->
+					<HR>
+					COMMING SOON
+					<!-- 
+					<A HREF='ro-0.html' CLASS='chapter'><B>what is a revenue stream?</B></A><BR/>
+					<A HREF='ro-0.html' CLASS='chapter'><B>what is a log source?</B></A><BR/>
+					<A HREF='ag-1.html' CLASS='chapter'>creating distributions</A><BR/>
+					<A HREF='ag-2.html' CLASS='chapter'>matching user logs</A><BR/>
+					<A HREF='ag-2.html' CLASS='chapter'>allocating revenue streams</A><BR/>
+					<A HREF='ag-2.html' CLASS='chapter'>running a distribution</A><BR/>
+					-->
+					<BR/>
+				</TD>
+
+				<TD CLASS='spacer'>&nbsp;</TD>
+
+				<TD CLASS='link'>					
+					<BR/><IMG SRC="icons/list.png" STYLE="height: 40px;opacity: 0.8;"/><BR/>
+					<!-- 
+					<A HREF='ro-0.html' CLASS='chapter'><B>what are the references?</B></A>
+					-->
+					<HR>
+					COMMING SOON					
+					<!-- 
+					<A HREF='ag-1.html' CLASS='chapter'>list of CMOs</A><BR/>
+					<A HREF='ag-2.html' CLASS='chapter'>creation classes</A><BR/>
+					<A HREF='ag-2.html' CLASS='chapter'>roles</A><BR/>
+					<A HREF='ag-2.html' CLASS='chapter'>right types and categories</A><BR/>
+					-->
+					<BR/>
+				</TD>
+
+				<TD CLASS='spacer'>&nbsp;</TD>
+			</TR>
+
+			<TR CLASS='spacer'><TD COLSPAN='7'>&nbsp;</TD></TR>
+				
+		</TABLE>
+
+	</BODY>
+
+</HTML>

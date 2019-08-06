@@ -1,0 +1,149 @@
+{
+	"creation classes" : {
+		"name": "creation classes",
+		
+		"description" : "Creation Classes are used to qualify creative works. They can be understood as category of creations. In some instances, they are refered as repertoire (which is a confusing denomination). Depending on the creation classes, the roles, the right types and categories as well as the distribution rules vary.",
+		"data" : {
+			"MW":{"glyph": "glyphicon-music","code":"MW","name":"musical work","description":"A work composed of a combination of sounds with or without lyrics to be performed by instruments and/or the human voice, not intended for a dramatic context."},
+			"DL":{"glyph": "glyphicon-user","code":"DL","name":"dramatico-musical work","description":"A work composed of a combination of sounds with lyrics and/or text to be performed by instruments and the human voice to be performed in a dramatic context."},
+			"LW":{"glyph": "glyphicon-book","code":"LW","name":"literary work","description":"A written or spoken work composed of a combination of words, not intended for a dramatic context."},
+			"DW":{"glyph": "glyphicon-user","code":"DW","name":"dramatic work","description":"A written or spoken work composed of a combination of words, containing connected actions and discourses of one or usually more persons, in a dramatic context."},
+			"CW":{"glyph": "glyphicon-retweet","code":"CW","name":"choreographic work","description":"A work comprising of a combination of movements and/or gestures and/or postures and/or mime, with or without music"},
+			"AV":{"glyph": "glyphicon-film","code":"AV","name":"audio-visual work","description":"A work that consists of a series of related images which are intrinsically intended to be shown by the use of machines or devices such as projectors, viewers or electronic equipment, together with accompanying music, dialogue and/or sound effects, if any, regardless of the nature of the material objects, such as films or tapes, in which the work is embodied."},
+			"MM":{"glyph": "glyphicon-qrcode","code":"MM","name":"multimedia work","description":"The combined use of digitalized information representing text, sound and still or video images or the media so used. The term can refer to any interactive system and any data storage medium."},
+			"IS":{"glyph": "glyphicon-list-alt","code":"IS","name":"information system","description":"A computer-based system with the defining characteristic that it provides information to users. Information systems include data processing applications, office automation applications, expert system application, databases."},
+			"WA":{"glyph": "glyphicon-picture","code":"WA","name":"work of art","description":"A graphic or visual art work, including painting, sculpture, etc."},
+			"PH":{"glyph": "glyphicon-camera","code":"PH","name":"photographic work","description":"A still image produced on surfaces sensitive to light or other radiation"},
+			"AC":{"glyph": "glyphicon-tower","code":"AC","name":"architectural work","description":"A work such as a building, including its related concepts, plans and models"},
+			"LF":{"glyph": "glyphicon-book","code":"LF","name":"literary fiction work","description":"A litterary work, based on a fiction"},
+			"LN":{"glyph": "glyphicon-book","code":"LN","name":"literary non-fiction work","description":"A litterary work, not based on a fiction"},
+			"AF":{"glyph": "glyphicon-film","code":"AF","name":"fiction audio-visual work","description":"An audio visual work based on a fiction."},
+			"AD":{"glyph": "glyphicon-film","code":"AD","name":"documentary audiovisual work","description":"An audio visual work based on a documentary."},
+			"SR":{"glyph": "glyphicon-headphones","code":"SR","name":"sound recording","description":"A sound recording is an electrical, mechanical, electronic, or digital inscription and re-creation of sound waves, such as spoken voice, singing, instrumental music, or sound effects."}
+		}
+	},
+	"affiliation roles" : {
+		"name": "affiliation roles",
+		"description" : "",
+		"data" : {
+		"AC":{ "code":"AC","name":"Actor","description":"The main actor/star featured in an audio-visual work."}
+		,"AG":{"code":"AG","name":"Graphic Designer","description":""}
+		,"AP":{"code":"AP","name":"Analyst / Programmer","description":""}
+		,"AS":{"code":"AS","name":"Author of sceenplay / Author of dialogue","description":"A writer who either adapts an existing work or creates a new screenplay for an audio-visual work."}
+		,"AT":{"code":"AT","name":"Architect","description":""}
+		,"CD":{"code":"CD","name":"Costume Designer","description":""}
+		,"CG":{"code":"CG","name":"Choreographer","description":""}
+		,"CM":{"code":"CM","name":"Director of Photography / Cinematograph","description":"The person responsible for capturing the images and the selection and arrangement of lighting of the audio-visual work."}
+		,"CP":{"code":"CP","name":"Author Computer Graphic","description":""}
+		,"CT":{"code":"CT","name":"Cartoonist","description":""}
+		,"DA":{"code":"DA","name":"Data architect","description":""}
+		,"DG":{"code":"DG","name":"Designer","description":""}
+		,"DS":{"code":"DS","name":"Author of subtitles","description":"Sub-titler: The person who provides the printed translation of the dialogue that appears in an audio-visual works; Dubber: The person who replaces the original dialogue with a translation."}
+		,"DW":{"code":"DW","name":"Drawer / Graphic Artist","description":""}
+		,"EB":{"code":"EB","name":"Book Publisher","description":""}
+		,"EJ":{"code":"EJ","name":"Journal / Periodical / Magazine Publisher","description":""}
+		,"EM":{"code":"EM","name":"Music Publisher","description":""}
+		,"EP":{"code":"EP","name":"Newspaper Publisher","description":""}
+		,"ET":{"code":"ET","name":"Film Editor","description":"A person who performs editing (in consultation with the director) of the audio-visual work."}
+		,"FA":{"code":"FA","name":"Author of Fine Art","description":""}
+		,"FD":{"code":"FD","name":"Film Distributor","description":"The person responsible for coordinating the distribution of the finished audio-visual work to broadcasters, exhibitors, etc."}
+		,"IN":{"code":"IN","name":"Performer","description":""}
+		,"JO":{"code":"JO","name":"Journalist","description":""}
+		,"LY":{"code":"LY","name":"Lyricist / Librettist","description":""}
+		,"MC":{"code":"MC","name":"Musical Creator (Composer)","description":""}
+		,"MD":{"code":"MD","name":"Multimedia director","description":""}
+		,"MS":{"code":"MS","name":"Stage Director","description":""}
+		,"PC":{"code":"PC","name":"Producer","description":"The person who bears the ultimate administrative and financial responsibility for an audio-visual work"}
+		,"PD":{"code":"PD","name":"Production Designer (Set-Designer)","description":""}
+		,"PH":{"code":"PH","name":"Photographer","description":""}
+		,"PR":{"code":"PR","name":"Press agency","description":""}
+		,"PW":{"code":"PW","name":"Playwright","description":""}
+		,"RE":{"code":"RE","name":"Film Director","description":"The person who directs the actors and the camera and bears the ultimate creative responsibility for an audio-visual work"}
+		,"ST":{"code":"ST","name":"Sound Engineer","description":"A member of the sound team involved with creating the soundtrack for the audio-visual work."}
+		,"WP":{"code":"WP","name":"Author / Poet","description":""}
+		,"PO":{"code":"PO","name":"Production Company","description":"The company that finances the production of an audio-visual work."}
+		}
+	},
+	"right types" : {
+		"name": "right types",
+		"description" : "",
+		"data" : {"PR":{"code":"PR","name":"Performing right","description":"The right to perform a work, i.e. to present a work non-theatrically by action such as playing, reciting, singing, or projecting to the public in their presence"}
+		,"PT":{"code":"PT","name":"Theatrical performing right","description":"The right to perform a work theatrically, i.e. to present a work on theatrical or similar stage by action such as playing, reciting, singing, or dancing to the public in their presence."}
+		,"RB":{"code":"RB","name":"Radio broadcast right","description":"The right to transmit a work on radio for public reception at a distance and at different places by wireless means, by wire or by satellite"}
+		,"TB":{"code":"TB","name":"Television broadcast right","description":"The right to transmit a work on television for public reception at a distance and at different places by wireless means, by wire or by satellite"}
+		,"OD":{"code":"OD","name":"Making available right – interactive","description":"The communication to the public and making available right for interactive forms of exploitation."}
+		,"OB":{"code":"OB","name":"Making available right – non interactive","description":"The communication to the public and making available right for noninteractive forms of exploitation."}
+		,"RT":{"code":"RT","name":"Retransmission right","description":"The right to retransmit a broadcast if effected by a cable operator"}
+		,"TP":{"code":"TP","name":"Right of retransmission of performance","description":"The right to transmit a live performance of a work beyond the place of performance to the public by means of screens, loudspeakers or similar technical devices"}
+		,"TO":{"code":"TO","name":"Right of public performance of radio broadcast","description":"The right to perform publicly a broadcast of a work by means of screens, loudspeakers or similar technical devices to a group of listeners or spectators in their presence"}
+		,"TV":{"code":"TV","name":"Right of public performance of TV broadcast","description":"The right to perform publicly a broadcast of a work by means of screens, loudspeakers or similar technical devices to a group of listeners or spectators in their presence"}
+		,"PC":{"code":"PC","name":"Right of public performance of a recording","description":"The right to perform publicly a recording of a work by means of playing an audio, visual or audiovisual carrier to a group of listeners or spectators in their presence"}
+		,"MR":{"code":"MR","name":"Mechanical right","description":"The right to record, reproduce and distribute a work on a carrier"}
+		,"MD":{"code":"MD","name":"Mechanical right – interactive","description":"The mechanical reproduction right effected by interactive forms of exploitation"}
+		,"MB":{"code":"MB","name":"Mechanical right – non interactive","description":"The mechanical reproduction right effected by non-interactive forms of exploitation."}
+		,"RP":{"code":"RP","name":"Reproduction right","description":"The right to make a copy of a literary or artistic work and to distribute such copies"}
+		,"SY":{"code":"SY","name":"Synchronisation right","description":"The right to include and combine a work either completely or in parts in timed relation with works of other categories for the creation of an audiovisual, multimedia work or a database"}
+		,"DB":{"code":"DB","name":"Database right","description":"The right to store a work in a database or a similar medium"}
+		,"BT":{"code":"BT","name":"Blank tape remuneration","description":"The right to claim a remuneration for private copying which is charged for manufacturing or importing recordable audio-, visual- or audiovisual- carriers and/or recorders"}
+		,"RG":{"code":"RG","name":"Reprography remuneration","description":"The right to claim a remuneration for the reproduction of works by reprography which is charged for manufacturing, importing or operating devices that permit works to be reproduced reprographically"}
+		,"RL":{"code":"RL","name":"Rental and lending right","description":"The right to rent or lend the original or a copy of a work to the public"}
+		,"RR":{"code":"RR","name":"Resale right (Droit de suite)","description":"The right to claim a share of the selling price of each resale of the original of a work"}
+	}},
+	"right categories" : {
+		"name": "right categories",
+		"description" : "",
+		"data" : {"MEC":{"code":"MEC","name":"Mechanical Right","description":"The right to record, reproduce and distribute a work on a carrier (CDs, MCs, Films, CD-ROM, etc.)"}
+		,"PER":{"code":"PER","name":"Performing Right","description":"The entitlement to perform musical, literary or dramatic works live or by mechanical means or to recite literary works"}
+		,"SYN":{"code":"SYN","name":"Synchronisation Right","description":"The right to include and combine a work either completely or in parts in timed relation with works of other categories for the creation of an audiovisual, multimedia work or a database"}
+		,"POI":{"code":"POI","name":"Point Based","description":"the economic rights are distributed to the right owner according to the associated weight (or point). For a given work, the weight can be defined per right owner or per role."}
+	}}, "work roles": {
+		"name": "work roles",
+		"description" : "",
+		"data" : {"AM":{"code":"AM","name":"Administrator","description":""}
+		,"PA":{"code":"PA","name":"Income Participant","description":""}
+		,"E":{"code":"E","name":"Original Publisher","description":""}
+		,"ES":{"code":"ES","name":"Substituted Publisher","description":""}
+		,"SE":{"code":"SE","name":"Sub Publisher","description":""}
+		,"AD":{"code":"AD","name":"Adaptor","description":""}
+		,"AR":{"code":"AR","name":"Arranger","description":""}
+		,"A":{"code":"A","name":"Author, Writer, Author of Lyrics","description":""}
+		,"C":{"code":"C","name":"Composer, Writer","description":""}
+		,"CA":{"code":"CA","name":"Composer/Author","description":""}
+		,"SR":{"code":"SR","name":"Sub Arranger","description":""}
+		,"SA":{"code":"SA","name":"Sub Author","description":""}
+		,"TR":{"code":"TR","name":"Translator","description":""}
+		,"PER":{"code":"PER","name":"Associated Performer","description":""}
+		,"PA":{"code":"PA","name":"Income Participant","description":""}
+		}
+	},
+	"name types": {
+		"name": "name types",
+		"description" : "",
+		"data" : {"PA":{"code":"PA","name":"Patronym","description":""},
+		"PP":{"code":"PP","name":"Pseudonym","description":""},
+		"PG":{"code":"PG","name":"Group Pseudonym","description":""},
+		"MO":{"code":"MO","name":"Name Modification","description":""},
+		"DF":{"code":"DF","name":"Different Spelling","description":""},
+		"ST":{"code":"ST","name":"Standardized Spelling","description":""},
+		"OR":{"code":"OR","name":"Other Reference","description":""},
+		"HR":{"code":"HR","name":"Holding Reference","description":""}
+		}
+	}, "title types" : {
+		"name": "title types",
+		"description" : "",
+		"data" : {
+		"AL":{"code":"AL","name":"Alternative Title with National Characters","description":""},
+		"AT":{"code":"AT","name":"Alternative Title","description":""},
+		"ET":{"code":"ET","name":"Extra Search Title","description":""},
+		"FT":{"code":"FT","name":"Formal Title","description":""},
+		"IT":{"code":"IT","name":"Incorrect Title","description":""},
+		"OL":{"code":"OL","name":"Original Title with National Characters","description":""},
+		"OT":{"code":"OT","name":"Original Title","description":""},
+		"PT":{"code":"PT","name":"Part Title","description":""},
+		"RT":{"code":"RT","name":"Restricted Title","description":""},
+		"TE":{"code":"TE","name":"First Line of Text","description":""},
+		"TT":{"code":"TT","name":"Original Title Translated","description":""}
+		}
+
+	}
+}

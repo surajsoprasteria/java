@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.CreationClassFlatMapper">
+	<resultMap id="resMap" type="CreationClassFlat">
+		<id property="idCreationClass" 		column="CRC_id_creation_class" />
+		<result property="code" 			column="CRC_code" />
+		<result property="fkName" 			column="CRC_fk_name" />
+		<result property="name" 			column="CRC_name" />
+		<result property="fkDescription" 	column="CRC_fk_description" />
+		<result property="description" 		column="CRC_description" />
+		<result property="examples" 		column="CRC_examples" />
+		<result property="userInsert" 		column="CRC_user_insert" />
+		<result property="dateInsert" 		column="CRC_date_insert" />
+		<result property="userUpdate" 		column="CRC_user_update" />
+		<result property="dateUpdate" 		column="CRC_date_update" />
+	</resultMap>
+
+	<sql id="fields">
+		creation_class.id_creation_class 	AS CRC_id_creation_class,
+		creation_class.code 				AS CRC_code,
+		creation_class.user_insert 			AS CRC_user_insert,
+		creation_class.date_insert 			AS CRC_date_insert,
+		creation_class.user_update 			AS CRC_user_update,
+		creation_class.date_update 			AS CRC_date_update,
+		creation_class.fk_name 				AS CRC_fk_name,
+		creation_class.fk_description 		AS CRC_fk_description,
+		tr_name.default_value 				AS CRC_name,
+		tr_desc.default_value 				AS CRC_description,
+		tr_exam.default_value 				AS CRC_examples
+	</sql>
+	<sql id="baseSelect">
+     	SELECT
+     		<include refid="fields" />
+		FROM creation_class
+		LEFT OUTER JOIN translation tr_name ON tr_name.id_translation = creation_class.fk_name
+		LEFT OUTER JOIN translation tr_desc ON tr_desc.id_translation = creation_class.fk_description
+		LEFT OUTER JOIN translation tr_exam ON tr_exam.id_translation = creation_class.fk_examples
+	</sql>
+	
+	
+	<insert id="insert" useGeneratedKeys="true" >
+		INSERT INTO creation_class (
+			code,
+			fk_name,
+			fk_description
+		) VALUES (
+			#{code},
+			#{fkName},
+			#{fkDescription}
+		)
+		
+		<selectKey   resultType="long" keyProperty="idCreationClass"  keyColumn="id_creation_class"   order="BEFORE" >		
+		select next from _sequences where name = 'ID_CREATION_CLASS_SEQ'
+		</selectKey>	
+	</insert>
+	
+	<update id="updateByPrimaryKey" keyProperty="idCreationClass">
+		UPDATE creation_class
+		SET 
+			fk_name 			= #{fkName},
+			fk_description		= #{fkDescription}
+		WHERE 
+			id_creation_class	= #{idCreationClass}
+	</update>
+
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE creation_class.id_creation_class = #{idCreationClass}
+	</select>
+
+	<select id="findByCode" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE creation_class.code = #{code}
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		ORDER BY tr_name.default_value
+	</select>
+	
+	
+	<select id="exsistCode" resultType="boolean" parameterType="map">
+		SELECT  COUNT(id_creation_class) AS result 
+		FROM  creation_class 
+		WHERE code = #{code}
+			<if test="idToExclude != null">
+				AND creation_class.id_creation_class != #{idToExclude}
+			</if>
+	</select>
+
+</mapper>

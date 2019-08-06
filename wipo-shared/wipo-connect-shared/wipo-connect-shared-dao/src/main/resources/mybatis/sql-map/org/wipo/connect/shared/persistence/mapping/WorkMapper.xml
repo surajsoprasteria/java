@@ -1,0 +1,1074 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.WorkMapper">
+
+	<sql id="fields">
+		work.id_work AS WRK_id_work ,
+		work.main_id AS WRK_main_id ,
+		work.genre AS WRKGEN_code,
+		work.fk_type AS WRK_fk_type ,
+		work.release_date AS WRK_release_date ,
+		work.duration AS WRK_duration,
+		work.fk_status AS WRK_fk_status,
+		work.registration_date AS WRK_registration_date,
+		work.fk_source_type AS WRK_fk_source_type,
+		work.fk_excerpt_type AS WRK_fk_excerpt_type,
+		work.fk_composite_type AS WRK_fk_composite_type,
+		work.domestic_work AS WRK_domestic_work,
+		work.last_update AS WRK_last_update,
+		work.to_be_submitted AS WRK_to_be_sub,
+		'${@org.wipo.connect.shared.exchange.enumerator.DomainEnum@INTERNATIONAL.name()}' as WRK_domain,
+		work.fk_cmo AS WRK_fk_cmo,
+		cmo_orig.code AS WRK_cmo_origin_code,
+		work.catalogue_number AS WRK_cat_number,
+		work.support AS WRK_support,
+		work.fk_country_production AS WRK_fk_country_prod,
+		work.category AS WRK_category_code,
+		work.language AS WRK_language,
+		work.label AS WRK_label,
+		work.fk_creation_class AS WRK_cc,
+		work.component_perc AS WRK_comp_perc,
+		work.sync_version AS WRK_sync_version
+	</sql>
+
+	<resultMap id="resMap" type="Work">
+		<id property="idWork" column="WRK_id_work" />
+
+		<result property="mainId" column="WRK_main_id" />
+		<result property="fkType" column="WRK_fk_type" />
+		<result property="releaseDate" column="WRK_release_date" />
+		<result property="duration" column="WRK_duration" />
+		<result property="fkStatus" column="WRK_fk_status" />
+		<result property="registrationDate" column="WRK_registration_date" />
+		<result property="domain" column="WRK_domain" />
+		<result property="statusCode" column="WRKS_code" />
+		<result property="typeCode" column="WRKTY_code" />
+		<result property="genreCode" column="WRKGEN_code" />
+
+		<result property="compositeTypeCode" column="COMPOSITE_code" />
+		<result property="excerptTypeCode" column="EXCERPT_code" />
+		<result property="sourceTypeCode" column="SOURCE_code" />
+
+		<result property="toBeSubmitted" column="WRK_to_be_sub" />
+        <result property="userInsert" column="WRK_user_insert" />
+        <result property="dateInsert" column="WRK_date_insert" />
+        <result property="userUpdate" column="WRK_user_update" />
+        <result property="dateUpdate" column="WRK_date_update" />
+
+		<result property="fkSourceType" column="WRK_fk_source_type" />
+		<result property="fkExcerptType" column="WRK_fk_excerpt_type" />
+		<result property="fkCompositeType" column="WRK_fk_composite_type" />
+		<result property="domesticWork" column="WRK_domestic_work" />
+		<result property="lastUpdateDate" column="WRK_last_update" />
+
+		<result property="fkCmo" column="WRK_fk_cmo" />
+		<result property="cmoOriginCode" column="WRK_cmo_origin_code" />
+
+		<result property="catalogueNumber" column="WRK_cat_number" />
+		<result property="support" column="WRK_support" />
+		<result property="fkCountryOfProduction" column="WRK_fk_country_prod" />
+		<result property="language" column="WRK_language" />
+		<result property="label" column="WRK_label" />
+		<result property="countryOfProductionCode" column="WRK_country_prod_code" />
+		<result property="categoryCode" column="WRK_category_code" />
+		<result property="componentPerc" column="WRK_comp_perc" />
+		<result property="fkCreationClass" column="WRK_cc" />
+		<result property="creationClassCode" column="WRK_creation_class_code" />
+		<result property="syncVersion" column="WRK_sync_version" />
+
+		<collection property="instrumentCodeList" ofType="java.lang.String">
+			<result column="WRKINS_code" />
+		</collection>
+
+		<collection property="titleList" ofType="Title" resultMap="org.wipo.connect.shared.persistence.mapping.TitleMapper.resMap" />
+		<collection property="workIdentifierList" ofType="WorkIdentifierFlat" resultMap="org.wipo.connect.shared.persistence.mapping.WorkIdentifierFlatMapper.resMap" />
+		<collection property="derivedViewList" ofType="DerivedView" resultMap="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.resMap" />
+		<collection property="workDateList" ofType="WorkDate" resultMap="org.wipo.connect.shared.persistence.mapping.WorkDateMapper.resMap" />
+	</resultMap>
+
+	<resultMap id="resMapReindex" type="Work">
+		<id property="idWork" column="WRK_id_work" />
+
+		<result property="mainId" column="WRK_main_id" />
+		<result property="fkStatus" column="WRK_fk_status" />
+		<result property="statusCode" column="WRKS_code" />
+		<result property="fkCreationClass" column="WRK_cc" />
+		<result property="creationClassCode" column="WRK_creation_class_code" />
+		<collection property="titleList" ofType="Title" resultMap="org.wipo.connect.shared.persistence.mapping.TitleMapper.resMap" />
+		<collection property="workIdentifierList" ofType="WorkIdentifierFlat" resultMap="org.wipo.connect.shared.persistence.mapping.WorkIdentifierFlatMapper.resMap" />
+	</resultMap>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.TitleMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.WorkIdentifierFlatMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.fieldsDerivedViewName" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.fieldsDerivedViewNameShare" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.NameMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.WorkDateMapper.fields" />,
+			work_instrument.code AS WRKINS_code,
+			work_status.code AS WRKS_code,
+			ref_type.code AS WRKTY_code,
+			ref_titletype.code AS TITY_code,
+			ref_source_type.code AS SOURCE_code,
+			ref_excerpt_type.code AS EXCERPT_code,
+			ref_composite_type.code AS COMPOSITE_code,
+			role.code as R_code,
+			ref_source_type_derived.code AS R_source_type,
+			country_of_prod.code AS WRK_country_prod_code,
+			creation_class.code as WRK_creation_class_code
+			<include refid="baseFrom" />
+	</sql>
+	<sql id="baseFrom">
+		FROM
+			work
+			LEFT OUTER JOIN work_instrument ON work_instrument.fk_work = work.id_work
+			LEFT OUTER JOIN work_title ON work_title.fk_work = work.id_work
+			LEFT OUTER JOIN title ON title.id_title = work_title.fk_title
+			LEFT OUTER JOIN work_identifier ON work_identifier.fk_work = work.id_work
+			LEFT OUTER JOIN identifier ON identifier.id_identifier = work_identifier.fk_identifier
+			LEFT OUTER JOIN derived_view ON derived_view.fk_work = work.id_work
+			LEFT OUTER JOIN derived_view_name ON derived_view_name.fk_derived_view = derived_view.id_derived_view
+			LEFT OUTER JOIN reference reference_cmo ON derived_view_name.fk_source_type = reference_cmo.id_reference
+			LEFT OUTER JOIN translation tr_aux ON reference_cmo.fk_value = tr_aux.id_translation
+			LEFT OUTER JOIN name ON derived_view_name.fk_name = name.id_name
+			LEFT OUTER JOIN role ON derived_view_name.fk_role = role.id_role
+			LEFT OUTER JOIN derived_view_name_share ON derived_view_name_share.fk_derived_view_name = derived_view_name.id_derived_view_name
+			LEFT OUTER JOIN right_type on right_type.id_right_type = derived_view_name_share.fk_right_type
+			LEFT OUTER JOIN work_status ON work_status.id_work_status = work.fk_status
+			LEFT OUTER JOIN reference ref_type ON ref_type.id_reference = work.fk_type
+			LEFT OUTER JOIN reference ref_source_type ON ref_source_type.id_reference = work.fk_source_type
+			LEFT OUTER JOIN reference ref_excerpt_type ON ref_excerpt_type.id_reference = work.fk_excerpt_type
+			LEFT OUTER JOIN reference ref_composite_type ON ref_composite_type.id_reference = work.fk_composite_type
+			LEFT OUTER JOIN reference ref_titletype ON ref_titletype.id_reference = title.fk_type
+	    	LEFT OUTER JOIN reference ref_source_type_derived ON ref_source_type_derived.id_reference = derived_view_name.fk_source_type
+	    	LEFT OUTER JOIN cmo cmo_orig ON work.fk_cmo = cmo_orig.id_cmo
+	    	LEFT OUTER JOIN work_date ON work_date.fk_work = work.id_work
+	    	LEFT OUTER JOIN reference ref_country_prod ON ref_country_prod.id_reference = work.fk_country_production
+			LEFT OUTER JOIN creation_class ON creation_class.id_creation_class = work.fk_creation_class
+			LEFT OUTER JOIN territory country_of_prod ON work.fk_country_production = country_of_prod.id_territory
+	</sql>
+	
+	<sql id="baseFromIdOnly">
+		FROM
+			work
+			LEFT OUTER JOIN work_status ON work_status.id_work_status = work.fk_status
+			LEFT OUTER JOIN cmo cmo_orig ON work.fk_cmo = cmo_orig.id_cmo
+			LEFT OUTER JOIN work_title ON work_title.fk_work = work.id_work
+			LEFT OUTER JOIN title ON title.id_title = work_title.fk_title
+			LEFT OUTER JOIN reference ref_titletype ON ref_titletype.id_reference = title.fk_type
+			LEFT OUTER JOIN work_identifier ON work_identifier.fk_work = work.id_work
+			LEFT OUTER JOIN identifier ON identifier.id_identifier = work_identifier.fk_identifier
+			LEFT OUTER JOIN derived_view ON derived_view.fk_work = work.id_work
+			LEFT OUTER JOIN derived_view_name ON derived_view_name.fk_derived_view = derived_view.id_derived_view
+			LEFT OUTER JOIN name ON derived_view_name.fk_name = name.id_name
+	    	LEFT OUTER JOIN work_date ON work_date.fk_work = work.id_work
+			LEFT OUTER JOIN creation_class ON creation_class.id_creation_class = work.fk_creation_class
+			LEFT OUTER JOIN territory country_of_prod ON work.fk_country_production = country_of_prod.id_territory
+			LEFT OUTER JOIN work_performer ON work_performer.fk_work = work.id_work
+	</sql>
+	
+	<sql id="baseConditions">
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="idList != null and idList.size  > 0">
+				AND (work.id_work IN
+				<foreach collection="idList" item="id" open="(" close=")" separator="" index="idx">
+					#{id}
+					<choose>
+						<when test="(idx > 0) and (idList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+							) OR work.id_work IN (
+						</when>
+						<when test="idList.size - idx - 1 == 0">
+
+						</when>
+						<otherwise>
+							,
+						</otherwise>
+					</choose>
+		        </foreach>
+		        )
+			</if>
+			<if test="title != null">
+				<bind name="title_like" value="'%' + title + '%'" />
+				AND EXISTS (
+					SELECT 0
+					FROM work aux_work
+					     INNER JOIN work_title aux_work_title ON aux_work_title.fk_work = aux_work.id_work
+					     INNER JOIN title aux_title ON aux_title.id_title = aux_work_title.fk_title
+					     INNER JOIN reference title_type_ref ON title_type_ref.id_reference = aux_title.fk_type
+					WHERE aux_work.id_work = work.id_work
+					and aux_title.description like #{title_like}
+					<if test="originalTitles == true">
+						AND title_type_ref.code = '${@org.wipo.connect.shared.exchange.enumerator.TitleTypeCodeEnum@OT.name()}'
+					</if>
+					 )
+			</if>
+			<if test="identifier != null">
+				AND (work.main_id = #{identifier}
+				<if test="onlyMainId == false">
+					OR EXISTS (
+						SELECT 0
+						FROM work aux_work
+						INNER JOIN work_identifier aux_work_identifier ON aux_work_identifier.fk_work = aux_work.id_work
+						INNER JOIN identifier aux_identifier ON aux_identifier.id_identifier = aux_work_identifier.fk_identifier
+						WHERE aux_work.id_work = work.id_work
+							AND aux_work_identifier.value = #{identifier})
+				</if>
+				)
+			</if>
+			<if test="wipoLocalId != null">
+				AND EXISTS (
+					SELECT 0
+					FROM work aux_work
+					INNER JOIN work_identifier aux_work_identifier ON aux_work_identifier.fk_work = aux_work.id_work
+					INNER JOIN identifier aux_identifier ON aux_identifier.id_identifier = aux_work_identifier.fk_identifier
+					WHERE aux_work.id_work = work.id_work
+						AND aux_identifier.code = '${@org.wipo.connect.shared.exchange.enumerator.IdentifierTypeEnum@WIPO_CONNECT_LOCAL_ID.toString()}'
+						AND aux_work_identifier.value = #{wipoLocalId} )
+			</if>
+			<if test="iswc != null">
+				AND EXISTS (
+					SELECT 0
+					FROM work aux_work
+					INNER JOIN work_identifier aux_work_identifier ON aux_work_identifier.fk_work = aux_work.id_work
+					INNER JOIN identifier aux_identifier ON aux_identifier.id_identifier = aux_work_identifier.fk_identifier
+					WHERE aux_work.id_work = work.id_work
+						AND aux_identifier.code = '${@org.wipo.connect.shared.exchange.enumerator.IdentifierTypeEnum@ISWC.toString()}'
+						AND aux_work_identifier.value = #{iswc} )
+			</if>
+			<if test="statusCode != null">
+				AND work.fk_status = (SELECT id_work_status from work_status aux_work_status where aux_work_status.code = #{statusCode})
+			</if>
+			<if test="(isToShowDeleted == false) and (statusCode == null)">
+				AND work.fk_status NOT IN (SELECT id_work_status from work_status aux_work_status where aux_work_status.code = '${@org.wipo.connect.shared.exchange.enumerator.WorkStatusEnum@DELETED.toString()}')
+			</if>
+			<if test="forceValidStatus != null and forceValidStatus==true">
+				AND work.fk_status = (SELECT id_work_status from work_status aux_work_status where aux_work_status.code = '${@org.wipo.connect.shared.exchange.enumerator.WorkStatusEnum@VALID.toString()}')
+			</if>
+			<if test="onlyRegistered != null and onlyRegistered==true">
+				AND work.fk_status in (SELECT id_work_status from work_status aux_work_status where
+								(aux_work_status.code not in ('${@org.wipo.connect.shared.exchange.enumerator.WorkStatusEnum@DELETED.toString()}')))
+			</if>
+			<if test="registrationDate != null">
+				AND work.registration_date &gt;= #{registrationDate:DATE}
+			</if>
+
+			<if test="performer != null">
+				<bind name="performer_like" value="'%' + performer + '%'" />
+				AND EXISTS (
+						SELECT 0
+						FROM work aux_work
+						INNER JOIN work_performer aux_perf ON aux_perf.fk_work = aux_work.id_work
+						WHERE aux_work.id_work = work.id_work
+						AND aux_perf.performer_name like #{performer_like}
+					)
+			</if>
+			<if test="disableOriginCheck==null or disableOriginCheck==false">
+				<include refid="org.wipo.connect.shared.persistence.mapping.ClientInfoMapper.workWhereCondition" />
+			</if>
+			<if test="categoryCode != null">
+				AND work.category = #{categoryCode}
+			</if>
+			<if test="countryOfProductionCode != null">
+				<bind name="countryOfProductionCode" value="'%' + countryOfProductionCode + '%'" />
+				AND  EXISTS (SELECT 0
+							 FROM work aux1
+				           		 LEFT JOIN territory aux2 ON aux2.id_territory = aux1.fk_country_production
+							WHERE 	aux1.id_work = work.id_work
+							AND aux2.code LIKE #{countryOfProductionCode})
+			</if>
+			<if test="label != null">
+				AND work.label = #{label}
+			</if>
+			<if test="catalogueNumber != null">
+				<bind name="catalogueNumber" value="'%' + catalogueNumber + '%'" />
+				AND work.catalogue_number like #{catalogueNumber}
+			</if>
+			<if test="dateTypeCode != null and dateValue == null">
+				AND EXISTS (
+					SELECT 0
+					FROM work aux_work
+					INNER JOIN work_date aux_work_date ON aux_work_date.fk_work = aux_work.id_work
+					WHERE aux_work.id_work = work.id_work
+					AND aux_work_date.code =#{dateTypeCode}
+				)
+			</if>
+
+			<if test="dateValue != null">
+					  <choose>
+				        	<when test="dateTypeCode == null">
+				        		AND EXISTS (
+									SELECT 0
+									FROM work aux_work
+									INNER JOIN work_date aux_work_date ON aux_work_date.fk_work = aux_work.id_work
+									WHERE aux_work.id_work = work.id_work
+									AND aux_work_date.date_value = #{dateValue}
+								)
+				        	</when>
+				        	<otherwise>
+					        	AND EXISTS (
+									SELECT 0
+									FROM work aux_work
+									INNER JOIN work_date aux_work_date ON aux_work_date.fk_work = aux_work.id_work
+									WHERE aux_work.id_work = work.id_work
+									AND aux_work_date.code =#{dateTypeCode}
+									AND aux_work_date.date_value = #{dateValue}
+								)
+				        	</otherwise>
+				        </choose>
+			</if>
+			<if test="creationClassCodeList != null and creationClassCodeList.size  > 0">
+			 	AND creation_class.code IN
+ 					<foreach collection="creationClassCodeList" item="cc_code" open="(" close=")" separator="" index="idx">
+ 						#{cc_code}
+				 		<choose>
+							<when test="creationClassCodeList.size - idx - 1 == 0">
+
+							</when>
+							<otherwise>
+								,
+							</otherwise>
+						</choose>
+					</foreach>
+			</if>
+			<if test="rightOwnerListSearch != null and rightOwnerListSearch.size  > 0">
+				<foreach collection="rightOwnerListSearch" item="item" index="index">
+					AND
+					<choose>
+			        	<when test="item.nameMainId !=null">
+					        EXISTS (SELECT 0
+								FROM work aux_work
+								INNER JOIN derived_view aux_derived_view ON aux_derived_view.fk_work = aux_work.id_work
+								INNER JOIN derived_view_name aux_derived_view_name ON aux_derived_view_name.fk_derived_view = aux_derived_view.id_derived_view
+								INNER JOIN name aux_name ON aux_name.id_name = aux_derived_view_name.fk_name
+								WHERE aux_work.id_work = work.id_work
+								AND aux_name.main_id = #{item.nameMainId}
+							)
+			        	</when>
+			        	<otherwise>
+							EXISTS (
+								SELECT 0
+								FROM work aux_work
+								INNER JOIN derived_view aux_derived_view ON aux_derived_view.fk_work = aux_work.id_work
+								INNER JOIN derived_view_name aux_derived_view_name ON aux_derived_view_name.fk_derived_view = aux_derived_view.id_derived_view
+								INNER JOIN name aux_name ON aux_name.id_name = aux_derived_view_name.fk_name
+								WHERE aux_work.id_work = work.id_work
+								AND (aux_name.first_name LIKE #{item.rightOwnerValueLike}
+								OR aux_name.name LIKE #{item.rightOwnerValueLike}
+								OR aux_name.main_id LIKE #{item.rightOwnerValueLike})
+							)
+			        	</otherwise>
+				        </choose>
+		        </foreach>
+			</if>
+
+			<if test="originalTitleTrimmed != null">
+				AND EXISTS (
+				SELECT 0
+			     FROM  work_title aux_work_title
+			          INNER JOIN title aux_title ON aux_title.id_title = aux_work_title.fk_title
+			          INNER JOIN reference title_type_ref ON title_type_ref.id_reference = aux_title.fk_type
+			     WHERE aux_work_title.fk_work = work.id_work
+			     AND REPLACE(aux_title.description,' ', '') = #{originalTitleTrimmed}
+			     AND title_type_ref.code = '${@org.wipo.connect.shared.exchange.enumerator.TitleTypeCodeEnum@OT.name()}'
+					)
+			</if>
+			<if test="identifierSearchVOList != null and identifierSearchVOList.size  > 0">
+      				AND EXISTS (
+			       	SELECT 0
+			       	FROM work_identifier aux_work_ident
+			       	INNER JOIN identifier aux_identifier ON aux_identifier.id_identifier=aux_work_ident.fk_identifier
+			       	WHERE aux_work_ident.fk_work = work.id_work
+			       	AND
+	         			<foreach collection="identifierSearchVOList" item="item" open="(" close=")" separator="OR" index="idx">
+	         			(
+	           			identifier.code = #{item.type}
+	          			AND aux_work_ident.value = #{item.value}
+	          			)
+	         			</foreach>
+	      			)
+	    	</if>
+			<if test="idToExcludeList != null and idToExcludeList.size  > 0">
+				AND (work.id_work NOT IN
+				<foreach collection="idToExcludeList" item="id" open="(" close=")" separator="" index="idx">
+					#{id}
+					<choose>
+						<when test="(idx > 0) and (idToExcludeList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+							) AND work.id_work NOT IN (
+						</when>
+						<when test="idToExcludeList.size - idx - 1 == 0">
+
+						</when>
+						<otherwise>
+							,
+						</otherwise>
+					</choose>
+		        </foreach>
+		        )
+			</if>
+
+		</trim>
+	</sql>
+	
+	
+	<sql id="baseConditionsIdOnly">
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="idList != null and idList.size  > 0">
+				AND (work.id_work IN
+				<foreach collection="idList" item="id" open="(" close=")" separator="" index="idx">
+					#{id}
+					<choose>
+						<when test="(idx > 0) and (idList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+							) OR work.id_work IN (
+						</when>
+						<when test="idList.size - idx - 1 == 0">
+
+						</when>
+						<otherwise>
+							,
+						</otherwise>
+					</choose>
+		        </foreach>
+		        )
+			</if>
+			<if test="title != null">
+				<bind name="title_like" value="'%' + title + '%'" />
+				AND EXISTS (
+					SELECT 0
+					FROM work aux_work
+					     INNER JOIN work_title aux_work_title ON aux_work_title.fk_work = aux_work.id_work
+					     INNER JOIN title aux_title ON aux_title.id_title = aux_work_title.fk_title
+					     INNER JOIN reference title_type_ref ON title_type_ref.id_reference = aux_title.fk_type
+					WHERE aux_work.id_work = work.id_work
+					AND aux_title.description LIKE #{title_like}
+				
+					<if test="originalTitles == true">
+						AND title_type_ref.code = '${@org.wipo.connect.shared.exchange.enumerator.TitleTypeCodeEnum@OT.name()}'
+					</if>
+					 )
+			</if>
+			<if test="identifier != null">
+				AND (work.main_id = #{identifier}
+				<if test="onlyMainId == false">
+					OR work_identifier.value = #{identifier}
+				</if>
+				)
+			</if>
+			<if test="wipoLocalId != null">
+				AND work_identifier.value = #{wipoLocalId}
+				AND identifier.code = '${@org.wipo.connect.shared.exchange.enumerator.IdentifierTypeEnum@WIPO_CONNECT_LOCAL_ID.name()}'
+			</if>
+			<if test="iswc != null">
+				AND work_identifier.value = #{wipoLocalId}
+				AND identifier.code = '${@org.wipo.connect.shared.exchange.enumerator.IdentifierTypeEnum@ISWC.name()}'
+			</if>
+			<if test="statusCode != null">
+				AND work_status.code = #{statusCode}
+			</if>
+			<if test="(isToShowDeleted == false) and (statusCode == null)">
+				AND work_status.code NOT IN ('${@org.wipo.connect.shared.exchange.enumerator.WorkStatusEnum@DELETED.name()}')
+			</if>
+			<if test="forceValidStatus != null and forceValidStatus==true">
+				AND work_status.code = '${@org.wipo.connect.shared.exchange.enumerator.WorkStatusEnum@VALID.name()}'
+			</if>
+			<if test="onlyRegistered != null and onlyRegistered==true">
+				AND work_status.code IN ('${@org.wipo.connect.shared.exchange.enumerator.WorkStatusEnum@VALID.name()}')
+			</if>
+			<if test="sourceType != null">
+				AND work.fk_source_type = (select aux_ref.id_reference from reference aux_ref where aux_ref.code=#{sourceType})
+			</if>
+			<if test="workType != null">
+				AND ref_source_type.code = =#{workType}
+			</if>
+			<if test="registrationDate != null">
+				AND work.registration_date &gt;= #{registrationDate:DATE}
+			</if>
+
+			<if test="performer != null">
+				<bind name="performer_like" value="'%' + performer + '%'" />
+				AND work_performer.performer_name like #{performer_like}
+			</if>
+			<if test="disableOriginCheck==null or disableOriginCheck==false">
+				<include refid="org.wipo.connect.shared.persistence.mapping.ClientInfoMapper.workWhereCondition" />
+			</if>
+			<if test="categoryCode != null">
+				AND work.category = #{categoryCode}
+			</if>
+			<if test="countryOfProductionCode != null">
+				<bind name="countryOfProductionCode" value="'%' + countryOfProductionCode + '%'" />
+				AND country_of_prod.code LIKE #{countryOfProductionCode}
+			</if>
+			<if test="label != null">
+				AND work.label = #{label}
+			</if>
+			<if test="catalogueNumber != null">
+				<bind name="catalogueNumber" value="'%' + catalogueNumber + '%'" />
+				AND work.catalogue_number like #{catalogueNumber}
+			</if>
+			<if test="dateTypeCode != null and dateValue==null">
+				AND work_date.code = #{dateTypeCode}
+			</if>
+			<if test="dateValue != null">
+				AND work_date.date_value = #{dateValue}
+			</if>
+			<if test="creationClassCodeList != null and creationClassCodeList.size  > 0">
+			 	AND creation_class.code IN 
+ 					<foreach collection="creationClassCodeList" item="cc_code" open="(" close=")" separator="" index="idx">
+ 						#{cc_code}
+				 		<choose>
+							<when test="creationClassCodeList.size - idx - 1 == 0">
+
+							</when>
+							<otherwise>
+								,
+							</otherwise>
+						</choose>
+					</foreach>
+			</if>
+			<if test="rightOwnerListSearch != null and rightOwnerListSearch.size  > 0">
+				<foreach collection="rightOwnerListSearch" item="item" index="index">
+					AND
+					<choose>
+			        	<when test="item.nameMainId !=null">
+					        EXISTS (SELECT 0
+								FROM work aux_work
+								INNER JOIN derived_view aux_derived_view ON aux_derived_view.fk_work = aux_work.id_work
+								INNER JOIN derived_view_name aux_derived_view_name ON aux_derived_view_name.fk_derived_view = aux_derived_view.id_derived_view
+								INNER JOIN name aux_name ON aux_name.id_name = aux_derived_view_name.fk_name
+								WHERE aux_work.id_work = work.id_work
+								AND aux_name.main_id = #{item.nameMainId}
+							)
+			        	</when>
+			        	<otherwise>
+							EXISTS (
+								SELECT 0
+								FROM work aux_work
+								INNER JOIN derived_view aux_derived_view ON aux_derived_view.fk_work = aux_work.id_work
+								INNER JOIN derived_view_name aux_derived_view_name ON aux_derived_view_name.fk_derived_view = aux_derived_view.id_derived_view
+								INNER JOIN name aux_name ON aux_name.id_name = aux_derived_view_name.fk_name
+								WHERE aux_work.id_work = work.id_work
+								AND (aux_name.first_name LIKE #{item.rightOwnerValueLike}
+								OR aux_name.name LIKE #{item.rightOwnerValueLike}
+								OR aux_name.main_id LIKE #{item.rightOwnerValueLike})
+							)
+			        	</otherwise>
+				        </choose>
+		        </foreach>
+			</if>
+
+			<if test="originalTitleTrimmed != null">
+				AND REPLACE(title.description,' ', '') = #{originalTitleTrimmed}
+				AND ref_titletype.code = '${@org.wipo.connect.shared.exchange.enumerator.TitleTypeCodeEnum@OT.name()}'
+			</if>
+			<if test="identifierSearchVOList != null and identifierSearchVOList.size  > 0">
+				AND
+				<foreach collection="identifierSearchVOList" item="item" open="(" close=")" separator="OR" index="idx">
+	        		(identifier.code = #{item.type} AND work_identifier.value = #{item.value})
+	         	</foreach>
+	    	</if>
+	    	<if test="idToExcludeList != null and idToExcludeList.size  > 0">
+				AND (work.id_work NOT IN
+				<foreach collection="idToExcludeList" item="id" open="(" close=")" separator="" index="idx">
+					#{id}
+					<choose>
+						<when test="(idx > 0) and (idToExcludeList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+							) AND work.id_work NOT IN (
+						</when>
+						<when test="idToExcludeList.size - idx - 1 == 0">
+
+						</when>
+						<otherwise>
+							,
+						</otherwise>
+					</choose>
+		        </foreach>
+		        )
+			</if>
+			<if test="	orderByExpression == @org.wipo.connect.enumerator.OrderByExpressionEnum@WORK_MAIN_TITLE.getFieldAsc() or
+						orderByExpression == @org.wipo.connect.enumerator.OrderByExpressionEnum@WORK_MAIN_TITLE.getFieldDesc()">
+				AND ref_titletype.code = '${@org.wipo.connect.shared.exchange.enumerator.TitleTypeCodeEnum@OT.name()}'
+			</if>
+
+		</trim>
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE work.id_work = #{idWork}
+	</select>
+
+	<select id="findWorkById" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE work.id_work = #{id}
+		<if test="code != null">
+			<include refid="org.wipo.connect.shared.persistence.mapping.ClientInfoMapper.workWhereCondition" />
+		</if>
+	</select>
+
+
+	<select id="findWorkIdByIdentifier" resultType="Long">
+		SELECT work_identifier.fk_work
+		FROM 		work_identifier
+		INNER JOIN 	identifier  ON identifier.id_identifier = work_identifier.fk_identifier
+		INNER JOIN	work ON work.id_work = work_identifier.fk_work
+		INNER JOIN	work_status ON work_status.id_work_status = work.fk_status
+		WHERE  	identifier.code = #{identifierType}
+		AND work_identifier.value = #{identifierValue}
+		<if test="includeDeleted == false">
+			AND work_status.code &lt;&gt; '${@org.wipo.connect.shared.exchange.enumerator.WorkStatusEnum@DELETED.name()}'
+		</if>
+	</select>
+
+	<select id="findWorkByIdentifier" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE EXISTS (
+			SELECT 0
+			FROM work aux_work
+			INNER JOIN work_identifier aux_work_identifier ON aux_work_identifier.fk_work = aux_work.id_work
+			INNER JOIN identifier aux_identifier ON aux_identifier.id_identifier = aux_work_identifier.fk_identifier
+			WHERE aux_work.id_work = work.id_work
+				AND aux_identifier.code = #{identifierType}
+				AND aux_work_identifier.value = #{identifierValue} )
+
+		<if test="includeDeleted == false">
+			AND work.fk_status NOT IN (SELECT id_work_status from work_status aux_work_status where aux_work_status.code = '${@org.wipo.connect.shared.exchange.enumerator.WorkStatusEnum@DELETED.toString()}')
+		</if>
+	</select>
+
+	<select id="findByStatus" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE work.fk_status = (SELECT id_work_status from work_status aux_work_status where aux_work_status.code = #{statusCode})
+	</select>
+
+	<select id="findByIdList" resultMap="resMap">
+		<choose>
+			<when test="map['lightSearch'] != null and map['lightSearch'] == true">
+				<include refid="lightBaseSelect" />
+			</when>
+			<otherwise>
+				<include refid="baseSelect" />
+			</otherwise>
+		</choose>
+		<choose>
+        	<when test="idList != null and idList.size  > 0">
+				WHERE (work.id_work IN
+				<foreach collection="idList" item="id" open="(" close=")" separator="" index="idx">
+					#{id}
+					<choose>
+						<when test="(idx > 0) and (idList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+							) OR work.id_work IN (
+						</when>
+						<when test="idList.size - idx - 1 == 0">
+
+						</when>
+						<otherwise>
+							,
+						</otherwise>
+					</choose>
+		        </foreach>
+		        )
+			</when>
+			<otherwise>
+				WHERE work.fk_status &lt;&gt; (SELECT id_work_status from work_status aux_work_status where aux_work_status.code = '${@org.wipo.connect.local.exchange.enumerator.WorkStatusEnum@DELETED.toString()}')
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="map['orderByExpression'] != null">
+	    		ORDER BY ${map['orderByExpression']}
+	    	</when>
+	    	<otherwise>
+	    		ORDER BY work.id_work
+	    	</otherwise>
+	    </choose> 
+	</select>
+
+	<select id="findWork" resultMap="resMap">
+		<choose>
+			<when test="lightSearch != null and lightSearch == true">
+				<include refid="lightBaseSelect" />
+				<include refid="baseConditions"></include>
+			</when>
+			<otherwise>
+				<include refid="baseSelect" />
+				<include refid="baseConditions"></include>
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="orderByExpression != null">
+	    		ORDER BY ${orderByExpression}
+	    	</when>
+	    	<otherwise>
+	    		ORDER BY work.id_work
+	    	</otherwise>
+	    </choose> 
+	</select>
+
+	<select id="findIdsPageForReindex" resultType="java.lang.Long">
+		SELECT DISTINCT work.id_work
+		FROM work
+
+		<trim prefix="WHERE" prefixOverrides="AND">
+			AND work.fk_status NOT IN (SELECT id_work_status from work_status aux_work_status where aux_work_status.code = '${@org.wipo.connect.shared.exchange.enumerator.WorkStatusEnum@DELETED.toString()}')
+		</trim>
+	</select>
+
+	<select id="findWorkForReindex" resultMap="resMapReindex">
+		SELECT
+					<include refid="fields" /> ,
+					<include refid="org.wipo.connect.shared.persistence.mapping.TitleMapper.fields" /> ,
+					<include refid="org.wipo.connect.shared.persistence.mapping.WorkIdentifierFlatMapper.fields" /> ,
+					work_status.code 			AS WRKS_code,
+					creation_class.code 		AS WRK_creation_class_code,
+					ref_titletype.code 			AS TITY_code
+
+		FROM
+				work
+			LEFT OUTER JOIN work_title ON work_title.fk_work = work.id_work
+			LEFT OUTER JOIN title ON title.id_title = work_title.fk_title
+			LEFT OUTER JOIN reference ref_titletype ON ref_titletype.id_reference = title.fk_type
+			LEFT OUTER JOIN work_identifier ON work_identifier.fk_work = work.id_work
+			LEFT OUTER JOIN identifier ON identifier.id_identifier = work_identifier.fk_identifier
+			LEFT OUTER JOIN work_status ON work_status.id_work_status = work.fk_status
+			LEFT OUTER JOIN creation_class ON creation_class.id_creation_class = work.fk_creation_class
+			LEFT OUTER JOIN cmo cmo_orig ON work.fk_cmo = cmo_orig.id_cmo
+
+		<trim prefix="WHERE" prefixOverrides="AND">
+				AND (work.id_work IN
+				<foreach collection="idList" item="id" open="(" close=")" separator="" index="idx">
+					#{id}
+					<choose>
+						<when test="(idx > 0) and (idList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+							) OR work.id_work IN (
+						</when>
+						<when test="idList.size - idx - 1 == 0">
+
+						</when>
+						<otherwise>
+							,
+						</otherwise>
+					</choose>
+		        </foreach>
+		        )
+		</trim>
+
+	</select>
+
+		<update id="updateByPrimaryKey" keyProperty="idWork">
+		UPDATE work
+		   SET duration = #{duration},
+				genre = #{genreCode},
+				release_date = #{releaseDate},
+				fk_type = #{fkType},
+				date_update = now(),
+				fk_source_type = #{fkSourceType},
+				domestic_work = #{domesticWork},
+				last_update = now(),
+				fk_excerpt_type = #{fkExcerptType},
+				fk_composite_type = #{fkCompositeType},
+				to_be_submitted = #{toBeSubmitted},
+				dummy=0,
+			   	catalogue_number = #{catalogueNumber},
+				support = #{support},
+				fk_country_production = #{fkCountryOfProduction},
+				category = #{categoryCode},
+				language = #{language},
+				label = #{label},
+				component_perc = #{componentPerc},
+				sync_version =sync_version + 1
+		WHERE
+			work.id_work = #{idWork}
+	</update>
+
+	<insert id="insert_old" useGeneratedKeys="true">
+		INSERT INTO work(duration,
+                         genre,
+                         release_date,
+                         fk_type,
+                         fk_status,
+                         registration_date,
+                         user_insert,
+                         date_insert,
+                         fk_source_type,
+                         domestic_work,
+                         last_update,
+                         fk_excerpt_type,
+                         fk_composite_type,
+                         to_be_submitted,
+                         fk_cmo,
+                          catalogue_number,
+						support,
+						fk_country_production,
+						category,
+						label,
+						language,
+						fk_creation_class,
+						component_perc)
+				VALUES (#{duration},
+				        #{genreCode},
+				        #{releaseDate},
+				        #{fkType},
+				        #{fkStatus},
+				        now(),
+				        #{userInsert},
+				        now(),
+				        #{fkSourceType},
+				        #{domesticWork},
+				        now(),
+				        #{fkExcerptType},
+				        #{fkCompositeType},
+				        #{toBeSubmitted},
+						<choose>
+							<when test="cmoOriginCode != null">
+								(SELECT id_cmo FROM cmo aux_co WHERE aux_co.code = #{cmoOriginCode})
+							</when>
+							<otherwise>
+								#{fkCmo}
+							</otherwise>
+						</choose>
+				        , #{catalogueNumber},
+						#{support},
+						#{fkCountryOfProduction},
+						#{categoryCode},
+						#{label},
+						#{language},
+						#{fkCreationClass},
+						#{componentPerc})
+		<selectKey   resultType="long" keyProperty="idWork"    keyColumn="id_work"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_WORK_SEQ'
+		</selectKey>						
+
+	</insert>
+
+	<insert id="insertWorkInstrument" >
+		INSERT INTO work_instrument(fk_work, code)
+		VALUES (#{idWork}, #{code})
+	</insert>
+
+	<insert id="insertWorkTitle">
+		INSERT INTO work_title (fk_work, fk_title)
+		VALUES (#{idWork}, #{idTitle})
+	</insert>
+
+	<delete id="deleteByPrimaryKey">
+		DELETE FROM work WHERE id_work = #{idWork}
+	</delete>
+
+	<delete id="deleteWorkInstrumentByWork">
+		DELETE FROM work_instrument WHERE fk_work = #{idWork}
+	</delete>
+
+	<delete id="deleteWorkTitle">
+		DELETE FROM work_title WHERE fk_work = #{idWork} AND fk_title = #{idTitle}
+	</delete>
+
+	<update id="updateWorkStatus">
+		UPDATE work
+		SET fk_status = (SELECT aux_work_status.id_work_status FROM work_status aux_work_status WHERE aux_work_status.code = #{code})
+		WHERE id_work = #{idWork}
+	</update>
+
+
+	<select id="findDuplicateWork" resultMap="resMap" >
+		<include refid="baseSelect" />
+		WHERE tmp_work_status.code NOT IN ('${@org.wipo.connect.shared.exchange.enumerator.WorkStatusEnum@DELETED.toString()}'))
+
+		<if test="work.id != null">
+			AND work.id_work &lt;&gt; #{work.id}
+		</if>
+
+		AND work.fk_creation_class = #{work.fkCreationClass}
+
+		<foreach collection="work.titleList" item="title">
+			AND EXISTS (
+				  SELECT 0
+					  FROM title aux_title
+					  INNER JOIN work_title aux_work_title ON aux_work_title.fk_title = aux_title.id_title
+					  LEFT OUTER JOIN reference ref_title_type ON ref_title_type.id_reference = aux_title.fk_type
+					  WHERE
+					    aux_work_title.fk_work = work.id_work
+
+					    AND aux_title.description = #{title.description}
+					    AND ref_title_type.code = #{title.typeCode}
+			)
+		</foreach>
+	</select>
+
+	<select id="findIdsPage" resultType="java.lang.Long">
+	<!--SELECT tmp.id_work
+		FROM ( 
+	-->
+			SELECT
+				work.id_work
+				<!-- work.id_work,
+				row_number() over (partition by work.id_work order by NULL) AS counter
+				-->
+		
+			<include refid="baseFromIdOnly" />
+			<include refid="baseConditionsIdOnly"></include>
+			
+			<choose>
+				<when test="orderByExpression != null">
+		    		ORDER BY ${orderByExpression}
+		    	</when>
+		    	<otherwise>
+		    		ORDER BY work.id_work
+		    	</otherwise>
+		    </choose> 
+		<!--
+		) tmp
+		WHERE tmp.counter = 1 
+		-->
+	</select>
+
+	<insert id="insertDummy" useGeneratedKeys="true" keyProperty="idWork"  keyColumn="id_work">
+		INSERT INTO work(duration,
+                       genre,
+                       release_date,
+                       fk_type,
+                       fk_status,
+                       registration_date,
+                       user_insert,
+                       date_insert,
+                       fk_source_type,
+                       domestic_work,
+                       last_update,
+                       fk_excerpt_type,
+                       fk_composite_type,
+                       to_be_submitted,
+                       fk_cmo,
+                       main_id,
+					   deleted,
+					   dummy,
+					   fk_creation_class,
+					   sync_version
+						 )
+		VALUES (#{duration},
+		        #{genreCode},
+		        #{releaseDate},
+		        #{fkType},
+		        #{fkStatus},
+		        now(),
+		        #{userInsert},
+		        now(),
+		        #{fkSourceType},
+		        #{domesticWork},
+		        now(),
+		        #{fkExcerptType},
+		        #{fkCompositeType},
+		        #{toBeSubmitted},
+				<choose>
+					<when test="cmoOriginCode != null">
+						(SELECT id_cmo FROM cmo aux_co WHERE aux_co.code = #{cmoOriginCode})
+					</when>
+					<otherwise>
+						#{fkCmo}
+					</otherwise>
+				</choose>,
+				#{mainId},
+				0,
+				1,
+				#{fkCreationClass},
+				0
+		        )
+
+	</insert>
+
+	<delete id="deleteDummy">
+		DELETE FROM work
+		WHERE dummy=1 and id_work=#{idWork}
+	</delete>
+	<update id="markAsDeleted" keyProperty="idWork">
+		UPDATE work
+		   SET dummy=0,
+		   	   deleted=1
+		WHERE
+			work.id_work = #{idWork}
+	</update>
+	<select id="findByMainId" resultMap="resMap">
+	<include refid="baseSelect" />
+		WHERE
+			 work.main_id = #{mainId} AND work.deleted = 0
+	</select>
+	
+<!-- 	<select id="findWorkIdByMainId" resultType="java.lang.Long">
+		SELECT work.id_work 
+		FROM work
+		WHERE work.main_id = #{mainId}
+		<if test="excludeDeleted == true">
+	    	 AND work.deleted = 0
+	    </if>
+		AND ROWNUM = 1
+	</select> -->
+	<select id="findWorkIdByMainId" resultType="java.lang.Long">
+		SELECT work.id_work 
+		FROM work
+		WHERE work.main_id = #{mainId}
+		<if test="excludeDeleted == true">
+	    	 AND work.deleted = 0
+	    </if>
+		LIMIT 1
+	</select>
+
+
+	<sql id="lightBaseSelect">
+		SELECT
+			<include refid="fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.TitleMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.WorkIdentifierFlatMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.DerivedViewMapper.fieldsDerivedViewName" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.NameMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.WorkDateMapper.fields" />,
+			NULL 		AS WRKINS_code,
+			work_status.code AS WRKS_code,
+			ref_type.code AS WRKTY_code,
+			ref_titletype.code AS TITY_code,
+			role.code as R_code,
+			creation_class.code as WRK_creation_class_code,
+			country_of_prod.code AS WRK_country_prod_code
+			<include refid="lightBaseFrom" />
+	</sql>
+	<sql id="lightBaseFrom">
+		FROM
+			work
+			LEFT OUTER JOIN work_title ON work_title.fk_work = work.id_work
+			LEFT OUTER JOIN title ON title.id_title = work_title.fk_title
+			LEFT OUTER JOIN work_identifier ON work_identifier.fk_work = work.id_work
+			LEFT OUTER JOIN identifier ON identifier.id_identifier = work_identifier.fk_identifier
+			LEFT OUTER JOIN derived_view ON derived_view.fk_work = work.id_work
+			LEFT OUTER JOIN derived_view_name ON derived_view_name.fk_derived_view = derived_view.id_derived_view
+			LEFT OUTER JOIN reference reference_cmo ON derived_view_name.fk_source_type = reference_cmo.id_reference
+			LEFT OUTER JOIN translation tr_aux ON reference_cmo.fk_value = tr_aux.id_translation
+			LEFT OUTER JOIN name ON derived_view_name.fk_name = name.id_name
+			LEFT OUTER JOIN role ON derived_view_name.fk_role = role.id_role
+			LEFT OUTER JOIN work_status ON work_status.id_work_status = work.fk_status
+			LEFT OUTER JOIN reference ref_type ON ref_type.id_reference = work.fk_type
+			LEFT OUTER JOIN reference ref_titletype ON ref_titletype.id_reference = title.fk_type
+	    	LEFT OUTER JOIN cmo cmo_orig ON work.fk_cmo = cmo_orig.id_cmo
+	    	LEFT OUTER JOIN work_date ON work_date.fk_work = work.id_work
+			LEFT OUTER JOIN creation_class ON creation_class.id_creation_class = work.fk_creation_class
+			LEFT OUTER JOIN territory country_of_prod ON work.fk_country_production = country_of_prod.id_territory
+			CROSS JOIN (SELECT NULL AS type FROM dual)  interested_party
+	</sql>
+
+	<select id="selectCountFindWork" resultType="java.lang.Integer">		
+		SELECT COUNT(DISTINCT work.id_work)
+		<include refid="baseFromIdOnly" />
+		<include refid="baseConditionsIdOnly"></include>
+	</select>
+	
+	<select id="findCreationClassByMainId" resultType="java.lang.String">
+		SELECT creation_class.code
+		FROM work
+		LEFT OUTER JOIN creation_class ON work.fk_creation_class = creation_class.id_creation_class
+		WHERE work.main_id = #{mainId}
+		AND (work.deleted IS NULL OR work.deleted = 0)
+	</select>
+
+</mapper>

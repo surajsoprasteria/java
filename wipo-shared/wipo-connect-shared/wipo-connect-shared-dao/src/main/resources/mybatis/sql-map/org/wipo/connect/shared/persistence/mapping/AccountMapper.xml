@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.AccountMapper">
+	<sql id="fields">
+		account.id_account AS ACCO_id_account,
+		account.email AS ACCO_email,
+		account.password AS ACCO_password,
+		account.type AS ACCO_type,
+		account.active AS ACCO_active,
+		account.user_insert AS ACCO_user_insert,
+		account.date_insert AS ACCO_date_insert,
+		account.user_update AS ACCO_user_update,
+		account.date_update AS ACCO_date_update
+	</sql>
+
+	<resultMap id="resMap" type="Account">
+		<id property="idAccount" column="ACCO_id_account" />
+		<result property="email" column="ACCO_email" />
+		<result property="password" column="ACCO_password" />
+		<result property="type" column="ACCO_type"/>
+		<result property="active" column="ACCO_active" />
+		<result property="userInsert" column="ACCO_user_insert" />
+		<result property="dateInsert" column="ACCO_date_insert" />
+		<result property="userUpdate" column="ACCO_user_update" />
+		<result property="dateUpdate" column="ACCO_date_update" />
+	</resultMap>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		SELECT
+		<include refid="fields" />
+		FROM
+		account account
+		WHERE
+		account.id_account = #{idAccount}
+	</select>
+
+	<update id="updateByPrimaryKey" keyProperty="idAccount">
+		UPDATE account
+		SET
+		email = #{email},
+		type = #{type},
+		active = #{active},
+		user_update = #{userUpdate},
+		date_update = now()
+		WHERE id_account = #{idAccount}
+	</update>
+
+	<update id="updatePassword" keyProperty="idAccount">
+		UPDATE account
+		SET
+		password = #{password},
+		user_update = #{email},
+		date_update = now()
+		WHERE account.id_account = #{idAccount}
+	</update>
+
+	<select id="getAccountByMail" resultMap="resMap">
+		SELECT
+		<include refid="fields" />
+		FROM
+		account account
+		WHERE
+		account.email = #{email}
+	</select>
+
+	<select id="findAccount" resultMap="resMap">
+		SELECT
+		<include refid="fields" />
+		FROM
+		account
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="email != null">
+				<bind name="email_like" value="'%' + email + '%'" />
+				AND account.email LIKE #{email_like}
+			</if>
+			<if test="active != null">
+				AND account.active = #{active}
+			</if>
+			<if test="type != null">
+				AND account.type = #{type}
+			</if>
+		</trim>
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true">
+
+		INSERT INTO account
+		( email, password, type, active,
+		user_insert, date_insert, user_update, date_update )
+		VALUES
+		(
+		#{email},#{password}, #{type}, #{active}, #{userInsert}, now(),
+		null,
+		null)
+
+		<selectKey   resultType="long" keyProperty="idAccount"    keyColumn="id_account"   order="BEFORE" >		
+		select next from _sequences where name = 'ID_ACCOUNT_SEQ'
+		</selectKey>	
+	</insert>
+</mapper>

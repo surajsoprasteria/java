@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.ClientInfoMapper">
+
+	<sql id="fields">
+		client_info.id_client_info as CLI_id,
+		client_info.client_key     as CLI_client_key,
+		client_info.fk_cmo		   as CLI_fk_cmo,
+		client_info.notes		   as CLI_notes
+	</sql>
+
+	<sql id="fieldsOrigin">
+		origin.id_cmo AS ORIG_id_cmo,
+		origin.name AS ORIG_name,
+		origin.code AS ORIG_code,
+		origin.acronym AS ORIG_acronym,
+		origin.fk_origin_country AS ORIG_fk_origin_country,
+		origin.contact AS ORIG_contact,
+		origin.description AS ORIG_description,
+		origin.international_name AS ORIG_international_name,
+		origin.is_data_source AS ORIG_isds
+	</sql>
+
+	<resultMap id="resMap" type="ClientInfo">
+		<id property="idClientInfo" column="CLI_id" />
+
+		<result property="fkCmo" column="CLI_fk_cmo" />
+		<result property="clientKey" column="CLI_client_key" />
+		<result property="notes" column="CLI_notes" />
+
+		<association property="cmo" resultMap="org.wipo.connect.shared.persistence.mapping.CmoMapper.resMap" />
+		<collection property="dataOriginList" ofType="Cmo" resultMap="resMapOrigin" />
+	</resultMap>
+
+	<resultMap id="resMapOrigin" type="Cmo">
+		<id property="idCmo" column="ORIG_id_cmo" />
+
+        <result property="name" column="ORIG_name" />
+        <result property="code" column="ORIG_code" />
+        <result property="acronym" column="ORIG_acronym" />
+        <result property="fkOriginCountry" column="ORIG_fk_origin_country" />
+        <result property="contact" column="ORIG_contact" />
+        <result property="description" column="ORIG_description" />
+        <result property="internationalName" column="ORIG_international_name" />
+        <result property="isDataSource" column="ORIG_isds" />
+	</resultMap>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.CmoMapper.fields" /> ,
+			<include refid="fieldsOrigin" />
+		FROM client_info
+			LEFT OUTER JOIN cmo ON client_info.fk_cmo = cmo.id_cmo
+			LEFT OUTER JOIN client_permission ON client_info.id_client_info = client_permission.fk_client_info
+			LEFT OUTER JOIN cmo origin ON client_permission.fk_cmo = origin.id_cmo
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+			client_info.id_client_info = #{idClientInfo}
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		ORDER BY cmo.acronym
+	</select>
+
+	<select id="findByCode" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+			cmo.code = #{code}
+	</select>
+
+	<update id="updateClientKey">
+		UPDATE client_info
+		SET client_key = #{clientKey}
+		WHERE id_client_info = #{idClientInfo}
+	</update>
+
+	<update id="updateByPrimaryKey">
+		UPDATE client_info
+		SET  fk_cmo = #{fkCmo}
+			,notes = #{notes}
+		WHERE id_client_info = #{idClientInfo}
+	</update>
+
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO client_info(fk_cmo,
+                            client_key,
+                            notes)
+		VALUES (#{fkCmo},
+		        #{clientKey},
+		        #{notes})
+		<selectKey   resultType="long" keyProperty="idClientInfo"    keyColumn="id_client_info"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_CLIENT_INFO_SEQ'
+		</selectKey>			        
+	</insert>
+
+	<insert id="insertClientPermission">
+		INSERT INTO client_permission
+			(fk_client_info, fk_cmo)
+		VALUES
+			(#{idClientInfo}, #{idCmo})
+	</insert>
+
+	<delete id="deleteByPrimaryKey">
+		DELETE FROM client_info WHERE id_client_info = #{idClientInfo}
+	</delete>
+
+	<delete id="deleteClientPermissionByClient">
+		DELETE FROM client_permission WHERE fk_client_info = #{idClientInfo}
+	</delete>
+
+
+
+
+	<sql id="ipWhereCondition">
+		AND EXISTS (select 0
+					from client_info aux_ci
+						inner join cmo aux_cmo on aux_cmo.id_cmo = aux_ci.fk_cmo
+						inner join client_permission aux_cp on aux_cp.fk_client_info = aux_ci.id_client_info
+						inner join interested_party aux_tbl on aux_tbl.fk_cmo =  aux_cp.fk_cmo
+					where
+							aux_cmo.code=#{code}
+						AND	interested_party.id_interested_party = aux_tbl.id_interested_party
+					)
+	</sql>
+
+	<sql id="workWhereCondition">
+		AND EXISTS (select 0
+					from client_info aux_ci
+						inner join cmo aux_cmo on aux_cmo.id_cmo = aux_ci.fk_cmo
+						inner join client_permission aux_cp on aux_cp.fk_client_info = aux_ci.id_client_info
+						inner join work aux_tbl on aux_tbl.fk_cmo =  aux_cp.fk_cmo
+					where
+							aux_cmo.code=#{code}
+						AND	work.id_work = aux_tbl.id_work
+					)
+	</sql>
+	
+	
+	<select id="checkCodeUniqueness" resultType="boolean" parameterType="map">
+		SELECT CASE WHEN COUNT(*) > 0 THEN 0 ELSE 1 END AS code_unique
+		FROM  client_info 
+		WHERE fk_cmo = (SELECT id_cmo FROM cmo WHERE cmo.code = #{code})
+		<if test="idToExclude != null">
+			AND client_info.id_client_info != #{idToExclude}
+		</if>
+	</select>
+
+
+</mapper>

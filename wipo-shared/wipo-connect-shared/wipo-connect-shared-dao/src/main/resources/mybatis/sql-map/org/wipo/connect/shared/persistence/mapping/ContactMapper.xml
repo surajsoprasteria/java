@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.ContactMapper">
+
+	<sql id="fields">
+		contact.id_contact,
+		contact.contact_type,
+		contact.value AS CONT_value,
+		contact.user_insert AS CONT_user_insert,
+		contact.date_insert AS CONT_date_insert,
+		contact.user_update AS CONT_user_update,
+		contact.date_update AS CONT_date_update
+	</sql>
+
+	<resultMap id="resMap" type="Contact">
+		<id property="idContact" column="id_contact" />
+		<result property="contactType" column="contact_type" />
+        <result property="value" column="CONT_value" />
+        <result property="userInsert" column="CONT_user_insert" />
+        <result property="dateInsert" column="CONT_date_insert" />
+        <result property="userUpdate" column="CONT_user_update" />
+        <result property="dateUpdate" column="CONT_date_update" />
+	</resultMap>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		SELECT		<include refid="fields" />
+		FROM 		contact
+		WHERE		contact.id_contact = #{idContact}
+	</select>
+
+	<update id="updateByPrimaryKey" keyProperty="idContact">
+		UPDATE 		contact
+		SET			contact_type = #{contactType},
+					value = #{value},
+					user_update = #{userUpdate},
+					date_update = now()
+		WHERE		contact.id_contact = #{idContact}
+	</update>
+
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO 		contact
+							(contact_type, value,user_insert,date_insert)
+		VALUES
+							(#{contactType},#{value},#{userInsert},now())
+		<selectKey   resultType="long" keyProperty="idContact"    keyColumn="id_contact"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_CONTACT_SEQ'
+		</selectKey>								
+
+	</insert>
+
+	 <delete id="deleteByPrimaryKey">
+	 	DELETE
+	 	FROM 		contact
+	 	WHERE 		id_contact = #{idContact}
+	 </delete>
+
+	 <select id="findContactsByLICEE" resultMap="resMap" parameterType="java.lang.Long" >
+		SELECT		<include refid="fields" />
+		FROM 		licensee
+	    JOIN 		licensee_contact
+	    				ON licensee.id_licensee = licensee_contact.fk_licensee
+	    JOIN 		contact
+	    				ON licensee_contact.fk_contact = contact.id_contact
+		WHERE 		licensee.id_licensee = #{idLicensee}
+	  	AND	  		licensee_contact.fk_licensee = #{idLicensee}
+	 </select>
+
+</mapper>

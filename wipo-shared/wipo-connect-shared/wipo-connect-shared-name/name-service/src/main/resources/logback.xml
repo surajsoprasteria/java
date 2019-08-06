@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+	<property scope="context" name="EXTERNAL_CONFIG_FILE" value="${wcc.config.dir}/logger/wipo-connect-name-local-logback.xml" />
+
+	<define name="EXTERNAL_CONFIG_EXISTS" class="ch.qos.logback.core.property.FileExistsPropertyDefiner">
+		<path>${EXTERNAL_CONFIG_FILE}</path>
+	</define>
+
+	<if condition='property("EXTERNAL_CONFIG_EXISTS").equals("true")'>
+		<then>
+			<!-- load external log configuration -->
+			<include file="${EXTERNAL_CONFIG_FILE}"/>
+		</then>
+		<else>
+			<!-- load internal log configuration -->
+			<include resource="logback-default-config.xml"/>
+		</else>
+	</if>
+
+</configuration>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.WorkImportMapper">
+
+  <sql id="fields">
+    work_import.id_work_import,
+    work_import.import_code,
+    work_import.fk_status,
+    work_import.start_date,
+    work_import.end_date,
+    work_import.row_count,
+    work_import.inserted_items,
+    work_import.lines_with_errors
+  </sql>
+
+  <sql id="fieldsImportFile">
+    work_import_file.id_work_import_file,
+    work_import_file.fk_work_import,
+    work_import_file.file_type,
+    work_import_file.filename,
+    work_import_file.filesize,
+    work_import_file.content_type
+  </sql>
+
+  <resultMap id="importFileMap" type="WorkImportFile">
+       <result property="idWorkImportFile" column="id_work_import_file" />
+       <result property="fkWorkImport" column="fk_work_import" />
+       <result property="fileType" column="file_type" />
+       <result property="fileName" column="filename" />
+       <result property="fileSize" column="filesize" />
+       <result property="contentType" column="content_type" />
+  </resultMap>
+
+  <resultMap id="resMap" type="WorkImport">
+    <id property="idWorkImport" column="id_work_import" />
+    <result property="importCode" column="import_code" />
+    <result property="fkStatus" column="fk_status" />
+    <result property="startDate" column="start_date" />
+    <result property="endDate" column="end_date" />
+    <result property="rowCount" column="row_count" />
+    <result property="insertedItems" column="inserted_items" />
+    <result property="linesWithErrors" column="lines_with_errors" />
+    <collection property="workImportFileList" ofType="WorkImportFile" resultMap="org.wipo.connect.shared.persistence.mapping.WorkImportMapper.importFileMap"/>
+  </resultMap>
+
+  <sql id="baseSelect">
+    SELECT
+      <include refid="fields" /> ,
+      <include refid="fieldsImportFile" />
+    FROM
+      work_import
+      LEFT OUTER JOIN work_import_file ON work_import_file.fk_work_import = work_import.id_work_import
+           LEFT OUTER JOIN import_status ON import_status.id_import_status = work_import.fk_status
+  </sql>
+
+
+
+  <select id="selectByPrimaryKey" resultMap="resMap">
+	<include refid="baseSelect" />
+	WHERE
+		work_import.id_work_import = #{id}
+  </select>
+
+  <select id="findAll" resultMap="resMap">
+    <include refid="baseSelect" />
+    ORDER BY work_import.id_work_import desc
+  </select>
+
+  <select id="findWorkImportFromStatus" resultMap="resMap">
+    <include refid="baseSelect" />
+    WHERE	import_status.code IN 
+    	<foreach collection="statusCodeList" item="code" open="(" close=")" separator=",">
+             #{code}
+    	</foreach>
+    ORDER BY work_import.id_work_import desc
+  </select>
+
+  <select id="findWorkImportFileById" resultMap="importFileMap">
+    SELECT
+      <include refid="fieldsImportFile" />
+    from work_import_file
+    WHERE work_import_file.id_work_import_file = #{id}
+  </select>
+
+  <update id="updateImportStatus">
+    update work_import
+       set fk_status = #{idStatus}
+    where id_work_import = #{idWorkImport}
+  </update>
+
+  <update id="updateImportStatusCode">
+    update work_import
+       set fk_status = (select id_import_status from import_status where code = #{statusCode})
+    where id_work_import = #{idWorkImport}
+  </update>
+
+  <update id="updateImportStartDate">
+    update work_import
+       set start_date = #{startDate:TIMESTAMP}
+    where id_work_import = #{idWorkImport}
+  </update>
+
+  <update id="updateImportEndDate">
+    update work_import
+       set end_date = #{endDate:TIMESTAMP}
+    where id_work_import = #{idWorkImport}
+  </update>
+
+  <insert id="insertWorkImport" useGeneratedKeys="true" flushCache="true">
+    INSERT INTO work_import
+          (import_code, fk_status, start_date, end_date)
+    VALUES 		(#{importCode},#{fkStatus}, #{startDate:TIMESTAMP}, #{endDate:TIMESTAMP})
+    
+    <selectKey   resultType="long" keyProperty="idWorkImport"    keyColumn="id_work_import"   order="BEFORE" >		
+		select next from _sequences where name = 'ID_WORK_IMPORT_SEQ'
+	</selectKey>
+  </insert>
+
+  <insert id="insertWorkImportFile" useGeneratedKeys="true" flushCache="true">
+    INSERT INTO work_import_file
+          (fk_work_import,file_type,filename,filesize,content_type)
+    VALUES 		(#{fkWorkImport},#{fileType},#{fileName},#{fileSize},#{contentType})
+	<selectKey   resultType="long" keyProperty="idWorkImportFile"    keyColumn="id_work_import_file"   order="BEFORE" >		
+		select next from _sequences where name = 'ID_WORK_IMPORT_FILE_SEQ'
+	</selectKey>
+  </insert>
+
+  <update id="updateWorkImportFromStatus" useGeneratedKeys="true" keyColumn="id_work_import" keyProperty="idWorkImport">
+    UPDATE 		work_import
+       SET			fk_status= (select id_import_status from import_status where code = #{status})
+     WHERE		work_import.id_work_import = #{idWorkImport}
+  </update>
+
+  <update id="updateRowResult" keyColumn="id_work_import" keyProperty="idWorkImport">
+		UPDATE 		work_import
+	   	SET			row_count					= #{rowCount},
+	 				inserted_items				= #{insertedItems},
+	 				lines_with_errors			= #{linesWithErrors}
+	 	WHERE		work_import.id_work_import 	= #{idWorkImport}
+ </update>
+
+  <select id="countWorkImportFileByName" resultType="java.lang.Long">
+  	SELECT COUNT(*)
+	FROM work_import_file
+	WHERE filename = #{fileName}
+  </select>
+
+  <select id="findImportCodeByWorkId" resultType="java.lang.String">
+  	SELECT import_code
+  	FROM work_import_detail
+  	LEFT JOIN work_import ON work_import_detail.fk_work_import = work_import.id_work_import
+  	WHERE fk_work = #{workId}
+  </select>
+
+  <update id="markAllPendingAsError">
+		UPDATE 		work_import
+	   	SET			fk_status= (select id_import_status from import_status where code = '${@org.wipo.connect.shared.exchange.enumerator.ImportStatusEnum@ERROR.toString()}')
+	 	WHERE		fk_status= (select id_import_status from import_status where code = '${@org.wipo.connect.shared.exchange.enumerator.ImportStatusEnum@IN_PROGRESS.toString()}')
+	</update>
+
+</mapper>

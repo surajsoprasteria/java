@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<HTML>
+	<HEAD>
+		<meta charset="utf-8"/>
+		<TITLE>WIPO Connect</TITLE>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="shortcut icon" type="image/png" href="/connect/res/img/icon.png">
+		<link rel="icon" type="image/png" href="/connect/res/img/icon.png">
+		<!-- CSS -->
+		<link href="/connect/res/css/bootstrap.css" rel="stylesheet"/>
+		<link href="/connect/res/css/lobibox.css" rel="stylesheet"/>
+		<link href="/connect/res/css/login.css" rel="stylesheet"/>
+		<link href="/connect/res/css/font-awesome.css" rel="stylesheet"/>
+		<link href="/connect/res/css/custom-fonts.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-dialog.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-select.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-toggle.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-datepicker.css" rel="stylesheet"/>
+		<link href="/connect/res/css/jquery.dataTables.css" rel="stylesheet"/>
+		<link href="/connect/res/css/dataTables.bootstrap.css" rel="stylesheet"/>
+		<link href="/connect/res/css/scroller.dataTables.min.css" rel="stylesheet"/>
+		<link href="/connect/res/css/scroller.bootstrap.css" rel="stylesheet"/>
+		<link href="/connect/res/css/dataTables-custom.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-custom.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-wizard.css" rel="stylesheet"/>
+		<link href="/connect/res/css/bootstrap-tagsinput.css" rel="stylesheet"/>
+		<link href="/connect/res/css/codemirror.css" rel="stylesheet"/>
+		<link href="/connect//res/css/collapsible-panel.css" rel="stylesheet"/>
+		<link href="/connect/res/css/template-default.css" rel="stylesheet"/>
+		<link href="/connect/res/css/validate.css" rel="stylesheet"/>
+		<link href="/connect/res/css/base.css" rel="stylesheet"/>
+		<link href="/connect/res/css/wipo.css" rel="stylesheet"/>
+		<link href="/connect/mvc/common/external.css" rel="stylesheet"/>
+
+		<SCRIPT SRC="jquery.js"></SCRIPT>
+		
+		
+		<SCRIPT>
+			$(document).ready(function() {
+				
+			});
+		</SCRIPT>
+
+		
+
+		<STYLE>
+
+			html, body {height: 100%;background-color: white;}
+
+			td.empty {background: rgba(255,255,255,0);}
+			td.link {background:rgba(64, 81, 118, 0.75);}
+
+			img {cursor: pointer;}
+			
+			td.link, td.empty {
+				vertical-align: top;
+				text-align: center;
+				width: 200px;
+				color: rgba(255,255,255,0.8);
+				font-size: 18px;
+				text-transform: uppercase;
+				font-weight: 400;
+				border-radius: 54px;
+				transition:0.3s;
+			}
+
+
+			td.spacer: { width: *;}
+
+			tr.spacer { height: 5%; }
+			tr.link { height: 27.5%; }
+
+
+			hr {
+				width: 185px;
+				text-align: center;
+				border-top: 2px solid rgba(255,255,255,0.8);
+				
+			}
+			
+			a.chapter {	color: rgba(255,255,255,0.8);font-size: 13px;text-transform: uppercase;}
+			a.chapter:hover {color: rgba(255,255,255,1);text-decoration: none;}
+			
+			a.redirect {color: rgba(0,0,0,0.7);font-size: 18px !important;text-decoration:none;text-transform: lowercase;}
+			a.redirect:hover {color: rgba(0,0,0,1);text-decoration:none;}
+
+			
+			
+			table.full-table {
+				border: none;
+    			border-collapse: collapse;
+				bottom: 0;
+    			top: 0;
+    			left: 0;
+    			right: 0;
+    			height:100%;
+    			width: calc(100% - 50px);
+			}
+			
+			table.full-table tr td, td.title, td.right {
+				width: 25%;
+				padding: 35px 50px 5px 0px;
+				margin-right: 50px;
+				vertical-align: top;
+				font-size: 18px;				
+			}
+			
+			td.col-3-l, td.col-3-c {
+				width: 25%;
+				padding: 35px 50px 5px 0px;
+				margin-right: 50px;
+				vertical-align: top;
+				font-size: 18px;	
+			}
+			
+			td.col-3-r {
+				width: 25%;
+				padding: 35px 50px 5px 0px;
+				margin-right: 50px;
+				vertical-align: top;
+				font-size: 18px;
+				padding-right: 0px !important;
+			}
+			
+			td.col-2-l {
+				width: 37.5%;
+				padding: 5px 50px 5px 0px !important;
+				margin-right: 50px;
+				vertical-align: top;
+				font-size: 18px;	
+			}
+			
+			td.col-2-r {
+				width: 37.5%;
+				padding: 5px 50px 5px 0px !important;
+				margin-right: 50px;
+				vertical-align: top;
+				font-size: 18px;
+				padding-right: 0px !important;
+			}
+			
+			
+			td.col-1 {
+				width: 75% !important;
+				padding: 0px 0px 5px 0px !important;
+			}
+			
+			
+			
+			
+			td.info {
+				border: 2px solid red;
+				padding-left: 35px !important;
+			}
+			
+			td.title {
+				padding-left: 50px !important;
+				padding-top: 50px !important;
+				font-size: 40px !important;
+			}
+			
+			titre {
+				font-weight: bold;
+				text-transform: lowercase;
+				display: block;
+				margin-bottom: 10px;
+			}
+			
+			contenu {
+				display: block;
+				font-size: 16px;
+				padding-bottom: 15px;
+			}
+			
+			.navbar-text a {color: white !important;}
+			.navbar-text a:hover {text-decoration: none;}
+			
+		</STYLE>
+	</HEAD>
+
+	<BODY>
+		<NAV CLASS="navbar navbar-default navbar-fixed-top" ROLE="navigation">
+			<DIV CLASS="navbar-first-row">
+				<DIV CLASS="container">
+					<DIV CLASS="navbar-header">
+						<P CLASS="navbar-text brand">
+							<A HREF="/connect/mvc/common/home">
+								<IMG ALT="wipo-wcc" CLASS="logo-brand" SRC="/connect/res/img/shuffle.png">
+							</A>
+							<A HREF="/connect/mvc/common/home">
+								<SPAN STYLE="overflow: hidden;height: 186px;position: absolute;top: -81px;left: -165px;">
+									<IMG SRC="/connect/mvc/terms/wipo.svg" STYLE="height: 363px;opacity: 0.1;-ms-transform: rotate(-15deg); -webkit-transform: rotate(-15deg);transform: rotate(-15deg);"/>
+								</SPAN>
+								WIPO Connect
+							</A>
+						</P>
+						<DIV CLASS="clear"></DIV>
+					</DIV>
+				</DIV>
+			</DIV>
+			<DIV CLASS="navbar-second-row">
+				<DIV CLASS="container">
+					<DIV CLASS="collapse navbar-collapse" id="navbar-collapse">
+						<P CLASS="navbar-text page-info"><a href='home.html'>guide</a> &gt; registering right owners</P>
+					</DIV>
+				</DIV>
+			</DIV>
+		</NAV>
+ 
+		<TABLE CLASS="full-table">
+			<TR>
+				<TD CLASS="title" ROWSPAN="2">
+					registering a right owner
+					<BR/>
+					<DIV>
+					<IMG STYLE="vertical-align:middle" SRC="icons/menu-doc.png" height="26px" onclick="window.open('/connect/mvc/interestedParty/pre-insert')"/>
+					<A HREF="/connect/mvc/interestedParty/pre-insert" CLASS="redirect" TARGET='new' STYLE="vertical-align:middle">register &gt; right owners</A>
+					</DIV>
+					<BR/>
+					<!--
+					<VIDEO WIDTH="100%" CONTROLS><SOURCE SRC="ro-2.mp4" type="video/mp4"></VIDEO>
+					-->
+				</TD>
+				<TD CLASS="col-1" COLSPAN="2"><BR/><BR/>
+					<TITRE>duplicate check</TITRE>
+					<CONTENU>
+					registration of right owners are carried out in two steps. In a first step, a set of mandatory information is 
+					asked to the operator. Once the operator clicks on "new", the solution checks if similar right owners have been 
+					registered before. This duplicate check displays the potential duplicates found in the local database, should some exist. 
+					The operator can cancel the registration or continue.
+					<CONTENU>
+					<BR/>
+					<CENTER>
+					<IMG SRC="screenshots/ro-2-1.png" WIDTH="90%"  onclick="window.open(this.src)"/>
+					</CENTER>
+				</TD>
+			</TR>
+				<TD CLASS="col-2-l">
+					<TITRE>main information</TITRE>
+					<CONTENU>
+					the second step is the completion of the remaining information. In the "main" tab, an operator can manage 
+					the party general information, including gender, country of birth, etc. Names, identifiers and affiliation 
+					(or assignments) can be also completed and updated. The information of the main tab are subject to the synchronization process.
+					<CONTENU>
+					<BR/>
+					<CENTER>
+					<IMG SRC="screenshots/ro-2-2.png" WIDTH="100%" onclick="window.open(this.src)"/>
+					</CENTER>
+				</TD>			
+				<TD CLASS="col-2-r">
+					<TITRE>local information</TITRE>
+					<CONTENU>
+					in the "local" tab, all additional information can be entered such as addresses, contacts, bank account, 
+					documents as well as any specific fields needed by the CMO. The information of the local tab are never disseminated, 
+					even when the right owner is synchronized
+					<CONTENU>
+					<BR/>
+					<CENTER>
+					<IMG SRC="screenshots/ro-2-3.png" WIDTH="90%"onclick="window.open(this.src)"/>
+					</CENTER>
+				</TD>
+			</TR>
+		</TABLE>
+
+	</BODY>
+
+</HTML>

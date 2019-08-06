@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.WorkImportDetailMapper">
+
+
+	<sql id="fields">
+		work_import_detail.id_work_import_detail,
+		work_import_detail.fk_work_import,
+		work_import_detail.fk_work
+	</sql>
+
+	<resultMap id="resMap" type="WorkImportDetail">
+       <result property="idWorkImportDetail" column="id_work_import_detail" />
+       <result property="fkWorkImport" column="fk_work_import" />
+       <result property="fkWork" column="fk_work" />
+	</resultMap>
+
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" /> ,
+		FROM
+			work_import_detail
+	</sql>
+
+	<select id="findWorkImportDetailFromStatus" resultMap="resMap">
+		<!-- <include refid="baseSelect" />
+		WHERE	import_detail_status.code=#{status} -->
+	</select>
+
+	<update id="updateImportDetailStatus">
+		<!-- update work_import_detail
+		   set fk_status = #{idStatus}
+		where id_work_import_detail = #{idWorkImportDetail} -->
+	</update>
+
+	<update id="updateImportDetailStatusCode">
+		<!-- update work_import
+		   set fk_status = (select id_import_detail_status from import_detail_status where code = #{statusCode})
+		where id_work_import_detail = #{idWorkImportDetail} -->
+	</update>
+
+
+	<insert id="insertWorkImportDetail" useGeneratedKeys="true" flushCache="true">
+		INSERT INTO work_import_detail
+					( fk_work_import,fk_work)
+		VALUES 		(#{fkWorkImport},#{fkWork})
+		
+		<selectKey   resultType="long" keyProperty="idWorkImportDetail"    keyColumn="id_work_import_detail"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_WORK_IMPORT_DETAIL_SEQ'
+		</selectKey>	
+	</insert>
+	
+	<update id="updateImportDetailByFkWork">
+		update work_import_detail
+		set fk_work_import = #{fkWorkImport}
+		where fk_work = #{fkWork}
+	</update>
+	
+<!-- 
+	<select id="existFkWork"  resultType="boolean">
+		SELECT 
+			CASE WHEN EXISTS(  SELECT  0       FROM  work_import_detail       WHERE fk_work = #{fkWork} )
+	 			THEN 1
+				ELSE 0
+      		END
+		FROM dual result
+	</select> -->
+	<select id="existFkWork"  resultType="boolean">
+		SELECT 
+			CASE WHEN EXISTS(  SELECT  0       FROM  work_import_detail       WHERE fk_work = #{fkWork} )
+	 			THEN 1
+				ELSE 0
+      		END
+		FROM dual
+	</select>
+</mapper>

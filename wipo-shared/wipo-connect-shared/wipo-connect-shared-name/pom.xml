@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+
+	<parent>
+		<groupId>org.wipo.suite.modules</groupId>
+		<artifactId>wipo-modules</artifactId>
+		<version>0.6-SNAPSHOT</version>
+		
+	</parent>
+
+	
+	<groupId>org.wipo.suite.modules.name</groupId>
+	<artifactId>wipo-name</artifactId>
+	<packaging>pom</packaging>
+	<version>0.1-SNAPSHOT</version>
+	
+	<!-- More Project Information -->
+	<name>Modules name</name>
+
+	<description>WIPO Suite Modules name The module name contains all developments relative to.  
+	</description>
+
+	<modules>
+		<module>name-specifications</module>
+		<module>name-client</module>
+		<module>name-dal</module>
+		<module>name-service</module>
+	</modules>
+	
+	<properties>
+		<connect.version>2.8.6-SNAPSHOT</connect.version>
+		<spring.version>5.1.5.RELEASE</spring.version>
+		<spring.boot.version>2.1.3.RELEASE</spring.boot.version>
+		<spring.mybatis.version>1.3.2</spring.mybatis.version>
+		<springfox.swagger>2.9.2</springfox.swagger>
+		<tomcat.version>9.0.14</tomcat.version>
+		<mysql.connector.version>8.0.15</mysql.connector.version>
+		<jackson.new.version>2.9.8</jackson.new.version>
+		<jackson.version>1.9.13</jackson.version>
+	</properties>
+	
+	
+	<dependencyManagement>
+		<dependencies>	
+		
+			<!-- 	WIPO Elements -->
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-shared-exchange</artifactId>
+				<version>${connect.version}</version>
+			</dependency>
+				
+			<dependency>
+			    <groupId>io.springfox</groupId>
+			    <artifactId>springfox-swagger2</artifactId>
+			    <version>${springfox.swagger}</version>
+			</dependency>
+			
+			
+			<!-- JDBC -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.connector.version}</version>
+			</dependency>
+
+		
+			<dependency>
+				<groupId>org.wipo.suite.modules.name</groupId>
+				<artifactId>name-dal</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.suite.modules.name</groupId>
+				<artifactId>name-specifications</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.suite.modules.name</groupId>
+				<artifactId>name-client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<scm>
+		<connection>scm:svn:https://svn.wipo.int/svn/ipobsd/modules/modules-name</connection>
+		<developerConnection>scm:svn:https://svn.wipo.int/svn/ipobsd/modules/modules-name/trunk/</developerConnection>
+		<url>scm:svn:https://svn.wipo.int/svn/ipobsd/modules/modules-name</url>
+	</scm>
+	
+	
+	
+	
+</project>

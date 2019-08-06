@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.UiLanguageMapper">
+	<sql id="fields">
+		ui_language.id_ui_language AS UILNG_id_ui_language,
+		ui_language.fk_language AS UILNG_fk_language,
+        language.name UILNG_lang_desc,
+        language.code AS UILNG_lang_code
+  <!--  language_identifier.value UILNG_lang_code -->
+	</sql>
+
+	<resultMap id="resMap" type="UiLanguage">
+		<id property="idUiLanguage" column="UILNG_id_ui_language" />
+		<result property="fkLanguage" column="UILNG_fk_language" />
+		<result property="languageCode" column="UILNG_lang_code" />
+		<result property="languageDescription" column="UILNG_lang_desc" />
+	</resultMap>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" />
+		FROM ui_language
+		  INNER JOIN language ON language.id_language = ui_language.fk_language
+	 <!-- INNER JOIN language_identifier ON language_identifier.fk_language = language.id_language
+		  INNER JOIN identifier ON identifier.id_identifier = language_identifier.fk_identifier
+		  WHERE identifier.code = '${@org.wipo.connect.shared.exchange.enumerator.IdentifierTypeEnum@ISO6391.toString()}' -->
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE ui_language.id_ui_language = #{idUiLanguage}
+	</select>
+
+	<select id="findByAccount" resultMap="resMap">
+		SELECT
+			<include refid="fields" />
+		FROM account
+		  INNER JOIN ui_language ON ui_language.id_ui_language = account.fk_ui_language
+		  INNER JOIN language ON language.id_language = ui_language.fk_language
+		  INNER JOIN language_identifier ON language_identifier.fk_language = language.id_language
+		  INNER JOIN identifier ON identifier.id_identifier = language_identifier.fk_identifier
+<!-- 	WHERE identifier.code = '${@org.wipo.connect.shared.exchange.enumerator.IdentifierTypeEnum@ISO6391.toString()}' -->
+ 		 WHERE account.id_account = #{idAccount}
+	</select>
+
+
+</mapper>

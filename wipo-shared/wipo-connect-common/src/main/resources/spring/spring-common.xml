@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+	 					http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+	<context:annotation-config />
+
+	<aop:aspectj-autoproxy />
+	<!-- Aspect -->
+	<bean id="logger" class="org.wipo.connect.common.logging.MethodLogger" />
+	<bean id="methodTracker" class="org.wipo.connect.common.logging.MethodTrackerPointcat" />
+
+	<bean id="dozerMapper" class="org.dozer.spring.DozerBeanMapperFactoryBean">
+   		<property name="mappingFiles" value="classpath*:/config/*mapping.xml">
+ 		</property>
+    </bean>
+
+	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+		<property name="scopes">
+			<map>
+				<entry key="requestOrThread">
+					<bean class="org.wipo.connect.common.scope.requestorthread.RequestOrThreadScope" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+</beans>

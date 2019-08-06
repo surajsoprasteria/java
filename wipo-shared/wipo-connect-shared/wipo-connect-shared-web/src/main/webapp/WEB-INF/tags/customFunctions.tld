@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd">
+	<display-name>Custom EL Functions</display-name>
+	<tlib-version>1.0</tlib-version>
+	<short-name>csf</short-name>
+	<uri>/WEB-INF/tags/customFunctions</uri>
+
+	<function>
+		<name>format</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.String format(java.lang.Number)</function-signature>
+	</function>
+
+	<function>
+		<name>formatWithScale</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.String formatWithScale(java.lang.Number, java.lang.Integer)</function-signature>
+	</function>
+
+	<function>
+		<name>formatAmount</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.String formatAmount(java.lang.Number)</function-signature>
+	</function>
+
+	<function>
+		<name>formatAmountWithScale</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.String formatAmountWithScale(java.lang.Number, java.lang.Integer)</function-signature>
+	</function>
+
+	<function>
+		<name>getCurrencySymbol</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.String getCurrencySymbol()</function-signature>
+	</function>
+
+	<function>
+		<name>getCurrencyLabel</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.String getCurrencyLabel()</function-signature>
+	</function>
+
+	<function>
+		<name>getDecimalSeparator</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.Character getDecimalSeparator()</function-signature>
+	</function>
+
+	<function>
+		<name>getGroupingSeparator</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.Character getGroupingSeparator()</function-signature>
+	</function>
+
+	<function>
+		<name>isCurrencyBefore</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>boolean isCurrencyBefore()</function-signature>
+	</function>
+
+	<function>
+		<name>isGroupSeparatorActive</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>boolean isGroupSeparatorActive()</function-signature>
+	</function>
+
+	<function>
+		<name>getRegexCheck</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.String getRegexCheck()</function-signature>
+	</function>
+
+	<function>
+		<name>getRegexDigitCheck</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.String getRegexDigitCheck()</function-signature>
+	</function>
+	
+	<function>
+		<name>getRegexTimeCheck</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.String getRegexTimeCheck()</function-signature>
+	</function>
+	
+	<function>
+		<name>secondsToHMs</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.String secondsToHMs(java.lang.Long)</function-signature>
+	</function>
+
+	<function>
+		<name>splitByWholeSeparator</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.String[] splitByWholeSeparator(java.lang.String, java.lang.String)</function-signature>
+	</function>
+
+	<function>
+		<name>joinList</name>
+		<function-class>org.wipo.connect.common.el.CustomFunctions</function-class>
+		<function-signature>java.lang.String joinList(java.lang.String, java.util.Collection)</function-signature>
+	</function>
+</taglib>

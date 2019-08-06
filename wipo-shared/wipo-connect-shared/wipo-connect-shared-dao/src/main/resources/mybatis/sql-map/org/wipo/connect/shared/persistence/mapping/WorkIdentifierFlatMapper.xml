@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.WorkIdentifierFlatMapper">
+
+	<resultMap id="resMap" type="WorkIdentifierFlat">
+		<id property="idWorkIdentifier" column="WIDFL_id_work_identifier" />
+
+		<result property="fkWork" column="WIDFL_fk_work" />
+		<result property="fkIdentifier" column="WIDFL_fk_identifier" />
+		<result property="value" column="WIDFL_value" />
+		<result property="code" column="WIDFL_code" />
+		<result property="acronym" column="WIDFL_acronim" />
+	</resultMap>
+
+	<sql id="fields">
+		work_identifier.id_work_identifier WIDFL_id_work_identifier,
+        work_identifier.fk_work WIDFL_fk_work,
+        work_identifier.fk_identifier WIDFL_fk_identifier,
+        work_identifier.value WIDFL_value,
+        identifier.code WIDFL_code,
+        identifier.acronym WIDFL_acronim
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" />
+
+		  FROM work_identifier
+		  INNER JOIN identifier ON identifier.id_identifier = work_identifier.fk_identifier
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			work_identifier.id_work_identifier = #{idWorkIdentifier}
+	</select>
+
+	<select id="findByWork" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			work_identifier.fk_work = #{idWork}
+			<if test="code != null">
+				AND identifier.code = #{code}
+			</if>
+	</select>
+	
+	
+	<select id ="isExistsISWIdentifierValue" resultType="boolean">
+		SELECT CASE WHEN MAX(work_identifier.value) IS NULL THEN 0 ELSE 1 END RESULT
+		FROM work_identifier
+		INNER JOIN identifier ON identifier.id_identifier =
+		work_identifier.fk_identifier
+		WHERE value = #{value}
+		AND identifier.code ='${@org.wipo.connect.shared.exchange.enumerator.IdentifierTypeEnum@ISW.toString()}'
+	</select>
+
+
+
+	<insert id="insert">
+		INSERT INTO work_identifier(fk_work, fk_identifier,value)
+		VALUES (#{idWork},(SELECT id_identifier FROM identifier WHERE code = #{type}), #{identifierValue})
+	</insert>
+	
+	<delete id="delete">
+		DELETE FROM work_identifier WHERE work_identifier.id_work_identifier =#{id}
+	</delete>
+	<select id ="identifierValueAlreadyPresent" resultType="boolean">
+		SELECT count(*)
+		FROM work_identifier
+		INNER JOIN identifier aux_identifier ON aux_identifier.id_identifier = work_identifier.fk_identifier
+		LEFT JOIN work aux_work ON aux_work.id_work=work_identifier.fk_work
+		WHERE aux_identifier.code=#{code}
+		AND work_identifier.value=#{value}
+		<if test="workId != null">
+			AND work_identifier.fk_work &lt;&gt; #{workId}
+		</if>
+		AND aux_work.deleted = 0
+	</select>
+
+
+</mapper>

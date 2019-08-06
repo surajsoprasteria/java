@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.GeneralParametersManagementMapper">
+
+	<sql id="fieldsNumberFormat">
+		number_format_param.id_number_format_param ,
+		number_format_param.decimal_separator      ,
+		number_format_param.currency_symbol        ,
+		number_format_param.currency_position      ,
+		number_format_param.grouping_separator
+	</sql>
+	
+	<resultMap id="resMapNumberFormat" type="NumberFormatParam">
+		<id property="idNumberFormatParam" column="id_number_format_param" />
+
+        <result property="decimalSeparator" column="decimal_separator" />
+        <result property="currencySymbol" column="currency_symbol" />
+        <result property="currencyPosition" column="currency_position" />
+        <result property="groupingSeparator" column="grouping_separator" />
+	</resultMap>
+	
+	<resultMap id="resMapPerformerConfig" type="PerformerConfiguration">
+		<id property="idPerformerConfiguration" column="id_performer_configuration" />
+        <result property="fkCreationClass" column="fk_creation_class" />
+        <result property="hidePerformers" column="hide_performers" />
+	</resultMap>
+
+	<select id="findNumberFormat" resultMap="resMapNumberFormat">
+		SELECT
+			<include refid="fieldsNumberFormat" />
+		FROM number_format_param
+	</select>
+
+	<update id="updateNumberFormat">
+		UPDATE number_format_param
+		SET
+			decimal_separator      = #{decimalSeparator},
+			currency_symbol        = #{currencySymbol},
+			currency_position      = #{currencyPosition},
+			grouping_separator     = #{groupingSeparator}
+	</update>
+	
+	<select id="findPerformerConfiguration" resultMap="resMapPerformerConfig">
+		SELECT
+		id_performer_configuration,
+		fk_creation_class,
+		hide_performers
+		FROM
+		performer_configuration
+	</select>
+
+	<update id="savePerformerConfiguration" >
+		UPDATE performer_configuration
+		SET
+		hide_performers = #{hidePerformers}
+		WHERE
+		id_performer_configuration = #{id}
+	</update>
+	
+	<select id="findPerformerConfigurationByFkCreationClass" resultType="Boolean">
+		SELECT
+		hide_performers
+		FROM performer_configuration
+		WHERE fk_creation_class = #{fkCreationClass}
+	</select>
+
+</mapper>

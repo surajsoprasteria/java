@@ -1,0 +1,11 @@
+div.panel.collapsible-panel .panel-heading{
+	/*position: relative;
+	padding-left: 40px;*/
+	min-height: 30px;
+}
+
+div.panel.collapsible-panel .panel-heading .btn-toggle-panel{
+	/*position: absolute;*/
+	float:left;
+	margin-right:10px;
+}

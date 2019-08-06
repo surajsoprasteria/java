@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.IpImportDetailMapper">
+
+
+	<sql id="fields">
+		ip_import_detail.id_ip_import_detail,
+		ip_import_detail.fk_ip_import,
+		ip_import_detail.fk_interested_party,
+		ip_import_detail.row_number,
+		ip_import_detail.row_id,
+		ip_import_detail.transaction,
+		ip_import_detail.rowtype,
+		ip_import_detail.result
+	</sql>
+
+	<resultMap id="resMap" type="IpImportDetail">
+       <result property="idIpImportDetail" column="id_ip_import_detail" />
+       <result property="fkIpImport" column="fk_ip_import" />
+       <result property="fkInterestedParty" column="fk_interested_party" />
+       <result property="rowNumber" column="row_number" />
+       <result property="rowId" column="row_id" />
+       <result property="transaction" column="transaction" />
+       <result property="rowType" column="rowtype" />
+       <result property="result" column="result" />
+          
+	</resultMap>
+
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" /> 
+		FROM
+			ip_import_detail
+       		LEFT OUTER JOIN import_detail_status ON import_detail_status.id_import_status = ip_import_detail.fk_status
+	</sql>
+
+	<select id="findIpImportDetailFromStatus" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE	import_detail_status.code=#{status}
+	</select>
+
+	<update id="updateImportDetailStatus">
+		update ip_import_detail
+		   set fk_status = #{idStatus}
+		where id_ip_import_detail = #{idIpImportDetail}
+	</update>
+
+	<update id="updateImportDetailStatusCode">
+		update ip_import
+		   set fk_status = (select id_import_detail_status from import_detail_status where code = #{statusCode})
+		where id_ip_import_detail = #{idIpImportDetail}
+	</update>
+
+
+	<insert id="insertIpImportDetail" useGeneratedKeys="true" flushCache="true">
+		INSERT INTO ip_import_detail
+					( fk_ip_import,fk_interested_party,row_number,row_id,transaction,rowtype,result)
+		VALUES 		(#{fkIpImport},#{fkInterestedParty},#{rowNumber},#{rowId},#{transaction},#{rowType},#{result})
+		
+		<selectKey   resultType="long" keyProperty="idIpImportDetail"    keyColumn="id_ip_import_detail"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_IP_IMPORT_DETAIL_SEQ'
+		</selectKey>	
+	</insert>
+	
+	<update id="updateImportDetailByFkIp">
+		update ip_import_detail
+		set fk_ip_import = #{fkIpImport}
+		where fk_interested_party = #{fkInterestedParty}
+	</update>
+	
+<!-- 	
+	<select id="existFkIp"  resultType="boolean">
+		SELECT 
+			CASE WHEN EXISTS(  SELECT  0       FROM  ip_import_detail       WHERE fk_interested_party = #{fkIp} )
+	 			THEN 1
+				ELSE 0
+      		END
+		FROM dual result
+	</select> -->
+	<select id="existFkIp"  resultType="boolean">
+		SELECT 
+			CASE WHEN EXISTS(  SELECT  0       FROM  ip_import_detail       WHERE fk_interested_party = #{fkIp} )
+	 			THEN 1
+				ELSE 0
+      		END
+		FROM dual
+	</select>
+	
+	<delete id="deleteByFkIpImport">
+		DELETE FROM ip_import_detail
+		WHERE fk_ip_import = #{fkIpImport}
+	</delete>
+
+</mapper>

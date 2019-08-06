@@ -1,0 +1,801 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.wipo.connect</groupId>
+	<artifactId>wipo-connect</artifactId>
+	<version>2.8.6-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>WIPO Connect</name>
+	<description>Wipo Connect Project</description>
+	<url />
+	<inceptionYear>2015</inceptionYear>
+	<licenses>
+		<license>
+			<name>Wipo license</name>
+			<url />
+			<distribution></distribution>
+		</license>
+	</licenses>
+	<organization>
+		<name>WIPO</name>
+		<url>http://www.wipo.int</url>
+	</organization>
+	<contributors>
+		<contributor>
+			<name>Fincons</name>
+			<organization>Fincons</organization>
+			<organizationUrl> http://www.finconsgroup.com</organizationUrl>
+			<timezone>CEST</timezone>
+		</contributor>
+	</contributors>
+	<!-- Environment Settings -->
+	<issueManagement />
+	<ciManagement />
+	<mailingLists />
+	<scm>
+		<connection>http://127.0.0.1</connection>
+		<developerConnection>http://127.0.0.1</developerConnection>
+		<url>http://127.0.0.1</url>
+	</scm>
+	<prerequisites />
+	<pluginRepositories />
+	<distributionManagement>
+     <site>
+        <id>${project.artifactId}-site</id>
+        <url>${project.baseUri}</url>
+     </site>
+  </distributionManagement>
+
+	<properties>
+		<revision>2.8.6-SNAPSHOT</revision>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+
+		<!-- test suite
+		<test.suite.skip>true</test.suite.skip>
+		<test.suite.url>http://localhost:8080/wipo-connect</test.suite.url>
+		-->
+
+		<!-- dependencies versions -->
+		<tomcat.version>9.0.14</tomcat.version>
+		<junit.version>4.12</junit.version>
+		<spring.version>5.1.4.RELEASE</spring.version>
+		<spring.security.version>5.1.3.RELEASE</spring.security.version>
+		<spring.data-solr.version>4.0.4.RELEASE</spring.data-solr.version>
+		<spring.boot.version>2.1.2.RELEASE</spring.boot.version>
+		<spring.mybatis.version>1.3.2</spring.mybatis.version>
+		<logback.version>1.2.3</logback.version>
+		<aspectj.version>1.9.2</aspectj.version>
+		<uadetector.version>2014.10</uadetector.version>
+		<jackson.version>2.9.8</jackson.version>
+		<slf4j.version>1.7.25</slf4j.version>
+		<commons.lang.version>3.8.1</commons.lang.version>
+		<commons.collection.version>4.2</commons.collection.version>
+		<commons.text.version>1.6</commons.text.version>
+		<commons.math.version>3.6.1</commons.math.version>
+		<commons.beanutils.version>1.9.3</commons.beanutils.version>
+		<commons.fileupload.version>1.3.3</commons.fileupload.version>
+		<commons.codec.version>1.11</commons.codec.version>
+		<commons.csv.version>1.6</commons.csv.version>
+		<commons.io.version>2.6</commons.io.version>
+		<dozer.version>5.5.1</dozer.version>
+		<h2.version>1.3.176</h2.version>
+		<javamelody.version>1.74.0</javamelody.version>
+		<mybatis.version>3.4.6</mybatis.version>
+		<ehcache.version>3.6.3</ehcache.version>
+		<javax.cache.version>1.1.0</javax.cache.version>
+		<mysql.connector.version>5.1.47</mysql.connector.version>
+		<ojdbc.version>11.2.0.3</ojdbc.version>
+		<javax.servlet.version>3.1.0</javax.servlet.version>
+		<javax.jsp.version>2.3.3</javax.jsp.version>
+		<jstl.version>1.2</jstl.version>
+		<tiles.version>3.0.8</tiles.version>
+		<groovy.version>2.5.5</groovy.version>
+		<selenium.version>2.53.1</selenium.version>
+		<testng.version>6.8.5</testng.version>
+		<webdriver.firefox.version>2.49.0</webdriver.firefox.version>
+		<webdriver.phantomjs.version>1.2.0</webdriver.phantomjs.version>
+		<lorem.version>1.2</lorem.version>
+		<janino.version>2.7.8</janino.version>
+		<jsch.version>0.1.55</jsch.version>
+		<esapi.version>2.1.0.1</esapi.version>
+		<xalan.version>2.7.2</xalan.version>
+		<jasper.version>6.7.0</jasper.version>
+		<jasper.font.version>6.0.0</jasper.font.version>
+		<jasper.custom.version>1.0.0</jasper.custom.version>
+		<xhtmlrenderer.version>R8</xhtmlrenderer.version>
+		<jtidy.version>4aug2000r7-dev</jtidy.version>
+		<httpclient.version>4.5.6</httpclient.version>
+		<apache.poi.version>3.17</apache.poi.version>
+		<javers.version>3.5.2</javers.version>
+		<jgrapht.version>1.0.1</jgrapht.version>
+		<lucene.version>7.4.0</lucene.version>
+		<reactive.streams.version>1.0.2</reactive.streams.version>
+		<springfox.swagger>2.9.2</springfox.swagger>
+
+		<!-- SonarQube -->
+		<sonar.exclusions>**/res/js/*.js</sonar.exclusions>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- WIPO-CONNECT PROJECTS -->
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-common</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-service-client</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-rule-engine</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-local</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-local-exchange</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-local-dao</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-local-business</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-local-backend</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-local-backend-ear</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-local-web</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-local-web-ear</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-local-microservice</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-shared</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-shared-exchange</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-shared-dao</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-shared-business</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-shared-backend</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-shared-backend-ear</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-shared-integration</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-shared-integration-ear</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-shared-web</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>org.wipo.connect</groupId>
+				<artifactId>wipo-connect-shared-web-ear</artifactId>
+				<version>2.8.6-SNAPSHOT</version>
+				<type>ear</type>
+			</dependency>
+
+			<!-- Spring dependecies -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+		      <groupId>org.springframework.data</groupId>
+		      <artifactId>spring-data-solr</artifactId>
+		      <version>${spring.data-solr.version}</version>
+		    </dependency>
+			<!-- Spring Security -->
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-taglibs</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+			<!-- UA DETECTOR -->
+			<dependency>
+				<groupId>net.sf.uadetector</groupId>
+				<artifactId>uadetector-resources</artifactId>
+				<version>${uadetector.version}</version>
+			</dependency>
+			<!-- JSON -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-jsr310</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<!-- Logging with SLF4J & LogBack -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			<dependency>
+		        <groupId>org.codehaus.janino</groupId>
+		        <artifactId>janino</artifactId>
+		        <version>${janino.version}</version>
+		    </dependency>
+			<!-- APACHE COMMONS -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons.lang.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.commons</groupId>
+			    <artifactId>commons-collections4</artifactId>
+			    <version>${commons.collection.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-text</artifactId>
+				<version>${commons.text.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.commons</groupId>
+			    <artifactId>commons-math3</artifactId>
+			    <version>${commons.math.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>${commons.beanutils.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>${commons.fileupload.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>${commons.codec.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-csv</artifactId>
+				<version>${commons.csv.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons.io.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>${apache.poi.version}</version>
+			</dependency>
+			<dependency>
+	             <groupId>org.apache.poi</groupId>
+	            <artifactId>poi-ooxml</artifactId>
+	            <version>${apache.poi.version}</version>
+	        </dependency>
+			<dependency>
+			    <groupId>org.apache.httpcomponents</groupId>
+			    <artifactId>httpclient</artifactId>
+			    <version>${httpclient.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jgrapht</groupId>
+				<artifactId>jgrapht-core</artifactId>
+				<version>${jgrapht.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+    			<artifactId>lucene-queryparser</artifactId>
+			    <version>${lucene.version}</version>
+			</dependency>
+
+			<!-- dozer -->
+			<dependency>
+				<groupId>net.sf.dozer</groupId>
+				<artifactId>dozer</artifactId>
+				<version>${dozer.version}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-log4j12</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.dozer</groupId>
+				<artifactId>dozer-spring</artifactId>
+				<version>${dozer.version}</version>
+			</dependency>
+
+			<!-- AspectJ dependencies -->
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>${aspectj.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+			    <groupId>org.aspectj</groupId>
+			    <artifactId>aspectjweaver</artifactId>
+			    <version>${aspectj.version}</version>
+			</dependency>
+
+			<!-- sftp connection -->
+			<dependency>
+			    <groupId>com.jcraft</groupId>
+			    <artifactId>jsch</artifactId>
+			    <version>${jsch.version}</version>
+			</dependency>
+
+			<!-- Enterprise Security API -->
+			<dependency>
+			    <groupId>org.owasp.esapi</groupId>
+			    <artifactId>esapi</artifactId>
+			    <version>${esapi.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>xalan</groupId>
+			    <artifactId>xalan</artifactId>
+			    <version>${xalan.version}</version>
+			</dependency>
+			
+
+			<!-- Jasper Report -->
+			<dependency>
+				<groupId>net.sf.jasperreports</groupId>
+				<artifactId>jasperreports</artifactId>
+				<version>${jasper.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>com.ibm.icu</groupId>
+						<artifactId>icu4j</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.jasperreports</groupId>
+				<artifactId>jasperreports-html-component</artifactId>
+				<version>${jasper.custom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.jasperreports</groupId>
+				<artifactId>jasperreports-fonts</artifactId>
+				<version>${jasper.font.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.jasperreports</groupId>
+				<artifactId>jasper-custom-fonts</artifactId>
+				<version>${jasper.custom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.xhtmlrenderer</groupId>
+				<artifactId>core-renderer</artifactId>
+				<version>${xhtmlrenderer.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>jtidy</groupId>
+				<artifactId>jtidy</artifactId>
+				<version>${jtidy.version}</version>
+			</dependency>
+
+			<!-- JAVERS  -->
+			<dependency>
+			    <groupId>org.javers</groupId>
+			    <artifactId>javers-core</artifactId>
+			    <version>${javers.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.javers</groupId>
+			    <artifactId>javers-spring</artifactId>
+			    <version>${javers.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.javers</groupId>
+			    <artifactId>javers-persistence-sql</artifactId>
+			    <version>${javers.version}</version>
+			</dependency>
+			
+			
+			<!-- spring boot -->        
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${spring.boot.version}</version>
+	        </dependency>
+	        
+	        <dependency>
+			    <groupId>org.springframework.data</groupId>
+			    <artifactId>spring-data-commons</artifactId>
+			    <version>${spring.boot.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.mybatis.spring.boot</groupId>
+			    <artifactId>mybatis-spring-boot-starter</artifactId>
+			    <version>${spring.mybatis.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-security</artifactId>
+			    <version>${spring.boot.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-cache</artifactId>
+			    <version>${spring.boot.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.tomcat</groupId>
+				<artifactId>tomcat-dbcp</artifactId>
+				<version>${tomcat.version}</version>
+			</dependency>     
+
+
+			<!-- test -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${spring.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<version>${h2.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.seleniumhq.selenium</groupId>
+				<artifactId>selenium-java</artifactId>
+				<version>${selenium.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.testng</groupId>
+				<artifactId>testng</artifactId>
+				<version>${testng.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+			    <groupId>com.github.detro</groupId>
+			    <artifactId>phantomjsdriver</artifactId>
+			    <version>${webdriver.phantomjs.version}</version>
+			    <scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.seleniumhq.selenium</groupId>
+				<artifactId>selenium-firefox-driver</artifactId>
+				<version>${webdriver.firefox.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+			    <groupId>com.thedeanda</groupId>
+			    <artifactId>lorem</artifactId>
+			    <version>${lorem.version}</version>
+			    <scope>test</scope>
+			</dependency>
+
+			<!-- java melody -->
+			<dependency>
+				<groupId>net.bull.javamelody</groupId>
+				<artifactId>javamelody-core</artifactId>
+				<version>${javamelody.version}</version>
+			</dependency>
+			<!-- Persistence dependecies -->
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis-spring</artifactId>
+				<version>${spring.mybatis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis</artifactId>
+				<version>${mybatis.version}</version>
+			</dependency>
+			<!-- Support for Ehcache -->
+			<dependency>
+				<groupId>org.ehcache</groupId>
+    			<artifactId>ehcache</artifactId>
+				<version>${ehcache.version}</version>
+			</dependency>
+			<dependency>
+		      	<groupId>javax.cache</groupId>
+		      	<artifactId>cache-api</artifactId>
+				<version>${javax.cache.version}</version>
+			</dependency>
+
+			<!-- JDBC -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.connector.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.oracle</groupId>
+				<artifactId>ojdbc6</artifactId>
+				<version>${ojdbc.version}</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- Servlet 3.0 API -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>${javax.servlet.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet.jsp</groupId>
+				<artifactId>javax.servlet.jsp-api</artifactId>
+				<version>${javax.jsp.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>jstl</groupId>
+				<artifactId>jstl</artifactId>
+				<version>${jstl.version}</version>
+			</dependency>
+			<!-- View dependecies -->
+			<dependency>
+				<groupId>org.apache.tiles</groupId>
+				<artifactId>tiles-core</artifactId>
+				<version>${tiles.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tiles</groupId>
+				<artifactId>tiles-jsp</artifactId>
+				<version>${tiles.version}</version>
+			</dependency>
+			<!-- GROOVY -->
+			<dependency>
+				<groupId>org.codehaus.groovy</groupId>
+				<artifactId>groovy</artifactId>
+				<version>${groovy.version}</version>
+			</dependency>
+			
+			<!-- Project swagger -->
+			<dependency>
+			    <groupId>io.springfox</groupId>
+			    <artifactId>springfox-swagger2</artifactId>
+			    <version>${springfox.swagger}</version>
+			</dependency>
+			
+			<!-- Spring react for Wildfly validation -->
+			<dependency>
+				<groupId>org.reactivestreams</groupId>
+				<artifactId>reactive-streams</artifactId>
+				<version>${reactive.streams.version}</version>
+			</dependency>
+			
+		</dependencies>
+	</dependencyManagement>
+	<dependencies>
+		<!-- test -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>com.thedeanda</groupId>
+		    <artifactId>lorem</artifactId>
+		    <scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>codelds</id>
+			<url>https://code.lds.org/nexus/content/groups/main-repo</url>
+		</repository>
+	</repositories>
+
+	<build>
+		<finalName>${project.artifactId}-2.8.6-SNAPSHOT</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<failOnMissingWebXml>true</failOnMissingWebXml>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	
+	<profiles>
+		<profile>
+			<id>all</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>							
+				<module>wipo-connect-service-client</module>
+				<module>wipo-connect-rule-engine</module>
+				<module>wipo-connect-common</module>
+				<module>wipo-connect-shared</module>
+			</modules>
+    	</profile>
+<!-- 		<profile>
+			<id>microservice</id>
+			<modules>
+				<module>wipo-connect-common</module>
+				<module>wipo-connect-local</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>report</id>
+			<modules>
+				<module>wipo-connect-common</module>
+				<module>wipo-connect-local</module>
+			</modules>
+		</profile> -->
+	</profiles>
+
+	<reporting>
+		<plugins>
+
+		</plugins>
+	</reporting>
+</project>

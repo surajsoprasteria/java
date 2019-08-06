@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			xmlns="http://request.interestedParty.connect.wipo.org" attributeFormDefault="unqualified"
+			xmlns:common-input="http://input.common.connect.wipo.org"
+			elementFormDefault="qualified" targetNamespace="http://request.interestedParty.connect.wipo.org">
+
+	<xsd:import namespace="http://input.common.connect.wipo.org" schemaLocation="../common-input.xsd" />
+
+	<xsd:element name="IpLookupRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element minOccurs="1" name="context" nillable="false" type="common-input:ContextType" />
+				<xsd:element minOccurs="1" name="interestedPartyRequest" nillable="false">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="identifier" type="xsd:string" />
+							<xsd:element name="onlyMainId" type="xsd:boolean" />
+							<xsd:element name="statusCode" type="xsd:string" />
+							<xsd:element name="birthFoundationDate" type="xsd:date" />
+							<xsd:element name="gender" type="xsd:string" />
+							<xsd:element name="type" type="xsd:string" />
+							<xsd:element name="birthPlace" type="xsd:string" />
+							<xsd:element name="birthCountryCode" type="xsd:string" />
+							<xsd:element name="citizenship" type="xsd:string" />
+							<xsd:element name="lastCompanyName" type="xsd:string" />
+							<xsd:element name="firstName" type="xsd:string" />
+							<xsd:element name="nameType" type="xsd:string" />
+							<xsd:element name="cmoAcronym" type="xsd:string" />
+							<xsd:element name="dateFrom" type="xsd:dateTime" />
+							<xsd:element name="dateTo" type="xsd:dateTime" />
+							<xsd:element name="fullText" type="xsd:string" />
+							<xsd:element name="paginationStart" type="xsd:integer" />
+							<xsd:element name="paginationLength" type="xsd:integer" />
+							<xsd:element name="paginationDraw" type="xsd:integer" />
+							<xsd:element name="orderByExpression" type="xsd:integer" />
+							<xsd:element name="isSimpleSearch" type="xsd:boolean" />
+							<xsd:element name="wipoLocalId" type="xsd:string" />
+							<xsd:element minOccurs="0" maxOccurs="unbounded" name="creationClassCodeList" nillable="true" type="xsd:string" />
+							<xsd:element minOccurs="0" maxOccurs="unbounded" name="nameMainIdList" nillable="false" type="xsd:string" />
+							<xsd:element minOccurs="0" maxOccurs="unbounded" name="nameTypeExcludeList" nillable="false" type="xsd:string" />
+							<xsd:element minOccurs="0" maxOccurs="unbounded" name="idToExcludeList" nillable="true" type="xsd:long" />
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="IpDetailsRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element minOccurs="1" name="context" nillable="false" type="common-input:ContextType" />
+				<xsd:element minOccurs="1" name="interestedPartyDetailRequest" nillable="false">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="idInterestedParty" type="xsd:long" />
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name="IpNamesType">
+		<xsd:sequence>
+			<xsd:element name="firstName" type="xsd:string" />
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="nameType" type="xsd:string" />
+			<xsd:element name="mainId" type="xsd:string" />
+			<xsd:element name="creationTimestamp" type="xsd:date" />
+			<xsd:element name="amendmentTimestemp" type="xsd:date" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="AffiliationType">
+		<xsd:sequence>
+			<xsd:element name="cmoCode" type="xsd:string" />
+			<xsd:element name="territoryFormula" nillable="false" type="xsd:string" />
+			<xsd:element name="startDate" type="xsd:date" />
+			<xsd:element name="endDate" type="xsd:date" />
+			<xsd:element name="amendmentTimestemp" type="xsd:date" />
+			<xsd:element name="signatureDate" type="xsd:date" />
+			<xsd:element name="shareValue" type="xsd:decimal"/>
+			<xsd:element minOccurs="1" maxOccurs="unbounded" name="affiliationDomainList" nillable="false" type="AffiliationDomainType" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="AffiliationDomainType">
+		<xsd:sequence>
+			<xsd:element name="ipiRightTypeCode" type="xsd:string" />
+			<xsd:element name="creationClassCode" type="xsd:string" />
+			<xsd:element name="ipiRoleCode" type="xsd:string" />
+			<xsd:element name="isExcluded" type="xsd:boolean" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="TerritoryType">
+		<xsd:sequence>
+			<xsd:element name="code" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="FlatType">
+		<xsd:sequence>
+			<xsd:element name="code" type="xsd:string" />
+			<xsd:element name="value" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element name="InternationallyRegisterRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element minOccurs="1" name="context" nillable="false" type="common-input:ContextType" />
+				<xsd:element minOccurs="1" name="taskCode" nillable="false" type="xsd:string" />
+				<xsd:element minOccurs="1" maxOccurs="unbounded" name="taskItemRequest" nillable="false">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="progr" type="xsd:long" nillable="false"/>
+							<xsd:element name="itemCode" type="xsd:string" nillable="false"/>
+							<xsd:element minOccurs="1" maxOccurs="unbounded" name="ipTaskItemDetail" nillable="false">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="birthDate" type="xsd:date" />
+										<xsd:element name="deathDate" type="xsd:date" />
+										<xsd:element name="birthPlace" type="xsd:string" />
+										<xsd:element name="birthState" type="xsd:string" />
+										<xsd:element name="birthCountryCode" type="xsd:string" />
+										<xsd:element name="maritalStatus" type="xsd:string" />
+										<xsd:element minOccurs="1" maxOccurs="unbounded" name="nameList" nillable="false" type="IpNamesType"  />
+										<xsd:element minOccurs="1" maxOccurs="unbounded" name="affiliationList" nillable="false" type="AffiliationType"  />
+										<xsd:element minOccurs="1" maxOccurs="unbounded" name="citizenshipCodeList" nillable="false" type="xsd:string" />
+										<xsd:element minOccurs="1" maxOccurs="unbounded" name="interestedPartyIdentifierFlatList" nillable="false" type="FlatType" />
+										<xsd:element name="mainId" type="xsd:string" nillable="true" />
+										<xsd:element name="creationDate" type="xsd:date" />
+										<xsd:element name="amendmentTimestamp" type="xsd:date" />
+										<xsd:element name="type" type="xsd:string" />
+										<xsd:element name="sex" type="xsd:string" />
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="IRElaborationRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element minOccurs="1" name="context" nillable="false" type="common-input:ContextType" />
+				<xsd:element minOccurs="1" maxOccurs="unbounded" name="itemCodeList" type="xsd:string" nillable="false"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+
+	<xsd:element name="NameLookupRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element minOccurs="1" name="context" nillable="false" type="common-input:ContextType" />
+				<xsd:element minOccurs="1" name="NameRequest" nillable="false">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="valueForm" type="xsd:string" />
+							<xsd:element name="onlyRegistered" type="xsd:boolean" />
+							<xsd:element minOccurs="0" maxOccurs="unbounded" name="creationClassCodeList" nillable="true" type="xsd:string" />
+							<xsd:element name="paginationStart" type="xsd:integer" />
+							<xsd:element name="paginationLength" type="xsd:integer" />
+							<xsd:element name="paginationDraw" type="xsd:integer" />
+							<xsd:element name="orderByExpression" type="xsd:integer" />
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+</xsd:schema>

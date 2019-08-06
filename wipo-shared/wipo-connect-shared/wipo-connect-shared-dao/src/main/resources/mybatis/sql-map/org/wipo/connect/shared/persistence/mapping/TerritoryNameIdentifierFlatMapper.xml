@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.TerritoryNameIdentifierFlatMapper">
+
+	<resultMap id="resMap" type="TerritoryNameIdentifierFlat">
+		<id property="idTerritoryNameIdentifier" column="id_territory_name_identifier" />
+		<result property="fkTerritoryName" column="fk_territory_name" />
+		<result property="fkIdentifier" column="fk_identifier" />
+		<result property="value" column="value" />
+		<result property="code" column="TR_code" />
+	</resultMap>
+
+	<sql id="fields">
+		territory_name_identifier.id_territory_name_identifier,
+        territory_name_identifier.fk_territory_name,
+        territory_name_identifier.fk_identifier,
+        territory_name_identifier.value,
+        identifier.code TR_code
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" />
+		  FROM territory_name_identifier
+		  INNER JOIN identifier ON identifier.id_identifier = territory_name_identifier.fk_identifier
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+			territory_name_identifier.id_territory_name_identifier = #{idTerritoryNameIdentifier}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO territory_name_identifier(fk_territory_name, fk_identifier, value)
+		VALUES (#{idTerritoryName},
+		        (SELECT id_identifier FROM identifier WHERE code = #{code}),
+		        #{value})
+	</insert>
+	
+	<update id="update" keyProperty="idTerritoryNameIdentifier">
+		UPDATE territory_name_identifier
+		SET 
+			value 				= #{value}
+		WHERE 
+			fk_territory_name 	= #{idTerritoryName}
+	</update>
+	
+	<select id="findIdentifierFromTerritoryCode" resultMap="resMap">
+		<include refid="baseSelect" />
+		RIGHT OUTER JOIN territory_name ON territory_name.id_territory_name = territory_name_identifier.fk_territory_name
+		RIGHT OUTER JOIN territory ON territory_name.fk_territory = territory.id_territory
+		WHERE territory.code = #{territoryCode}
+		AND identifier.code =#{identifierCode}
+		And ((territory_name.start_date IS NULL OR territory_name.start_date &lt;= now())
+		AND	(territory_name.end_date IS NULL OR territory_name.end_date &gt;= now()))
+	</select>
+
+</mapper>

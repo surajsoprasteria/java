@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.IpiRightTypeFlatMapper">
+	<resultMap id="resMap" type="IpiRightTypeFlat">
+		<id property="idIpiRightType" 		column="IPIRT_id_ipi_right_type" />
+		<result property="code" 			column="IPIRT_code" />
+		<result property="fkName" 			column="IPIRT_fk_name" />
+		<result property="name" 			column="IPIRT_name" />
+		<result property="fkDescription" 	column="IPIRT_fk_description" />
+		<result property="description" 		column="IPIRT_description" />
+		<result property="examples" 		column="IPIRT_examples" />
+		
+		<collection property="fkCcList" 	ofType="java.lang.Long">
+			<result column="IPIRT_fk_creation_class" />
+		</collection>
+	</resultMap>
+
+	<sql id="fields">
+		ipi_right_type.id_ipi_right_type 		AS IPIRT_id_ipi_right_type,
+		ipi_right_type.code 					AS IPIRT_code,
+		ipi_right_type.fk_name 					AS IPIRT_fk_name,
+		ipi_right_type.fk_description 			AS IPIRT_fk_description,
+		ipi_right_type_class.fk_creation_class	AS IPIRT_fk_creation_class,
+		tr_name.default_value 					AS IPIRT_name,
+		tr_desc.default_value 					AS IPIRT_description,
+		tr_exam.default_value					AS IPIRT_examples
+	</sql>
+	
+	<sql id="baseSelect">
+     	SELECT
+     		<include refid="fields" />
+		FROM ipi_right_type
+		LEFT OUTER JOIN ipi_right_type_class ON ipi_right_type_class.fk_ipi_right_type = ipi_right_type.id_ipi_right_type
+		LEFT OUTER JOIN translation tr_name ON tr_name.id_translation = ipi_right_type.fk_name
+		LEFT OUTER JOIN translation tr_desc ON tr_desc.id_translation = ipi_right_type.fk_description
+		LEFT OUTER JOIN translation tr_exam ON tr_exam.id_translation = ipi_right_type.fk_examples
+	</sql>
+
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE ipi_right_type.id_ipi_right_type = #{idIpiRightType}
+	</select>
+	
+	
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO ipi_right_type (
+				code,
+				fk_name,
+				fk_description
+			) VALUES (
+				#{code},
+				#{fkName},
+				#{fkDescription}
+			)
+		<selectKey   resultType="long" keyProperty="idIpiRightType"    keyColumn="id_ipi_right_type"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_IPI_RIGHT_TYPE_SEQ'
+		</selectKey>	
+	</insert>
+	
+	<update id="updateByPrimaryKey" keyProperty="idIpiRightType">
+		UPDATE ipi_right_type
+		SET
+			fk_name 			= #{fkName},
+			fk_description		= #{fkDescription}
+		WHERE 
+			id_ipi_right_type 	= #{idIpiRightType}
+	</update>
+	
+	
+
+	<select id="findByCode" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE ipi_right_type.code = #{code}
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		ORDER BY ipi_right_type.code
+	</select>
+	
+	
+	<select id="exsistIpiRightTypeCode" resultType="boolean" parameterType="map">
+		SELECT  COUNT(id_ipi_right_type) AS result 
+		FROM  ipi_right_type 
+		WHERE code = #{code}
+			<if test="idToExclude != null">
+				AND ipi_right_type.id_ipi_right_type != #{idToExclude}
+			</if>
+	</select>
+	
+	
+	<insert id="insertIpiRightTypeCreationClass">
+		INSERT INTO ipi_right_type_class (
+			fk_ipi_right_type,
+			fk_creation_class
+		) VALUES (
+			#{fkIpiRightType},
+			#{fkCreationClass}
+		)
+	</insert>
+	
+	
+	<select id="findAllByCc" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE ipi_right_type_class.fk_creation_class = #{idCreationClass}
+		ORDER BY ipi_right_type.code
+	</select>
+
+</mapper>

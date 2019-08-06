@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.AffiliationMapper">
+	<sql id="fields">
+		affiliation.id_affiliation 				AS AFFI_id_affiliation ,
+		affiliation.fk_interested_party 		AS AFFI_fk_interested_party ,
+		affiliation.fk_cmo 						AS AFFI_fk_cmo ,
+		affiliation.start_date 					AS AFFI_start_date ,
+		affiliation.end_date 					AS AFFI_end_date ,
+		affiliation.share_value 				AS AFFI_share_value ,
+		affiliation.signature_date 				AS AFFI_signature_date ,
+		affiliation.amendment_timestamp 		AS AFFI_amendment_timestamp ,
+		affiliation.territory_formula 			AS AFFI_territory_formula
+	</sql>
+
+	<sql id="fieldsAffiliationDomain">
+		affiliation_domain.id_affiliation_domain 	AS AFFDO_id_affiliation_domain ,
+		affiliation_domain.fk_affiliation 			AS AFFDO_fk_affiliation ,
+		affiliation_domain.fk_ipi_role 				AS AFFDO_fk_ipi_role ,
+		affiliation_domain.fk_creation_class 		AS AFFDO_fk_creation_class ,
+		affiliation_domain.fk_ipi_right_type 		AS AFFDO_fk_ipi_right_type,
+		affiliation_domain.is_excluded 				AS AFFDO_is_excluded,
+		aff_ipi_role.code 							AS AFFDO_ipi_role_code,
+		aff_cc.code 								AS AFFDO_cc_code,
+		aff_rt.code 								AS AFFDO_irt_code
+	</sql>
+
+	<resultMap id="resMap" type="Affiliation">
+		<id property="idAffiliation" 				column="AFFI_id_affiliation" />
+        <result property="fkInterestedParty" 		column="AFFI_fk_interested_party" />
+        <result property="startDate" 				column="AFFI_start_date" />
+        <result property="endDate" 					column="AFFI_end_date" />
+        <result property="shareValue" 				column="AFFI_share_value" />
+        <result property="signatureDate" 			column="AFFI_signature_date" />
+        <result property="amendmentTimestamp" 		column="AFFI_amendment_timestamp" />
+		<result property="territoryFormula" 		column="AFFI_territory_formula" />
+		
+		<association property="cmo" resultMap="org.wipo.connect.shared.persistence.mapping.CmoMapper.resMap" />
+        <collection property="affiliationDomainList" ofType="AffiliationDomain" resultMap="resMapAffiliationDomain" />
+	</resultMap>
+
+	<resultMap id="resMapSplit" type="AffiliationSplit">
+		<result property="idName" 					column="AFFS_id_name" />
+		<result property="idInterestedParty" 		column="AFFS_id_interested_party" />
+		<result property="idRole" 					column="AFFS_id_role" />
+		<result property="idRightType" 				column="AFFS_id_right_type" />
+		<result property="idCmo" 					column="AFFS_id_cmo" />
+		<result property="cmoAcronym" 				column="AFFS_cmo_acronym" />
+		<result property="cmoCode" 					column="AFFS_cmo_code" />
+		<result property="shareValue" 				column="AFFS_share_value" />
+		<result property="roleCode" 				column="AFFS_role_code" />
+		<result property="rightTypeCode" 			column="AFFS_right_type_code" />
+	</resultMap>
+
+	<resultMap id="resMapAffiliationDomain" type="AffiliationDomain">
+		<id property="idAffiliationDomain" 			column="AFFDO_id_affiliation_domain" />
+        <result property="fkAffiliation" 			column="AFFDO_fk_affiliation" />
+        <result property="fkIpiRole" 				column="AFFDO_fk_ipi_role" />
+        <result property="fkCreationClass" 			column="AFFDO_fk_creation_class" />
+        <result property="fkIpiRightType" 			column="AFFDO_fk_ipi_right_type" />
+        <result property="isExcluded" 				column="AFFDO_is_excluded" />
+        <result property="ipiRoleCode" 				column="AFFDO_ipi_role_code" />
+        <result property="creationClassCode" 		column="AFFDO_cc_code" />
+        <result property="ipiRightTypeCode" 		column="AFFDO_irt_code" />
+	</resultMap>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" /> ,
+			<include refid="fieldsAffiliationDomain" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.CmoMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.CmoMapper.fieldsCmoDomain" />
+		FROM affiliation
+		LEFT OUTER JOIN affiliation_domain ON affiliation_domain.fk_affiliation = affiliation.id_affiliation
+		LEFT OUTER JOIN cmo ON cmo.id_cmo = affiliation.fk_cmo
+		LEFT OUTER JOIN cmo_domain ON cmo_domain.fk_cmo = cmo.id_cmo
+		LEFT OUTER JOIN ipi_role aff_ipi_role ON aff_ipi_role.id_ipi_role = affiliation_domain.fk_ipi_role
+	    LEFT OUTER JOIN creation_class aff_cc ON aff_cc.id_creation_class = affiliation_domain.fk_creation_class
+	    LEFT OUTER JOIN ipi_right_type aff_rt ON aff_rt.id_ipi_right_type = affiliation_domain.fk_ipi_right_type
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE affiliation.id_affiliation = #{idAffiliation}
+	</select>
+
+	<select id="findByInterestedParty" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE affiliation.fk_interested_party = #{idInterestedParty}
+		
+		<if test="ccCodeList != null">
+			AND affiliation_domain.fk_creation_class in (select id_creation_class from creation_class where code in
+			<foreach item="code" index="idx" collection="ccCodeList"  open="(" separator="," close=")">
+			  	 #{code}
+		  	</foreach>
+			)
+		</if>
+		
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO affiliation(fk_interested_party,
+                                  fk_cmo,
+                                  start_date,
+                                  end_date,
+                                  share_value,
+                                  signature_date,
+                                  amendment_timestamp,
+                                  territory_formula)
+		VALUES (#{fkInterestedParty},
+		        #{cmo.id},
+		        #{startDate},
+		        #{endDate},
+		        #{shareValue},
+		        #{signatureDate},
+		        #{amendmentTimestamp},
+		        #{territoryFormula})
+		<selectKey   resultType="long" keyProperty="idAffiliation"    keyColumn="id_affiliation"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_AFFILIATION_SEQ'
+		</selectKey>			        
+	</insert>
+
+	<update id="updateByPrimaryKey" keyProperty="idAffiliation">
+		UPDATE affiliation
+		SET
+		fk_interested_party =#{fkInterestedParty},
+        fk_cmo = #{cmo.id},
+        start_date=#{startDate},
+        end_date= #{endDate},
+        share_value= #{shareValue},
+        signature_date = #{signatureDate},
+        amendment_timestamp=#{amendmentTimestamp},
+        territory_formula=#{territoryFormula}
+		WHERE
+		id_affiliation = #{idAffiliation}
+
+	</update>
+
+	<insert id="insertAffiliationDomain" useGeneratedKeys="true" keyProperty="idAffiliationDomain" keyColumn="id_affiliation_domain">
+		INSERT INTO affiliation_domain(fk_affiliation,
+                                         fk_ipi_role,
+                                         fk_creation_class,
+                                         fk_ipi_right_type,
+                                         is_excluded)
+		VALUES (#{fkAffiliation},
+		        #{fkIpiRole},
+		        #{fkCreationClass},
+		        #{fkIpiRightType},
+		        #{isExcluded})
+	</insert>
+
+	<update id="updateEndDate">
+		UPDATE affiliation
+		SET end_date= #{endDate}
+		WHERE id_affiliation = #{idAffiliation}
+	</update>
+
+	<update id="updateDomainExclusion">
+		UPDATE affiliation_domain
+		SET is_excluded = #{isExcluded}
+		WHERE id_affiliation_domain = #{idAffiliationDomain}
+	</update>
+
+	<update id="updateDomainExclusionList">
+		UPDATE affiliation_domain
+		SET is_excluded = #{isExcluded}
+		WHERE
+		<trim prefixOverrides="OR">
+			<foreach collection="idAffiliationDomainList" item="id">
+				OR id_affiliation_domain = #{id}
+			</foreach>
+		</trim>
+	</update>
+
+	<update id="updateTerritoryByAffiliation">
+		UPDATE affiliation
+		SET territory_formula = #{territoryFormula}
+		WHERE fk_affiliation = #{idAffiliation}
+	</update>
+
+	 <delete id="deleteAffiliationDomainByParent">
+	 	DELETE
+	 	FROM 		affiliation_domain
+	 	WHERE 		fk_affiliation = #{fkAffiliation}
+	 </delete>
+	 
+	<delete id="deleteAffiliation">
+		DELETE FROM affiliation
+		WHERE id_affiliation = #{idAffiliation}
+	</delete>
+
+	  <delete id="deleteAffiliationByIp">
+	 	DELETE
+	 	FROM 		affiliation
+	 	WHERE 		id_affiliation = #{interestedPartyId}
+	 </delete>
+
+	 <select id="findAffiliationSplit" resultMap="resMapSplit">
+		SELECT interested_party_name.fk_name AS AFFS_id_name,
+		       interested_party_name.fk_interested_party AS AFFS_id_interested_party,
+		       role.id_role AS AFFS_id_role,
+		       role.code AS AFFS_role_code,
+		       right_type.id_right_type AS AFFS_id_right_type,
+		       right_type.code AS AFFS_right_type_code,
+		       cmo.id_cmo AS AFFS_id_cmo,
+		       cmo.acronym AS AFFS_cmo_acronym,
+		       cmo.code AS AFFS_cmo_code,
+		       sum(affiliation.share_value) AS AFFS_share_value
+		       
+		FROM affiliation
+		LEFT OUTER JOIN cmo ON cmo.id_cmo = affiliation.fk_cmo
+		LEFT OUTER JOIN affiliation_domain ON affiliation_domain.fk_affiliation = affiliation.id_affiliation
+		LEFT OUTER JOIN interested_party ON interested_party.id_interested_party = affiliation.fk_interested_party
+		LEFT OUTER JOIN interested_party_name ON affiliation.fk_interested_party = interested_party_name.fk_interested_party
+		LEFT OUTER JOIN ipi_role ON ipi_role.id_ipi_role = affiliation_domain.fk_ipi_role
+		LEFT OUTER JOIN role ON role.fk_ipi_role = ipi_role.id_ipi_role
+		  
+	   	LEFT OUTER JOIN ipi_right_type ON ipi_right_type.id_ipi_right_type = affiliation_domain.fk_ipi_right_type
+		INNER JOIN 		ipi_right_type_class ON ipi_right_type_class.fk_ipi_right_type = ipi_right_type.id_ipi_right_type
+    
+		INNER JOIN 		creation_class ON ipi_right_type_class.fk_creation_class = creation_class.id_creation_class
+		INNER JOIN 		right_type_class ON right_type_class.fk_creation_class = creation_class.id_creation_class
+    
+		INNER JOIN 		right_type ON right_type.id_right_type = right_type_class.fk_right_type
+		
+		WHERE
+		    (affiliation.end_date IS NULL OR  affiliation.end_date &gt;= now())
+			AND (affiliation.start_date IS NULL OR  affiliation.start_date &lt;= now())
+ 			AND interested_party_name.fk_name = #{idName}
+			AND role.code = #{roleCode}
+			AND right_type.code= #{rightTypeCode}
+
+		GROUP BY interested_party_name.fk_name ,
+			     interested_party_name.fk_interested_party ,
+			     role.id_role ,
+			     role.code ,
+			     right_type.id_right_type ,
+			     right_type.code ,
+			     cmo.id_cmo ,
+			     cmo.code ,
+			     cmo.acronym
+	</select>
+
+
+	<select id="findAffiliatedCmosByName" resultType="java.lang.String">
+		SELECT cmo_aff.acronym
+		FROM interested_party_name
+		LEFT OUTER JOIN affiliation ip_aff ON ip_aff.fk_interested_party = interested_party_name.fk_interested_party AND ip_aff.start_date &lt;= now() AND (ip_aff.end_date IS NULL OR ip_aff.end_date &gt;= now())
+		LEFT OUTER JOIN cmo cmo_aff ON cmo_aff.id_cmo = ip_aff.fk_cmo
+		WHERE interested_party_name.fk_name = #{idName}
+	</select>
+	
+	
+<!--  	
+	<select id="checkIfExistAffiliationDomain" resultType="boolean">
+		SELECT 
+			CASE WHEN EXISTS (
+				SELECT id_affiliation_domain
+				FROM affiliation_domain
+				WHERE 	fk_affiliation = #{idAffiliation}
+			) THEN 1 ELSE 0
+			END
+		FROM dual result
+	</select> -->
+	<select id="checkIfExistAffiliationDomain" resultType="boolean">
+		SELECT 
+			CASE WHEN EXISTS (
+				SELECT id_affiliation_domain
+				FROM affiliation_domain
+				WHERE 	fk_affiliation = #{idAffiliation}
+			) THEN 1 ELSE 0
+			END
+		FROM dual
+	</select>
+	
+	<delete id="deleteAffiliationDomainByIp">
+		DELETE FROM affiliation_domain
+		WHERE fk_affiliation IN (SELECT id_affiliation FROM affiliation WHERE fk_interested_party= #{idInterestedParty})
+	</delete>
+	
+	<delete id="deleteAffiliationDomain">
+		DELETE FROM affiliation_domain
+		WHERE id_affiliation_domain = #{idAffiliationDomain}
+	</delete>
+
+</mapper>

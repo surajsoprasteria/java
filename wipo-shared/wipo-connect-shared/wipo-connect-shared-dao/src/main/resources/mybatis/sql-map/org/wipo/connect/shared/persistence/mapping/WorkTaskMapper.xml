@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.WorkTaskMapper">
+
+	<resultMap id="taskResMap" type="WorkTask">
+		<id property="idWorkTask" column="id_work_task" />
+		<result property="taskCode" column="task_code" />
+		<result property="cmoCode" column="cmo_code" />
+		<collection property="workTaskItemList" ofType="WorkTaskItem" resultMap="org.wipo.connect.shared.persistence.mapping.WorkTaskMapper.taskItemResMap" />
+	</resultMap>
+
+	<resultMap id="taskItemResMap" type="WorkTaskItem">
+		<id property="idWorkTaskItem" column="id_work_task_item" />
+		<result property="fkWorkTask" column="fk_work_task" />
+		<result property="fkWork" column="fk_work" />
+		<result property="itemStatus" column="item_status" />
+		<result property="progr" column="progr" />
+		<result property="itemCode" column="item_code" />
+		<result property="responseStatus" column="CSIRES_response_status" />
+		<result property="cmoCode" column="item_cmo_code" />
+		<association property="workTaskDetail" resultMap="taskDetailResMap" />
+		<association property="workTaskCsiResult" resultMap="workTaskCsiResultMap" />
+	</resultMap>
+
+	<resultMap id="taskDetailResMap" type="WorkTaskDetail">
+		<id property="idWorkTaskDetail" column="WTD_id_wtd" />
+		<result property="fkWorkTaskItem" column="WTD_fk_work_task_item" />
+		<result property="duration" column="WTD_duration" />
+       	<result property="genreCode" column="WTD_genre_code" />
+		<result property="releaseDate" column="WTD_release_date" />
+		<result property="typeCode" column="WTD_type_code" />
+        <result property="registrationDate" column="WTD_registration_date" />
+		<result property="workCreationDate" column="WTD_work_creation_date" />
+		<result property="sourceTypeCode" column="WTD_source_type_code" />
+		<result property="domesticWork" column="WTD_domestic_work" />
+		<result property="excerptTypeCode" column="WTD_excerpt_type_code" />
+		<result property="compositeTypeCode" column="WTD_composite_type_code" />
+		<result property="mainId" column="WTD_main_id" />
+
+		<result property="catalogueNumber" column="WTD_catalogue_number" />
+		<result property="support" column="WTD_support" />
+		<result property="language" column="WTD_language" />
+		<result property="componentPerc" column="WTD_component_perc" />
+		<result property="creationClassCode" column="WTD_creation_class_code" />
+		<result property="countryOfProductionCode" column="WTD_country_production_code" />
+		<result property="categoryCode" column="WTD_category_code" />
+		<result property="label" column="WTD_label" />
+
+
+        <collection property="instrumentCodeList" ofType="java.lang.String" >
+ 			<result column="WTDINST_instrument_code" />
+ 		</collection>
+        <collection property="titleList" ofType="WorkTaskDetailTitle" resultMap="org.wipo.connect.shared.persistence.mapping.WorkTaskMapper.titleDetailMap" />
+        <collection property="workPerformerList" ofType="WorkTaskDetailPerf" resultMap="org.wipo.connect.shared.persistence.mapping.WorkTaskMapper.workTaskDetailPerfMap" />
+        <collection property="workIdentifierList" ofType="WorkTaskDetailIdent" resultMap="org.wipo.connect.shared.persistence.mapping.WorkTaskMapper.workTaskDetailIdentMap" />
+        <collection property="derivedViewList" ofType="WorkTaskDetailDv" resultMap="org.wipo.connect.shared.persistence.mapping.WorkTaskMapper.workTaskDetailDvMap" />
+
+		<collection property="workDateList" ofType="WorkTaskDetailDate" resultMap="org.wipo.connect.shared.persistence.mapping.WorkTaskMapper.workTaskDetailDateMap" />
+		<collection property="derivedWorkList" ofType="WorkTaskDetailDerivedWork" resultMap="org.wipo.connect.shared.persistence.mapping.WorkTaskMapper.workTaskDetailDvWorkMap" />
+	</resultMap>
+
+	<resultMap id="titleDetailMap" type="WorkTaskDetailTitle">
+       <id property="idWorkTaskDetailTitle" column="WTDT_id_wtd_title" />
+       <result property="fkWorkTaskDetail" column="WTDT_fk_wtd" />
+       <result property="description" column="WTDT_description" />
+       <result property="typeCode" column="WTDT_type_code" />
+	</resultMap>
+
+	<resultMap id="workTaskDetailIdentMap" type="WorkTaskDetailIdent">
+	  <id property="idWorkTaskDetailIdent" column="WTDID_id_wtd_ident" />
+	  <result property="fkWorkTaskDetail" column="WTDID_fk_wtd" />
+	  <result property="code" column="WTDID_code" />
+	  <result property="value" column="WTDID_value" />
+	</resultMap>
+
+	<resultMap id="workTaskDetailDvMap" type="WorkTaskDetailDv">
+	  <id property="idWorkTaskDetailDv" column="WTDDV_id_wtd_dv" />
+	  <result property="fkWorkTaskDetail" column="WTDDV_fk_wtd" />
+	  <result property="territoryFormula" column="territory_formula" />
+	  <collection property="derivedViewNameList" ofType="WorkTaskDetailDvName" resultMap="org.wipo.connect.shared.persistence.mapping.WorkTaskMapper.workTaskDetailDvNameMap" />
+	</resultMap>
+
+	<resultMap id="workTaskDetailDvNameMap" type="WorkTaskDetailDvName">
+	  <id property="idWorkTaskDetailDvName" column="WTDDVN_id_wtd_dv_name" />
+	  <result property="fkWorkTaskDetailDv" column="WTDDVN_fk_wtd_dv" />
+	  <result property="name.mainId" column="WTDDVN_name_main_id" />
+	  <result property="roleCode" column="WTDDVN_role_code" />
+	  <result property="creatorRefIndex" column="WTDDVN_creator_ref_index" />
+	  <result property="refIndex" column="WTDDVN_ref_index" />
+	  <result property="sourceTypeCode" column="WTDDVN_source_type_code" />
+	  <collection property="derivedViewNameShareList" ofType="WorkTaskDetailDvShare" resultMap="org.wipo.connect.shared.persistence.mapping.WorkTaskMapper.workTaskDetailDvShareMap" />
+	</resultMap>
+
+	<resultMap id="workTaskDetailDvShareMap" type="WorkTaskDetailDvShare">
+	  <id property="idWorkTaskDetailDvShare" column="WTDDVS_id_wtd_dv_share" />
+	  <result property="fkWorkTaskDetailDvName" column="WTDDVS_fk_wtd_dv_name" />
+	  <result property="rightTypeCode" column="WTDDVS_right_type_code" />
+	  <result property="shareValue" column="WTDDVS_share_value" />
+	  <result property="cmoCode" column="WTDDVS_cmo_code" />
+	</resultMap>
+
+	<resultMap id="workTaskDetailPerfMap" type="WorkTaskDetailPerf">
+	  <id property="idWorkTaskDetailPerf" column="WTDP_id_wtd_perf" />
+	  <result property="fkWorkTaskDetail" column="WTDP_fk_wtd" />
+	  <result property="performerName" column="WTDP_performer_name" />
+	</resultMap>
+
+	<resultMap id="workTaskDetailDateMap" type="WorkTaskDetailDate">
+	  <id property="idWorkTaskDetailDate" column="WTDD_id_wtd_date" />
+	  <result property="fkWorkTaskDetail" column="WTDD_fk_wtd" />
+	  <result property="dateTypeCode" column="WTDD_date_type_code" />
+	  <result property="dateValue" column="WTDD_date_value" />
+	</resultMap>
+
+	<resultMap id="workTaskDetailDvWorkMap" type="WorkTaskDetailDerivedWork">
+	  <id property="idWorkTaskDetailDerivedWork" column="WTDDW_id_wtd_derived_work" />
+	  <result property="fkWorkTaskDetail" column="WTDDW_fk_wtd" />
+	  <result property="mainIdWork" column="WTDDW_main_id_work" />
+	  <result property="weight" column="WTDDW_weight" />
+	  <result property="trackNumber" column="WTDDW_track_number" />
+	</resultMap>
+
+
+
+	<resultMap id="workTaskCsiResultMap" type="WorkTaskCsiResult">
+	  <id property="idWorkTaskCsiResult" column="CSIRES_id" />
+	  <result property="fkWorkTaskItem" column="CSIRES_fk_work_task_item" />
+	  <result property="statusCode" column="CSIRES_status_code" />
+	  <result property="itemCode" column="CSIRES_item_code" />
+	</resultMap>
+
+	<resultMap id="workTaskElaborationResultMap" type="WorkTaskElaborationResult">
+	  <id property="idWorkTaskItem" column="WTER_id_work_task_item" />
+	  <result property="itemCode" column="WTER_item_code" />
+	  <result property="taskStatus" column="WTER_item_status" />
+	  <result property="workResponseStatus" column="WTER_response_status" />
+	  <result property="csiStatus" column="WTER_status_code" />
+	  <result property="sharedWorkId" column="WTER_fk_work" />
+	  <result property="sharedWorkMainId" column="WTER_value" />
+	</resultMap>
+
+
+	<sql id="task_fields">
+		work_task.id_work_task,
+		work_task.task_code,
+		work_task.cmo_code,
+		work_task.cmo_code AS item_cmo_code,
+
+		work_task_item.id_work_task_item,
+		work_task_item.fk_work_task,
+		work_task_item.fk_work,
+		work_task_item.item_status,
+		work_task_item.progr,
+		work_task_item.item_code,
+
+		work_task_item.item_code AS CSIRES_item_code,
+		work_task_item.response_status AS CSIRES_response_status
+	</sql>
+
+	<sql id="work_task_detail_fields">
+		work_task_detail.id_work_task_detail AS WTD_id_wtd,
+		work_task_detail.fk_work_task_item AS WTD_fk_work_task_item,
+		work_task_detail.duration AS WTD_duration,
+		work_task_detail.genre_code AS WTD_genre_code,
+		work_task_detail.release_date AS WTD_release_date,
+		work_task_detail.type_code AS WTD_type_code,
+		work_task_detail.registration_date AS WTD_registration_date,
+		work_task_detail.work_creation_date AS WTD_work_creation_date,
+		work_task_detail.source_type_code AS WTD_source_type_code,
+		work_task_detail.domestic_work AS WTD_domestic_work,
+		work_task_detail.excerpt_type_code AS WTD_excerpt_type_code,
+		work_task_detail.composite_type_code AS WTD_composite_type_code,
+		work_task_detail.main_id AS WTD_main_id,
+
+		work_task_detail.catalogue_number AS WTD_catalogue_number,
+		work_task_detail.support AS WTD_support,
+		work_task_detail.language AS WTD_language,
+		work_task_detail.component_perc AS WTD_component_perc,
+		work_task_detail.creation_class_code AS WTD_creation_class_code,
+		work_task_detail.country_production_code AS WTD_country_production_code,
+		work_task_detail.category_code AS WTD_category_code,
+		work_task_detail.label AS WTD_label,
+
+		work_task_detail_date.id_work_task_detail_date AS WTDD_id_wtd_date,
+		work_task_detail_date.fk_work_task_detail AS WTDD_fk_wtd,
+		work_task_detail_date.date_type_code AS WTDD_date_type_code,
+		work_task_detail_date.date_value AS WTDD_date_value,
+
+		work_task_detail_d_work.id_work_task_detail_d_work AS WTDDW_id_wtd_derived_work,
+		work_task_detail_d_work.fk_work_task_detail AS WTDDW_fk_wtd,
+		work_task_detail_d_work.main_id AS WTDDW_main_id_work,
+		work_task_detail_d_work.weight AS WTDDW_weight,
+		work_task_detail_d_work.track_number AS WTDDW_track_number,
+
+		work_task_detail_title.id_work_task_detail_title AS WTDT_id_wtd_title,
+		work_task_detail_title.description AS WTDT_description,
+		work_task_detail_title.type_code AS WTDT_type_code,
+		work_task_detail_title.fk_work_task_detail AS WTDT_fk_wtd,
+
+		work_task_detail_perf.id_work_task_detail_perf AS WTDP_id_wtd_perf,
+		work_task_detail_perf.fk_work_task_detail AS WTDP_fk_wtd,
+		work_task_detail_perf.performer_name AS WTDP_performer_name,
+
+		work_task_detail_dv.id_work_task_detail_dv AS WTDDV_id_wtd_dv,
+		work_task_detail_dv.fk_work_task_detail AS WTDDV_fk_wtd,
+		work_task_detail_dv.territory_formula,
+
+		work_task_detail_dv_name.id_work_task_detail_dv_name AS WTDDVN_id_wtd_dv_name,
+		work_task_detail_dv_name.fk_work_task_detail_dv AS WTDDVN_fk_wtd_dv,
+		work_task_detail_dv_name.name_main_id AS WTDDVN_name_main_id,
+		work_task_detail_dv_name.role_code AS WTDDVN_role_code,
+		work_task_detail_dv_name.creator_ref_index AS WTDDVN_creator_ref_index,
+		work_task_detail_dv_name.ref_index AS WTDDVN_ref_index,
+		work_task_detail_dv_name.source_type_code AS WTDDVN_source_type_code,
+
+		work_task_detail_dv_share.id_work_task_detail_dv_share AS WTDDVS_id_wtd_dv_share,
+		work_task_detail_dv_share.fk_work_task_detail_dv_name AS WTDDVS_fk_wtd_dv_name,
+		work_task_detail_dv_share.right_type_code AS WTDDVS_right_type_code,
+		work_task_detail_dv_share.share_value AS WTDDVS_share_value,
+		work_task_detail_dv_share.cmo_code AS WTDDVS_cmo_code,
+
+		work_task_detail_ident.id_work_task_detail_ident AS WTDID_id_wtd_ident,
+		work_task_detail_ident.fk_work_task_detail AS WTDID_fk_wtd,
+		work_task_detail_ident.code AS WTDID_code,
+		work_task_detail_ident.value AS WTDID_value,
+
+		work_task_detail_instrument.id_work_task_instrument AS WTDINST_id_wtd_instr,
+		work_task_detail_instrument.instrument_code AS WTDINST_instrument_code,
+		work_task_detail_instrument.fk_work_task_detail AS WTDINST_fk_wtd
+	</sql>
+
+
+	<insert id="insertWorkTask" useGeneratedKeys="true" flushCache="true">
+		INSERT INTO work_task
+						(task_code, cmo_code)
+		VALUES
+						(#{taskCode}, #{cmoCode})
+		<selectKey   resultType="long" keyProperty="idWorkTask" keyColumn="id_work_task"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_WORK_TASK_SEQ'
+		</selectKey>							
+	</insert>
+
+	<insert id="insertWorkTaskItem" useGeneratedKeys="true" flushCache="true">
+		INSERT INTO work_task_item
+					(fk_work_task,fk_work, item_status,progr,item_code)
+		VALUES
+					(#{fkWorkTask},#{fkWork},#{itemStatus},#{progr},#{itemCode})
+		<selectKey   resultType="long" keyProperty="idWorkTaskItem" keyColumn="id_work_task_item"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_WORK_TASK_ITEM_SEQ'
+		</selectKey>
+	</insert>
+
+
+	<update id="updateTaskItemStatus" >
+		UPDATE 		work_task_item
+	   	SET			item_status= #{statusCode}
+	 	WHERE		work_task_item.id_work_task_item = #{id}
+	</update>
+
+	<update id="updateTaskItemResponseStatus" >
+		UPDATE 		work_task_item
+	   	SET			response_status= #{responseStatus}
+	 	WHERE		work_task_item.id_work_task_item = #{id}
+	</update>
+
+	<update id="updateTaskItemWork" >
+		UPDATE 		work_task_item
+	   	SET			fk_work= #{fkWork}
+	 	WHERE		work_task_item.id_work_task_item = #{id}
+	</update>
+
+
+	<select id="findWorkTaskElaborationResultByItemCode" resultMap="workTaskElaborationResultMap">
+		SELECT work_task_item.id_work_task_item AS WTER_id_work_task_item,
+			   work_task_item.item_code AS WTER_item_code,
+			   work_task_item.item_status AS WTER_item_status,
+			   work_task_item.response_status AS WTER_response_status,
+			   work_task_item.fk_work AS WTER_fk_work,
+			   work.main_id AS WTER_value
+		  FROM work_task_item
+		       LEFT OUTER JOIN work ON work_task_item.fk_work = work.id_work
+
+		 WHERE work_task_item.item_code IN
+
+		 <foreach collection="itemCodeList" item="itemCode" open="(" close=")" separator=",">
+		     #{itemCode}
+         </foreach>
+	</select>
+
+	<select id="findWorkTaskItemByStatus" resultMap="taskItemResMap"  >
+		SELECT
+			<include refid="task_fields"/> ,
+			<include refid="work_task_detail_fields"/>
+			FROM work_task
+			   LEFT OUTER JOIN work_task_item ON work_task.id_work_task = work_task_item.fk_work_task
+			   LEFT OUTER JOIN work_task_detail ON work_task_item.id_work_task_item = work_task_detail.fk_work_task_item
+			   LEFT OUTER JOIN work_task_detail_date ON work_task_detail_date.fk_work_task_detail = work_task_detail.id_work_task_detail
+			   LEFT OUTER JOIN work_task_detail_d_work ON work_task_detail_d_work.fk_work_task_detail = work_task_detail.id_work_task_detail
+		  	   LEFT OUTER JOIN work_task_detail_dv ON work_task_detail_dv.fk_work_task_detail = work_task_detail.id_work_task_detail
+		       LEFT OUTER JOIN work_task_detail_dv_name ON work_task_detail_dv_name.fk_work_task_detail_dv = work_task_detail_dv.id_work_task_detail_dv
+		       LEFT OUTER JOIN work_task_detail_dv_share ON work_task_detail_dv_share.fk_work_task_detail_dv_name = work_task_detail_dv_name.id_work_task_detail_dv_name
+		       LEFT OUTER JOIN work_task_detail_dv_ter ON work_task_detail_dv_ter.fk_work_task_detail_dv = work_task_detail_dv.id_work_task_detail_dv
+		       LEFT OUTER JOIN work_task_detail_ident ON work_task_detail_ident.fk_work_task_detail = work_task_detail.id_work_task_detail
+		       LEFT OUTER JOIN work_task_detail_instrument ON work_task_detail_instrument.fk_work_task_detail = work_task_detail.id_work_task_detail
+		       LEFT OUTER JOIN work_task_detail_perf ON work_task_detail_perf.fk_work_task_detail = work_task_detail.id_work_task_detail
+		       LEFT OUTER JOIN work_task_detail_title ON work_task_detail_title.fk_work_task_detail = work_task_detail.id_work_task_detail
+
+		 	WHERE 		work_task_item.item_status = #{statusCode}
+	</select>
+
+
+
+
+	<insert id="insertWorkTaskDetail" useGeneratedKeys="true" keyColumn="id_work_task_detail" keyProperty="idWorkTaskDetail" flushCache="true" >
+		INSERT INTO work_task_detail(main_id,
+									   fk_work_task_item,
+                                       duration,
+                                       genre_code,
+                                       release_date,
+                                       type_code,
+                                       registration_date,
+                                       work_creation_date,
+                                       source_type_code,
+                                       domestic_work,
+                                       excerpt_type_code,
+                                       composite_type_code,
+                                       catalogue_number,
+                                       support,
+                                       language,
+                                       component_perc,
+                                       creation_class_code,
+                                       country_production_code,
+                                       category_code,
+                                       label)
+			VALUES (#{mainId},
+					#{fkWorkTaskItem},
+					#{duration},
+					#{genreCode},
+					#{releaseDate},
+					#{typeCode},
+					#{registrationDate},
+					#{workCreationDate},
+					#{sourceTypeCode},
+					#{domesticWork},
+					#{excerptTypeCode},
+					#{compositeTypeCode},
+					#{catalogueNumber},
+                    #{support},
+                    #{language},
+                    #{componentPerc},
+                    #{creationClassCode},
+                    #{countryOfProductionCode},
+                    #{categoryCode},
+                    #{label})
+	</insert>
+
+	<insert id="insertWorkTaskDetailTitle" useGeneratedKeys="true" keyColumn="id_work_task_detail_title" keyProperty="idWorkTaskDetailTitle" flushCache="true" >
+		INSERT INTO work_task_detail_title (description, type_code, fk_work_task_detail)
+		VALUES (#{description},#{typeCode},#{fkWorkTaskDetail})
+	</insert>
+
+	<insert id="insertWorkTaskDetailInstrument" useGeneratedKeys="true" flushCache="true" >
+		INSERT INTO work_task_detail_instrument (instrument_code, fk_work_task_detail)
+		VALUES (#{instrumentCode},#{fkWorkTaskDetail})
+	</insert>
+
+	<insert id="insertWorkTaskDetailPerf" useGeneratedKeys="true" keyColumn="id_work_task_detail_perf" keyProperty="idWorkTaskDetailPerf" flushCache="true" >
+		INSERT INTO work_task_detail_perf(fk_work_task_detail, performer_name)
+		VALUES (#{fkWorkTaskDetail}, #{performerName})
+	</insert>
+
+	<insert id="insertWorkTaskDetailIdent" useGeneratedKeys="true" keyColumn="id_work_task_detail_ident" keyProperty="idWorkTaskDetailIdent" flushCache="true" >
+		INSERT INTO work_task_detail_ident(fk_work_task_detail, code, value)
+		VALUES (#{fkWorkTaskDetail}, #{code}, #{value})
+	</insert>
+
+	<insert id="insertWorkTaskDetailDv" useGeneratedKeys="true" keyColumn="id_work_task_detail_dv" keyProperty="idWorkTaskDetailDv" flushCache="true" >
+		INSERT INTO work_task_detail_dv(fk_work_task_detail, territory_formula)
+		VALUES (#{fkWorkTaskDetail}, #{territoryFormula})
+	</insert>
+
+
+
+	<insert id="insertWorkTaskDetailDvName" useGeneratedKeys="true" keyColumn="id_work_task_detail_dv_name" keyProperty="idWorkTaskDetailDvName" flushCache="true" >
+		INSERT INTO work_task_detail_dv_name(fk_work_task_detail_dv,
+                                               name_main_id,
+                                               role_code,
+                                               creator_ref_index,
+                                               ref_index,
+                                               source_type_code)
+			VALUES (#{fkWorkTaskDetailDv},
+			        #{name.mainId},
+			        #{roleCode},
+			        #{creatorRefIndex},
+			        #{refIndex},
+			        #{sourceTypeCode})
+	</insert>
+
+	<insert id="insertWorkTaskDetailDvShare" useGeneratedKeys="true" keyColumn="id_work_task_detail_dv_share" keyProperty="idWorkTaskDetailDvShare" flushCache="true" >
+		INSERT INTO work_task_detail_dv_share(fk_work_task_detail_dv_name,
+                                              right_type_code,
+                                              share_value,
+                                              cmo_code)
+		VALUES (#{fkWorkTaskDetailDvName},
+		        #{rightTypeCode},
+		        #{shareValue},
+		        #{cmoCode})
+	</insert>
+
+	<insert id="insertWorkTaskDetailDerivedWork" useGeneratedKeys="true" keyColumn="id_work_task_detail_d_work" keyProperty="idWorkTaskDetailDerivedWork" flushCache="true" >
+		INSERT INTO work_task_detail_d_work (main_id, weight, fk_work_task_detail, track_number)
+		VALUES (#{sharedMainId},#{weight},#{fkWorkTaskDetail}, #{trackNumber})
+	</insert>
+
+	<insert id="insertWorkTaskDetailDate" useGeneratedKeys="true" keyColumn="id_work_task_detail_date" keyProperty="idWorkTaskDetailDate" flushCache="true" >
+		INSERT INTO work_task_detail_date (date_type_code, date_value, fk_work_task_detail)
+		VALUES (#{dateTypeCode},#{dateValue},#{fkWorkTaskDetail})
+	</insert>
+
+
+</mapper>

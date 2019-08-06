@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.IpTaskMapper">
+
+	<resultMap id="taskResMap" type="IpTask">
+		<id property="idIpTask" column="id_ip_task" />
+		<result property="taskCode" column="task_code" />
+		<result property="cmoCode" column="cmo_code" />
+		<collection property="ipTaskItemList" ofType="IpTaskItem" resultMap="org.wipo.connect.shared.persistence.mapping.IpTaskMapper.taskItemResMap" />
+	</resultMap>
+
+	<resultMap id="taskItemResMap" type="IpTaskItem">
+		<id property="idIpTaskItem" column="id_ip_task_item" />
+		<result property="fkIpTask" column="fk_ip_task" />
+		<result property="fkInterestedParty" column="fk_interested_party" />
+		<result property="itemStatus" column="item_status" />
+		<result property="progr" column="progr" />
+		<result property="itemCode" column="item_code" />
+		<result property="responseStatus" column="response_status" />
+		<result property="cmoCode" column="item_cmo_code" />
+		<association property="ipTaskItemDetail" resultMap="taskDetailResMap" />
+	</resultMap>
+
+	<resultMap id="taskDetailResMap" type="IpTaskItemDetail">
+		<result property="idIpTaskItemDetail" column="id_ip_task_item_detail" />
+		<result property="fkIpTaskItem" column="fk_ip_task_item" />
+       	<result property="sex" column="sex" />
+		<result property="birthDate" column="birth_date" />
+		<result property="deathDate" column="death_date" />
+		<result property="birthPlace" column="birth_place" />
+		<result property="birthState" column="birth_state" />
+        <result property="birthCountryCode" column="birth_country_code" />
+        <result property="maritalStatus" column="marital_status" />
+        <result property="mainId" column="main_id" />
+        <result property="creationDate" column="creation_date" />
+        <result property="amendmentTimestamp" column="amendment_timestamp" />
+        <result property="type" column="type" />
+
+        <collection property="affiliationList" ofType="IpTaskDetailAffiliation" resultMap="org.wipo.connect.shared.persistence.mapping.IpTaskMapper.ipTaskDetailAffiliation" />
+        <collection property="nameList" ofType="IpTaskDetailName" resultMap="org.wipo.connect.shared.persistence.mapping.IpTaskMapper.ipTaskDetailName" />
+		<collection property="citizenshipCodeList" ofType="java.lang.String" >
+ 			<result column="citizenshipCodeList" />
+ 		</collection>
+ 		<collection property="interestedPartyIdentifierFlatList" ofType="IpTaskDetailIdent" resultMap="org.wipo.connect.shared.persistence.mapping.IpTaskMapper.ipTaskDetailIdent" />
+	</resultMap>
+
+	<resultMap id="ipTaskDetailAffiliation" type="IpTaskDetailAffiliation">
+	  <id property="idIpTaskDetailAffiliation" column="IPTDA_id_iptd_aff" />
+	  <result property="fkIpTaskItemDetail" column="IPTDA_fk_iptd" />
+	  <result property="cmoCode" column="IPTDA_cmo_code" />
+	  <result property="startDate" column="IPTDA_start_date" />
+	  <result property="endDate" column="IPTDA_and_date" />
+	  <result property="shareValue" column="IPTDA_share_value" />
+	  <result property="signatureDate" column="IPTDA_signature_date" />
+	  <result property="amendmentTimestamp" column="IPTDA_amn_time" />
+	 <result property="territoryFormula" column="IPTDA_territory_formula" />
+	  <collection property="affiliationDomainList" ofType="IpTaskDetailAffiliationDomain" resultMap="org.wipo.connect.shared.persistence.mapping.IpTaskMapper.ipTaskDetailAffiliationDomain" />
+	</resultMap>
+
+	<resultMap id="ipTaskDetailAffiliationDomain" type="IpTaskDetailAffiliationDomain">
+	  <id property="idIpTaskDetailAffiliationDomain" column="IPTDAD_id_iptd_aff_dom" />
+	  <result property="fkIpTaskItemDetail" column="IPTDAD_fk_iptd" />
+	   <result property="fkIpTaskDetailAffiliation" column="IPTDAD_fk_iptd_aff" />
+	  <result property="ipiRightTypeCode" column="IPTDAD_right_type_code" />
+	  <result property="creationClassCode" column="IPTDAD_creation_class_code" />
+	  <result property="ipiRoleCode" column="IPTDAD_role_code" />
+	  <result property="isExcluded" column="IPTDAD_is_excluded" />
+	</resultMap>
+
+	<resultMap id="ipTaskDetailName" type="IpTaskDetailName">
+	  <id property="idIpTaskDetailName" column="IPTDN_id_iptd_name" />
+	  <result property="fkIpTaskItemDetail" column="IPTDN_fk_iptd" />
+	   <result property="name" column="IPTDN_name" />
+	  <result property="firstName" column="IPTDN_first_name" />
+	  <result property="nameType" column="IPTDN_name_type" />
+	  <result property="creationTimestamp" column="IPTDN_creation_times" />
+	  <result property="amendmentTimestamp" column="IPTDN_amn_times" />
+	  <result property="mainId" column="IPTDN_main_id" />
+	</resultMap>
+
+
+	<resultMap id="ipTaskDetailIdent" type="IpTaskDetailIdent">
+	  <id property="idIpTaskDetailIdent" column="IPTDI_id_iptd_ident" />
+	  <result property="fkIpTaskItemDetail" column="IPTDI_fk_iptd" />
+	  <result property="code" column="IPTDI_code" />
+	  <result property="value" column="IPTDI_value" />
+	</resultMap>
+
+	<resultMap id="ipTaskElaborationResultMap" type="IpTaskElaborationResult">
+	  <id property="idIpTaskItem" column="IPTER_id_ip_task_item" />
+	  <result property="fkInterestedParty" column="IPTER_fk_interested_party" />
+	  <result property="itemStatus" column="IPTER_item_status" />
+	   <result property="itemCode" column="IPTER_item_code" />
+	  <result property="responseStatus" column="IPTER_response_status" />
+	  <result property="progr" column="IPTER_progr" />
+	</resultMap>
+
+
+	<sql id="fields">
+		ip_task.id_ip_task,
+		ip_task_item.id_ip_task_item,
+		ip_task_item.fk_interested_party,
+		ip_task.task_code,
+		ip_task.cmo_code,
+		ip_task.cmo_code AS item_cmo_code,
+		ip_task_item.item_status,
+		ip_task_item.progr,
+		ip_task_item.response_status
+
+	</sql>
+
+	<sql id="ip_task_item_detail_fields2">
+		ip_task_item_detail.id_ip_task_item_detail,
+		ip_task_item_detail.fk_ip_task_item,
+		ip_task_item_detail.type,
+		ip_task_item_detail.birth_date,
+		ip_task_item_detail.death_date,
+		ip_task_item_detail.birth_place,
+		ip_task_item_detail.birth_state,
+		ip_task_item_detail.birth_country_code,
+		ip_task_item_detail.marital_status,
+		ip_task_item_detail.sex,
+		ip_task_item_detail.main_id,
+		ip_task_item_detail.creation_date,
+		ip_task_item_detail.amendment_timestamp,
+
+		ip_task_detail_aff_domain.id_ip_task_detail_aff_domain AS IPTDAD_id_iptd_aff_dom,
+		ip_task_detail_aff_domain.fk_ip_task_item_detail AS IPTDAD_fk_iptd,
+		ip_task_detail_aff_domain.fk_ip_task_detail_affiliation AS IPTDAD_fk_iptd_aff,
+		ip_task_detail_aff_domain.ipi_right_type_code AS IPTDAD_right_type_code,
+		ip_task_detail_aff_domain.creation_class_code AS IPTDAD_creation_class_code,
+		ip_task_detail_aff_domain.ipi_role_code AS IPTDAD_role_code,
+		ip_task_detail_aff_domain.is_excluded AS IPTDAD_is_excluded,
+
+		ip_task_detail_affiliation.id_ip_task_detail_affiliation AS IPTDA_id_iptd_aff,
+		ip_task_detail_affiliation.fk_ip_task_item_detail AS IPTDA_fk_iptd,
+		ip_task_detail_affiliation.cmo_code AS IPTDA_cmo_code,
+		ip_task_detail_affiliation.start_date AS IPTDA_start_date,
+		ip_task_detail_affiliation.end_date AS IPTDA_and_date,
+		ip_task_detail_affiliation.share_value AS IPTDA_share_value,
+		ip_task_detail_affiliation.signature_date AS IPTDA_signature_date,
+		ip_task_detail_affiliation.amendment_timestamp AS IPTDA_amn_time,
+		ip_task_detail_affiliation.territory_formula AS IPTDA_territory_formula,
+
+		ip_task_detail_ident.id_ip_task_detail_ident AS IPTDI_id_iptd_ident,
+		ip_task_detail_ident.fk_ip_task_item_detail AS IPTDI_fk_iptd,
+		ip_task_detail_ident.code AS IPTDI_code,
+		ip_task_detail_ident.value AS IPTDI_value,
+
+		ip_task_detail_name.id_ip_task_detail_name AS IPTDN_id_iptd_name,
+		ip_task_detail_name.fk_ip_task_item_detail AS IPTDN_fk_iptd,
+		ip_task_detail_name.name AS IPTDN_name,
+		ip_task_detail_name.first_name AS IPTDN_first_name,
+		ip_task_detail_name.name_type AS IPTDN_name_type,
+		ip_task_detail_name.creation_timestamp AS IPTDN_creation_times,
+		ip_task_detail_name.amendment_timestamp AS IPTDN_amn_times,
+		ip_task_detail_name.main_id AS IPTDN_main_id,
+
+		ip_task_detail_territory.code as citizenshipCodeList
+	</sql>
+
+	<select id="findIpTaskItemByStatus" resultMap="taskItemResMap"  >
+		SELECT
+			<include refid="fields"/>,
+			<include refid="ip_task_item_detail_fields2"/>
+				  FROM ip_task
+			   LEFT OUTER JOIN ip_task_item ON ip_task.id_ip_task = ip_task_item.fk_ip_task
+			   LEFT OUTER JOIN ip_task_item_detail ON ip_task_item.id_ip_task_item = ip_task_item_detail.fk_ip_task_item
+		  	   LEFT OUTER JOIN ip_task_detail_ident ON ip_task_detail_ident.fk_ip_task_item_detail = ip_task_item_detail.id_ip_task_item_detail
+		       LEFT OUTER JOIN ip_task_detail_territory ON ip_task_detail_territory.fk_ip_task_item_detail = ip_task_item_detail.id_ip_task_item_detail
+		       LEFT OUTER JOIN ip_task_detail_name ON ip_task_detail_name.fk_ip_task_item_detail = ip_task_item_detail.id_ip_task_item_detail
+		       LEFT OUTER JOIN ip_task_detail_affiliation ON ip_task_detail_affiliation.fk_ip_task_item_detail = ip_task_item_detail.id_ip_task_item_detail
+		       LEFT OUTER JOIN ip_task_detail_aff_domain ON ip_task_detail_aff_domain.fk_ip_task_detail_affiliation = ip_task_detail_affiliation.id_ip_task_detail_affiliation
+
+		 		WHERE 		ip_task_item.item_status = #{statusCode}
+	</select>
+
+
+	<select id="selectTaskByCodeAndStatus" resultType="int">
+		SELECT 		count(*)
+		FROM		ip_task
+		<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="taskCode != null">
+					AND ip_task.task_code = #{taskCode}
+				</if>
+
+				<!--		
+				<if test="status != null">
+					AND ip_task.task_status = #{status}
+				</if> -->
+				<if test="status == null">
+					AND ip_task.task_status = #{status}
+				</if>
+			</trim>
+	</select>
+
+	<insert id="insertIpTask" useGeneratedKeys="true" flushCache="true">
+		INSERT INTO ip_task(task_code, cmo_code)
+		VALUES (#{taskCode},#{cmoCode})
+				
+		<selectKey   resultType="long" keyColumn="id_ip_task" keyProperty="idIpTask" order="BEFORE">				
+		select next from _sequences where name = 'ID_IP_TASK_SEQ'
+		</selectKey>
+	</insert>
+
+	<update id="updateTaskStatus" >
+		UPDATE 	ip_task
+		SET 	ip_task.task_status='${@org.wipo.connect.shared.exchange.enumerator.InterestedPartyTaskStatusEnum@COMPLETED.toString()}'
+		WHERE 	ip_task.task_status='NEW'
+	    AND 	not exists (select 	0
+	    					from 	ip_task_item
+              				where 	ip_task.id_ip_task = ip_task_item.fk_ip_task
+                			AND 	ip_task_item.item_status != '${@org.wipo.connect.shared.exchange.enumerator.InterestedPartyTaskStatusEnum@COMPLETED.toString()}')
+	</update>
+
+	<insert id="insertIpTaskItem" useGeneratedKeys="true"  flushCache="true">
+		INSERT INTO ip_task_item(fk_ip_task,fk_interested_party, item_status,progr,item_code)
+		VALUES (#{fkIpTask},#{fkInterestedParty},#{itemStatus},#{progr},#{itemCode})
+		
+		<selectKey   resultType="long" keyColumn="id_ip_task_item" keyProperty="idIpTaskItem" order="BEFORE">				
+		select next from _sequences where name = 'ID_IP_TASK_ITEM_SEQ'
+		</selectKey>
+	</insert>
+
+	<insert id="insertIpTaskItemDetail" useGeneratedKeys="true"  flushCache="true" >
+		INSERT INTO ip_task_item_detail
+					(fk_ip_task_item, type, sex, birth_date, death_date, birth_place, birth_state, birth_country_code, marital_status,main_id,creation_date,amendment_timestamp)
+		VALUES 		(#{fkIpTaskItem},#{type},#{sex},#{birthDate},#{deathDate},#{birthPlace},#{birthState},#{birthCountryCode},#{maritalStatus}, #{mainId},#{creationDate},#{amendmentTimestamp})
+		
+		<selectKey   resultType="long" keyColumn="id_ip_task_item_detail" keyProperty="idIpTaskItemDetail" order="BEFORE">				
+		select next from _sequences where name = 'ID_IP_TASK_ITEM_DETAIL_SEQ'
+		</selectKey>
+	</insert>
+
+	<insert id="insertIpTaskDetailAff" useGeneratedKeys="true" flushCache="true" >
+		INSERT INTO ip_task_detail_affiliation(fk_ip_task_item_detail, cmo_code, start_date, end_date,share_value, signature_date,amendment_timestamp,territory_formula)
+		VALUES (#{fkIpTaskItemDetail}, #{cmoCode}, #{startDate},#{endDate},#{shareValue},#{signatureDate},#{amendmentTimestamp},#{territoryFormula})
+		
+		<selectKey   resultType="long" keyColumn="id_ip_task_detail_affiliation" keyProperty="idIpTaskDetailAffiliation" order="BEFORE">				
+		select next from _sequences where name = 'ID_IP_TASK_DET_AFF_SEQ'
+		</selectKey>
+	</insert>
+
+	<insert id="insertIpTaskDetailAffDomain" useGeneratedKeys="true"  flushCache="true" >
+		INSERT INTO ip_task_detail_aff_domain(fk_ip_task_item_detail, fk_ip_task_detail_affiliation, ipi_right_type_code, creation_class_code, ipi_role_code,is_excluded)
+		VALUES (#{fkIpTaskItemDetail}, #{fkIpTaskDetailAffiliation}, #{ipiRightTypeCode},#{creationClassCode},#{ipiRoleCode},#{isExcluded})
+		
+		<selectKey   resultType="long" keyColumn="id_ip_task_detail_aff_domain" keyProperty="idIpTaskDetailAffiliationDomain" order="BEFORE">				
+		select next from _sequences where name = 'ID_IP_TASK_DET_AFF_DOM_SEQ'
+		</selectKey>
+	</insert>
+
+	<insert id="insertIpTaskDetailName" useGeneratedKeys="true"  flushCache="true" >
+		INSERT INTO ip_task_detail_name(fk_ip_task_item_detail, name, first_name, name_type, creation_timestamp,amendment_timestamp,main_id)
+		VALUES (#{fkIpTaskItemDetail}, #{name}, #{firstName},#{nameType},#{creationTimestamp},#{amendmentTimestamp},#{mainId})
+		
+		<selectKey   resultType="long" keyColumn="id_ip_task_detail_name" keyProperty="idIpTaskDetailName" order="BEFORE">				
+		select next from _sequences where name = 'ID_IP_TASK_DET_NAME_SEQ'
+		</selectKey>
+	</insert>
+	
+
+	<insert id="insertIpTaskDetailTerritory" useGeneratedKeys="true" keyColumn="id_ip_task_detail_territory" flushCache="true" >
+		INSERT INTO ip_task_detail_territory(fk_ip_task_item_detail, code)
+		VALUES (#{fkIpTaskItemDetail}, #{code})
+	</insert>
+
+	<insert id="insertIpTaskDetailIdent" useGeneratedKeys="true" flushCache="true" >
+		INSERT INTO ip_task_detail_ident(fk_ip_task_item_detail, code, value)
+		VALUES (#{fkIpTaskItemDetail}, #{code}, #{value})
+		<selectKey   resultType="long" keyColumn="id_ip_task_detail_ident" keyProperty="idIpTaskDetailIdent" order="BEFORE">				
+		select next from _sequences where name = 'ID_IP_TASK_DET_IDENT_SEQ'
+		</selectKey>
+	</insert>
+	<update id="updateTaskItemStatus" >
+		UPDATE 		ip_task_item
+	   	SET			item_status= #{statusCode}
+	 	WHERE		ip_task_item.id_ip_task_item = #{id}
+	</update>
+	<update id="updateTaskItemResponseStatus" >
+		UPDATE 		ip_task_item
+	   	SET			response_status= #{responseStatus}
+	 	WHERE		ip_task_item.id_ip_task_item = #{id}
+	</update>
+	<update id="updateTaskItemIp" >
+		UPDATE 		ip_task_item
+	   	SET			fk_interested_party= #{fkInterestedParty}
+	 	WHERE		ip_task_item.id_ip_task_item = #{id}
+	</update>
+
+	<select id="findIpTaskElaborationResultByItemCode" resultMap="ipTaskElaborationResultMap">
+		SELECT ip_task_item.id_ip_task_item AS IPTER_id_ip_task_item,
+			   ip_task_item.item_code AS IPTER_item_code,
+			   ip_task_item.item_status AS IPTER_item_status,
+			   ip_task_item.response_status AS IPTER_response_status,
+			    ip_task_item.progr AS IPTER_progr,
+			   ip_task_item.fk_interested_party AS IPTER_fk_interested_party
+		  FROM ip_task_item
+
+		 WHERE (ip_task_item.item_code IN
+
+
+		<foreach collection="itemCodeList" item="id" open="(" close=")" separator="" index="idx">
+			#{id}
+			<choose>
+				<when test="(idx > 0) and (itemCodeList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+					) OR ip_task_item.item_code IN (
+				</when>
+				<when test="itemCodeList.size - idx - 1 == 0">
+
+				</when>
+				<otherwise>
+					,
+				</otherwise>
+			</choose>
+        </foreach>
+        )
+
+	</select>
+</mapper>

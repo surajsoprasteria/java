@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.RoleFlatMapper">
+	<resultMap id="resMap" type="RoleFlat">
+		<id property="idRole" 				column="RF_id_role" />
+		<result property="code" 			column="RF_code" />
+		<result property="fkName" 			column="RF_fk_name" />
+		<result property="name" 			column="RF_name" />
+		<result property="fkDescription" 	column="RF_fk_description" />
+		<result property="description" 		column="RF_description" />
+		<result property="examples" 		column="RF_examples" />
+		<result property="fkIpiRole" 		column="RF_fk_ipi_role" />
+
+		<collection property="fkCcList" 	ofType="java.lang.Long">
+			<result column="RF_fk_creation_class" />
+		</collection>
+
+		<collection property="creationClassList" ofType="CreationClassFlat" resultMap="org.wipo.connect.shared.persistence.mapping.CreationClassFlatMapper.resMap"/>
+	</resultMap>
+
+	<sql id="fields">
+		role.id_role 							AS RF_id_role,
+		role.code 								AS RF_code,
+		role.fk_ipi_role 						AS RF_fk_ipi_role,
+		role.fk_name							AS RF_fk_name,
+		role.fk_description						As RF_fk_description,
+		ipi_role_right_class.fk_creation_class	AS RF_fk_creation_class,
+		tr_name_role.default_value 				AS RF_name,
+		tr_desc_role.default_value 				AS RF_description,
+		tr_exam_role.default_value 				AS RF_examples
+	</sql>
+
+	<sql id="baseSelect">
+     	SELECT
+     		<include refid="fields" />
+		FROM role
+		LEFT OUTER JOIN ipi_role_right_class ON ipi_role_right_class.fk_ipi_role = role.fk_ipi_role
+		LEFT OUTER JOIN creation_class ON ipi_role_right_class.fk_creation_class = creation_class.id_creation_class
+
+
+		LEFT OUTER JOIN translation tr_name_role ON tr_name_role.id_translation = role.fk_name
+		LEFT OUTER JOIN translation tr_desc_role ON tr_desc_role.id_translation = role.fk_description
+		LEFT OUTER JOIN translation tr_exam_role ON tr_exam_role.id_translation = role.fk_examples
+
+		LEFT OUTER JOIN translation tr_name ON tr_name.id_translation = creation_class.fk_name
+		LEFT OUTER JOIN translation tr_desc ON tr_desc.id_translation = creation_class.fk_description
+		LEFT OUTER JOIN translation tr_exam ON tr_exam.id_translation = creation_class.fk_examples
+
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE role.id_role = #{idRole}
+	</select>
+
+	<select id="findByCode" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE role.code = #{code}
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		ORDER BY tr_name.default_value
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO role (
+				code,
+				fk_ipi_role,
+				fk_name,
+				fk_description
+			) VALUES (
+				#{code},
+				#{fkIpiRole},
+				#{fkName},
+				#{fkDescription}
+			)
+			
+		<selectKey   resultType="long" keyProperty="idRole"    keyColumn="id_role"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_ROLE_SEQ'
+		</selectKey>			
+	</insert>
+
+	<update id="updateByPrimaryKey" keyProperty="idRole">
+		UPDATE role
+		SET
+			fk_name 			= #{fkName},
+			fk_description		= #{fkDescription}
+		WHERE
+			id_role 			= #{idRole}
+	</update>
+
+
+	<select id="exsistWorkCode" resultType="boolean" parameterType="map">
+		SELECT  COUNT(id_role) AS result
+		FROM  role
+		WHERE code = #{code}
+			<if test="idToExclude != null">
+				AND role.id_role != #{idToExclude}
+			</if>
+	</select>
+
+	<select id="findWorkRoleListByCC" resultMap="resMap">
+		select 			<include refid="fields" /> ,
+     					<include refid="org.wipo.connect.shared.persistence.mapping.CreationClassFlatMapper.fields" />
+		FROM role
+  		JOIN ipi_role_right_class ON ipi_role_right_class.fk_ipi_role = role.fk_ipi_role
+  		JOIN creation_class ON ipi_role_right_class.fk_creation_class = creation_class.id_creation_class
+
+		LEFT OUTER JOIN translation tr_name_role ON tr_name_role.id_translation = role.fk_name
+		LEFT OUTER JOIN translation tr_desc_role ON tr_desc_role.id_translation = role.fk_description
+		LEFT OUTER JOIN translation tr_exam_role ON tr_exam_role.id_translation = role.fk_examples
+
+		LEFT OUTER JOIN translation tr_name ON tr_name.id_translation = creation_class.fk_name
+		LEFT OUTER JOIN translation tr_desc ON tr_desc.id_translation = creation_class.fk_description
+		LEFT OUTER JOIN translation tr_exam ON tr_exam.id_translation = creation_class.fk_examples
+
+		<if test="cc != null">
+			WHERE 			creation_class.code=#{cc}
+		</if>
+		ORDER BY 		tr_name.default_value
+	</select>
+
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.PermissionMapper">
+	<sql id="fields">
+		permission.id_permission SECP_id_permission ,
+        permission.code SECP_code ,
+        permission.fk_description SECP_fk_description,
+        permission.permission_name AS SECP_permission_name
+  	</sql>
+
+	<resultMap id="resMap" type="Permission">
+		<id property="idPermission" column="SECP_id_permission" />
+		<result property="code" column="SECP_code" />
+		<result property="fkDescription" column="SECP_fk_description" />
+		<result property="descriptionPerm" column="SECP_description_perm" />
+		<result property="descriptionCode" column="SECP_permission_name" />
+
+	</resultMap>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		SELECT
+		<include refid="fields" />,
+		t1.default_value AS SECP_description_perm
+		FROM
+		permission
+		LEFT OUTER JOIN translation t1 ON t1.id_translation = permission.fk_description
+		WHERE
+		permission.id_permission = #{idPermission}
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		SELECT
+		<include refid="fields" />,
+		t1.default_value AS SECP_description_perm
+		FROM
+		permission
+		LEFT OUTER JOIN translation t1 ON t1.id_translation = permission.fk_description
+	</select>
+
+	<select id="selectPermissionsByIdGroup" resultMap="resMap">
+		SELECT
+		<include refid="fields" />,
+		t1.default_value AS SECP_description_perm
+		FROM
+		permission
+		LEFT OUTER JOIN translation t1 ON t1.id_translation = permission.fk_description
+		LEFT JOIN sec_group_permission ON sec_group_permission.fk_permission=permission.id_permission
+		WHERE
+		sec_group_permission.fk_sec_group = #{idSecGroup}
+	</select>
+	<insert id="insertSecGroupPermission" useGeneratedKeys="true">
+		INSERT INTO sec_group_permission
+		(
+		fk_sec_group,
+		fk_permission )
+		VALUES
+		(
+		#{fkSecGroup},
+		#{fkPermission})
+
+	</insert>
+	<delete id="deleteSecGroupPermission">
+	 	DELETE
+	 	FROM 		sec_group_permission
+	 	WHERE 		fk_sec_group = #{fkSecGroup}
+	 	AND 		fk_permission=#{fkPermission}
+	 </delete>
+
+	 <delete id="deleteSecGroupPermissionByIdSecGroup">
+	 	DELETE
+	 	FROM 		sec_group_permission
+	 	WHERE 		fk_sec_group = #{fkSecGroup}
+
+	 </delete>
+
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.WorkStatusHistoryMapper">
+	<resultMap id="resMap" type="WorkStatusHistory">
+		<id property="idWorkStatusHistory" column="WSHI_id_work_status_history" />
+
+		<result property="fkWork" column="WSHI_fk_work" />
+		<result property="fkStatus" column="WSHI_fk_status" />
+		<result property="amendmentTimestamp" column="WSHI_amendment_timestamp" />
+		<result property="userInsert" column="WSHI_user_insert" />
+		<result property="dateInsert" column="WSHI_date_insert" />
+		<result property="userUpdate" column="WSHI_user_update" />
+		<result property="dateUpdate" column="WSHI_date_update" />
+	</resultMap>
+
+	<sql id="fields">
+		work_status_history.id_work_status_history AS WSHI_id_work_status_history ,
+		work_status_history.fk_work AS WSHI_fk_work ,
+		work_status_history.fk_status AS WSHI_fk_status ,
+		work_status_history.amendment_timestamp AS WSHI_amendment_timestamp ,
+		work_status_history.user_insert AS WSHI_user_insert ,
+		work_status_history.date_insert AS WSHI_date_insert ,
+		work_status_history.user_update AS WSHI_user_update ,
+		work_status_history.date_update AS WSHI_date_update
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" />
+		FROM work_status_history
+	</sql>
+
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE work_status_history.id_work_status_history = #{idWorkStatusHistory}
+	</select>
+
+	<select id="findByWork" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE work_status_history.fk_work = #{idWork}
+		ORDER BY work_status_history.amendment_timestamp
+	</select>
+
+	<insert id="insertByCode">
+		INSERT INTO work_status_history(fk_work,
+                                        fk_status,
+                                        amendment_timestamp)
+		VALUES (#{idWork},
+		        (SELECT aux_work_status.id_work_status FROM work_status aux_work_status WHERE aux_work_status.code = #{code}),
+		        now())
+	</insert>
+
+	<insert id="insert"  useGeneratedKeys="true" >
+		INSERT INTO work_status_history(fk_work,
+                                        fk_status,
+                                        amendment_timestamp,
+                                        user_insert,
+                                        date_insert)
+		VALUES (#{fkWork},
+		        #{fkStatus},
+		        now(),
+		        #{userInsert},
+		        now())
+
+		<selectKey   resultType="long" keyProperty="idWorkStatusHistory"    keyColumn="id_work_status_history"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_WORK_STATUS_HISTORY_SEQ'
+		</selectKey>	
+	</insert>
+
+</mapper>

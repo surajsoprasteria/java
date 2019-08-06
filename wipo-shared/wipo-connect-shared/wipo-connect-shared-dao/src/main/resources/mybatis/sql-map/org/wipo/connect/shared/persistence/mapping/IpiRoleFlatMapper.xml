@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+	<mapper namespace="org.wipo.connect.shared.persistence.mapping.IpiRoleFlatMapper">
+	<resultMap id="resMap" type="IpiRoleFlat">
+		<id property="idIpiRole" 			column="RF_id_ipi_role" />
+		<result property="code" 			column="RF_code" />
+		<result property="fkName" 			column="RF_fk_name" />
+		<result property="name" 			column="RF_name" />
+		<result property="fkDescription" 	column="RF_fk_description" />
+		<result property="description" 		column="RF_description" />
+		<result property="examples" 		column="RF_examples" />
+		
+		<collection property="fkCcList" 	ofType="java.lang.Long">
+			<result column="RF_fk_creation_class" />
+		</collection>
+	</resultMap>
+
+	<sql id="fields">
+		ipi_role.id_ipi_role 					AS RF_id_ipi_role,
+		ipi_role.code 							AS RF_code,
+		ipi_role.fk_name 						AS RF_fk_name,
+		ipi_role.fk_description 				AS RF_fk_description,
+		ipi_role_right_class.fk_creation_class	AS RF_fk_creation_class,
+		tr_name.default_value 					AS RF_name,
+		tr_desc.default_value 					AS RF_description,
+		tr_exam.default_value 					AS RF_examples
+	</sql>
+
+	<sql id="baseSelect">
+     	SELECT
+     		<include refid="fields" />
+		FROM ipi_role
+		LEFT OUTER JOIN ipi_role_right_class ON ipi_role_right_class.fk_ipi_role = ipi_role.id_ipi_role
+		LEFT OUTER JOIN translation tr_name ON tr_name.id_translation = ipi_role.fk_name
+		LEFT OUTER JOIN translation tr_desc ON tr_desc.id_translation = ipi_role.fk_description
+		LEFT OUTER JOIN translation tr_exam ON tr_exam.id_translation = ipi_role.fk_examples
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE ipi_role.id_ipi_role = #{idIpiRole}
+	</select>
+	
+	
+	
+	<insert id="insert" useGeneratedKeys="true" >
+		INSERT INTO ipi_role (
+			code,
+			fk_name,
+			fk_description
+		) VALUES (
+			#{code},
+			#{fkName},
+			#{fkDescription}
+		)
+		
+		<selectKey   resultType="long" keyProperty="idIpiRole"    keyColumn="id_ipi_role"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_IPI_ROLE_SEQ'
+		</selectKey>	
+	</insert>
+	
+	<update id="updateByPrimaryKey" keyProperty="idIpiRole">
+		UPDATE ipi_role
+		SET 
+			fk_name 			= #{fkName},
+			fk_description		= #{fkDescription}
+		WHERE 
+			id_ipi_role			= #{idIpiRole}
+	</update>
+	
+	
+
+	<select id="findByCode" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE ipi_role.code = #{code}
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		ORDER BY tr_name.default_value
+	</select>
+	
+	
+	<select id="exsistIpiCode" resultType="boolean" parameterType="map">
+		SELECT  COUNT(id_ipi_role) AS result 
+		FROM  ipi_role 
+		WHERE code = #{code}
+			<if test="idToExclude != null">
+				AND ipi_role.id_ipi_role != #{idToExclude}
+			</if>
+	</select>
+	
+	
+	<insert id="insertIpiCreationClass">
+		INSERT INTO ipi_role_right_class (
+			fk_ipi_role,
+			fk_creation_class
+		) VALUES (
+			#{fkIpiRole},
+			#{fkCreationClass}
+		)
+	</insert>
+
+</mapper>

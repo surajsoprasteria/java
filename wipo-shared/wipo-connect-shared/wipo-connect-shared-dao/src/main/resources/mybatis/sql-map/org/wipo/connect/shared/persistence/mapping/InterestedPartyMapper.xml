@@ -1,0 +1,1187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.InterestedPartyMapper">
+
+	<sql id="fields">
+		interested_party.id_interested_party,
+		interested_party.main_id,
+		interested_party.fk_status,
+		interested_party.birth_date,
+		interested_party.sex,
+		interested_party.marital_status,
+		interested_party.birth_place,
+		interested_party.birth_state,
+		interested_party.fk_birth_country,
+		interested_party.type,
+		interested_party.death_date,
+		interested_party.amendment_timestamp,
+		interested_party.fk_account AS IP_fk_account,
+		interested_party.fk_status,
+		interested_party.do_affiliation,
+		interested_party.is_affiliated,
+		interested_party.creation_date,
+		interested_party.user_insert AS IP_user_insert,
+		interested_party.date_insert AS IP_date_insert,
+		interested_party.user_update AS IP_user_update,
+		interested_party.date_update AS IP_date_update,
+		interested_party.sync_version AS IP_sync_version,
+		cmo_aff.acronym AS cmo_aff_acronym,
+		interested_party.fk_cmo AS IP_fk_cmo,
+		cmo_orig.code AS IP_cmo_origin_code,
+		ip_aff_cc.code AS aff_cc_code,
+		ip_aff_cc.id_creation_class AS aff_cc_id
+	</sql>
+
+	<resultMap id="resMap" type="InterestedParty">
+		<id property="idInterestedParty" column="id_interested_party" />
+		<result property="mainId" column="main_id" />
+		<result property="statusCode" column="IP_STATUS_code" />
+		<result property="fkStatus" column="fk_status" />
+		<result property="birthDate" column="birth_date" />
+		<result property="sex" column="sex" />
+		<result property="maritalStatus" column="marital_status" />
+		<result property="birthPlace" column="birth_place" />
+		<result property="birthState" column="birth_state" />
+        <result property="birthCountryCode" column="territory_code" />
+        <result property="fkBirthCountry" column="fk_birth_country" />
+        <result property="type" column="type" />
+        <result property="deathDate" column="death_date" />
+        <result property="doAffiliation" column="do_affiliation" />
+        <result property="isAffiliated" column="is_affiliated" />
+        <result property="creationDate" column="creation_date" />
+        <result property="amendmentTimestamp" column="IP_amendment_timestamp" />
+        <result property="fkCmo" column="IP_fk_cmo" />
+        <result property="cmoOriginCode" column="IP_cmo_origin_code" />
+        <result property="dateUpdate" column="IP_date_update" />
+         <result property="syncVersion" column="IP_sync_version" />
+
+ 		<collection property="nameList" ofType="Name" resultMap="org.wipo.connect.shared.persistence.mapping.NameMapper.resMap" />
+ 		<collection property="interestedPartyIdentifierFlatList" ofType="InterestedPartyIdentifierFlat" resultMap="org.wipo.connect.shared.persistence.mapping.InterestedPartyIdentifierFlatMapper.resMap" />
+ 		<collection property="citizenshipCodeList" ofType="java.lang.String" >
+ 			<result column="citizenshipCodeList" />
+ 		</collection>
+ 		<collection property="affiliatedCmos" ofType="java.lang.String">
+			<result column="cmo_aff_acronym" />
+		</collection>
+		<collection property="citizenshipIdList" column="fk_territory" resultMap="org.wipo.connect.shared.persistence.mapping.TerritoryMapper.resMapCitizenship"/>
+
+		<collection property="fkCreationClassList" ofType="java.lang.Long">
+			<result column="aff_cc_id" />
+		</collection>
+
+		<collection property="creationClassCodeList" ofType="java.lang.String">
+			<result column="aff_cc_code" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="resMapReindex" type="InterestedParty">
+		<id property="idInterestedParty" column="id_interested_party" />
+
+		<result property="mainId" column="main_id" />
+		<result property="fkStatus" column="fk_status" />
+		<result property="statusCode" column="IP_STATUS_code"/>
+		<result property="birthDate" column="birth_date" />
+        <result property="type" column="type" />
+ 		<collection property="nameList" ofType="Name" resultMap="org.wipo.connect.shared.persistence.mapping.NameMapper.resMap" />
+ 		<collection property="interestedPartyIdentifierFlatList" ofType="InterestedPartyIdentifierFlat" resultMap="org.wipo.connect.shared.persistence.mapping.InterestedPartyIdentifierFlatMapper.resMap" />
+
+ 		<collection property="affiliatedCmos" ofType="java.lang.String">
+			<result column="cmo_aff_acronym" />
+		</collection>
+
+		<collection property="fkCreationClassList" ofType="java.lang.Long">
+			<result column="aff_cc_id" />
+		</collection>
+
+		<collection property="creationClassCodeList" ofType="java.lang.String">
+			<result column="aff_cc_code" />
+		</collection>
+	</resultMap>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" /> ,
+			interested_party_status.code AS IP_STATUS_code,
+			terr.code AS territory_code,
+			territory.code as citizenshipCodeList,
+			interested_party_territory.fk_territory,
+			<include refid="org.wipo.connect.shared.persistence.mapping.InterestedPartyIdentifierFlatMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.AccountMapper.fields"/>,
+			<include refid="org.wipo.connect.shared.persistence.mapping.NameMapper.fields"/>
+			<include refid="baseFrom" />
+	</sql>
+
+	<sql id="baseFrom">
+		FROM
+			interested_party
+			LEFT OUTER JOIN account ON interested_party.fk_account = account.id_account
+
+       		LEFT OUTER JOIN interested_party_territory ON interested_party.id_interested_party = interested_party_territory.fk_interested_party
+       		LEFT OUTER JOIN territory ON interested_party_territory.fk_territory = territory.id_territory
+
+       		LEFT OUTER JOIN interested_party_identifier ON interested_party_identifier.fk_interested_party = interested_party.id_interested_party
+       		LEFT OUTER JOIN identifier ON interested_party_identifier.fk_identifier = identifier.id_identifier
+
+       		LEFT OUTER JOIN interested_party_name ON interested_party_name.fk_interested_party = interested_party.id_interested_party
+       		LEFT OUTER JOIN name ON interested_party_name.fk_name = name.id_name
+
+       		LEFT JOIN interested_party_status ON interested_party_status.id_interested_party_status = interested_party.fk_status
+
+			LEFT OUTER JOIN territory terr ON interested_party.fk_birth_country = terr.id_territory
+
+
+			LEFT OUTER JOIN affiliation ip_aff on ip_aff.fk_interested_party = interested_party.id_interested_party AND ip_aff.start_date &lt;= now() AND (ip_aff.end_date IS NULL OR ip_aff.end_date &gt;= now())
+		    LEFT OUTER JOIN affiliation_domain ip_aff_dom ON ip_aff.id_affiliation = ip_aff_dom.fk_affiliation
+			LEFT OUTER JOIN creation_class ip_aff_cc ON ip_aff_cc.id_creation_class = ip_aff_dom.fk_creation_class
+		    LEFT OUTER JOIN cmo cmo_aff ON cmo_aff.id_cmo = ip_aff.fk_cmo
+		    LEFT OUTER JOIN cmo cmo_orig ON interested_party.fk_cmo = cmo_orig.id_cmo
+	</sql>
+	
+	<sql id="baseFromIdOnly">
+		FROM
+			interested_party
+			LEFT OUTER JOIN cmo cmo_orig ON interested_party.fk_cmo = cmo_orig.id_cmo
+       		LEFT OUTER JOIN interested_party_territory ON interested_party.id_interested_party = interested_party_territory.fk_interested_party
+       		LEFT OUTER JOIN territory ON interested_party_territory.fk_territory = territory.id_territory
+       		LEFT OUTER JOIN interested_party_identifier ON interested_party_identifier.fk_interested_party = interested_party.id_interested_party
+       		LEFT OUTER JOIN identifier ON interested_party_identifier.fk_identifier = identifier.id_identifier
+       		LEFT OUTER JOIN interested_party_name ON interested_party_name.fk_interested_party = interested_party.id_interested_party
+       		LEFT OUTER JOIN name ON interested_party_name.fk_name = name.id_name
+       		LEFT JOIN interested_party_status ON interested_party_status.id_interested_party_status = interested_party.fk_status
+			LEFT OUTER JOIN territory terr ON interested_party.fk_birth_country = terr.id_territory
+	</sql>
+
+	<sql id="baseConditions">
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="idList != null and idList.size  > 0">
+				AND (interested_party.id_interested_party IN
+				<foreach collection="idList" item="id" open="(" close=")" separator="" index="idx">
+					#{id}
+					<choose>
+						<when test="(idx > 0) and (idList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+							) OR interested_party.id_interested_party IN (
+						</when>
+						<when test="idList.size - idx - 1 == 0">
+
+						</when>
+						<otherwise>
+							,
+						</otherwise>
+					</choose>
+		        </foreach>
+		        )
+			</if>
+
+			<if test="identifier != null">
+				AND (interested_party.main_id = #{identifier}
+				<if test="onlyMainId == false">
+					OR EXISTS (
+						SELECT 0
+						FROM interested_party aux_interested_party
+						LEFT OUTER JOIN interested_party_identifier aux_ip_ident ON aux_ip_ident.fk_interested_party = aux_interested_party.id_interested_party
+						LEFT OUTER JOIN identifier aux_identifier ON aux_identifier.id_identifier = aux_ip_ident.fk_identifier
+						LEFT OUTER JOIN interested_party_name aux_ipn ON aux_ipn.fk_interested_party = aux_interested_party.id_interested_party
+						LEFT OUTER JOIN name aux_name ON aux_name.id_name = aux_ipn.fk_name
+						WHERE aux_interested_party.id_interested_party = interested_party.id_interested_party
+							AND (aux_ip_ident.value = #{identifier} OR aux_name.main_id = #{identifier})
+						)
+				</if>
+				)
+			</if>
+
+			<if test="lastCompanyName != null">
+				<bind name="lastName_like" value="'%' + lastCompanyName + '%'" />
+				AND EXISTS (SELECT 		0
+			             	FROM 		interested_party aux1
+                  			LEFT JOIN 	interested_party_name aux2 ON aux2.fk_interested_party = aux1.id_interested_party
+		                  	LEFT JOIN 	name aux3 ON aux2.fk_name = aux3.id_name
+				            WHERE 		aux1.id_interested_party = interested_party.id_interested_party and aux3.name LIKE #{lastName_like})
+			</if>
+			<if test="firstName != null">
+				<bind name="firstName_like" value="'%' + firstName + '%'" />
+				AND EXISTS (SELECT 		0
+			             	FROM 		interested_party aux1
+	                  		LEFT JOIN 	interested_party_name aux2 ON aux2.fk_interested_party = aux1.id_interested_party
+				            LEFT JOIN 	name aux3 ON aux2.fk_name = aux3.id_name
+				            WHERE 		aux1.id_interested_party = interested_party.id_interested_party and aux3.first_name LIKE #{firstName_like})
+			</if>
+			<if test="nameType != null">
+				<bind name="nameType_like" value="'%' + nameType + '%'" />
+				AND EXISTS (SELECT 	0
+			             	FROM 	interested_party aux1
+				                  	LEFT JOIN interested_party_name aux2 ON aux2.fk_interested_party = aux1.id_interested_party
+				                  	LEFT JOIN name aux3 ON aux2.fk_name = aux3.id_name
+			             	WHERE 	aux1.id_interested_party = interested_party.id_interested_party and aux3.first_name LIKE #{nameType_like})
+			</if>
+			<if test="birthFoundationDate != null">
+				AND interested_party.birth_date = #{birthFoundationDate:DATE}
+			</if>
+			<if test="gender != null">
+				AND interested_party.sex = #{gender}
+			</if>
+			<if test="type != null">
+				AND interested_party.type = #{type}
+			</if>
+			<if test="birthPlace != null">
+				<bind name="birthPlace_like" value="'%' + birthPlace + '%'" />
+				AND interested_party.birth_place LIKE #{birthPlace_like}
+			</if>
+
+			 <if test="birthCountryCode != null">
+				<bind name="birthCountryCode_like" value="'%' + birthCountryCode + '%'" />
+				AND  EXISTS (SELECT 0
+							 FROM interested_party aux1
+				           		 LEFT JOIN territory aux2 ON aux2.id_territory = aux1.fk_birth_country
+							WHERE 	aux1.id_interested_party = interested_party.id_interested_party
+							AND aux2.code LIKE #{birthCountryCode_like})
+			</if>
+
+			<if test="statusCode != null">
+				AND  interested_party.fk_status = (SELECT id_interested_party_status from interested_party_status aux_ip_status where aux_ip_status.code = #{statusCode})
+			</if>
+			<if test="(isToShowDeleted == false) and (statusCode == null)">
+				AND  interested_party.fk_status NOT IN (SELECT id_interested_party_status from interested_party_status aux_ip_status where aux_ip_status.code = '${@org.wipo.connect.shared.exchange.enumerator.InterestedPartyStatusEnum@DELETED.toString()}')
+			</if>
+			<if test="forceValidStatus != null and forceValidStatus==true">
+				AND  interested_party.fk_status = (SELECT id_interested_party_status from interested_party_status aux_ip_status where aux_ip_status.code = '${@org.wipo.connect.shared.exchange.enumerator.InterestedPartyStatusEnum@VALID.toString()}')
+			</if>
+			<if test="creationDate != null">
+				AND interested_party.creation_date = #{creationDate:TIMESTAMP}
+			</if>
+			<if test="dateFrom != null">
+				AND interested_party.creation_date &gt;= #{dateFrom:TIMESTAMP}
+			</if>
+			<if test="dateTo != null">
+				AND interested_party.creation_date &lt;= #{dateTo:TIMESTAMP}
+			</if>
+
+			<if test="citizenship != null">
+				<bind name="countryCitizenship" value="'%' + citizenship + '%'" />
+				AND  EXISTS (SELECT 0
+							 FROM interested_party aux1
+				                  LEFT JOIN interested_party_territory aux2 ON aux2.fk_interested_party = aux1.id_interested_party
+				                  LEFT JOIN territory aux3   ON aux2.fk_territory = aux3.id_territory
+							WHERE 	aux1.id_interested_party = interested_party.id_interested_party
+							AND aux3.code LIKE #{countryCitizenship})
+			</if>
+
+			<if test="cmoAcronym != null">
+				<bind name="cmoOfAffiliation" value="'%' + cmoAcronym + '%'" />
+				AND EXISTS (SELECT 0
+                 			FROM 	interested_party aux1
+                    		LEFT 	JOIN affiliation aux2 ON aux2.fk_interested_party = aux1.id_interested_party
+                      		LEFT 	JOIN cmo aux3 ON aux2.fk_cmo = aux3.id_cmo
+                			WHERE  	aux1.id_interested_party = interested_party.id_interested_party
+                     		AND 	aux3.code LIKE #{cmoOfAffiliation})
+			</if>
+			<if test="creationClassCodeList != null and creationClassCodeList.size  > 0">
+			 	AND EXISTS (
+			 		SELECT 0
+			 		FROM affiliation_domain aux_a_d
+			 		JOIN affiliation 		aux_a 	ON aux_a.id_affiliation = aux_a_d.fk_affiliation
+			 		JOIN creation_class 	aux_cc	ON aux_cc.id_creation_class = aux_a_d.fk_creation_class
+			 		WHERE aux_a.fk_interested_party = interested_party.id_interested_party
+			 		AND aux_cc.code IN
+					 	<foreach collection="creationClassCodeList" item="cc_code" open="(" close=")" separator="" index="idx">
+					 		#{cc_code}
+					 		<choose>
+								<when test="creationClassCodeList.size - idx - 1 == 0">
+
+								</when>
+								<otherwise>
+									,
+								</otherwise>
+							</choose>
+						</foreach>
+				)
+			</if>
+			<if test="disableOriginCheck==null or disableOriginCheck==false">
+				 <include refid="org.wipo.connect.shared.persistence.mapping.ClientInfoMapper.ipWhereCondition" />
+			</if>
+   			<if test="nameMainIdList != null and nameMainIdList.size  > 0">
+			    AND EXISTS (SELECT  0
+			                FROM interested_party_name aux2
+			                       LEFT JOIN name aux3 ON aux2.fk_name = aux3.id_name
+			                WHERE  aux2.fk_interested_party = interested_party.id_interested_party
+			    			AND aux3.main_id IN
+			     <foreach collection="nameMainIdList" item="item" open="(" close=")" separator="," index="idx">
+			        #{item}
+			     </foreach>
+			      <if test="nameTypeExcludeList != null and nameTypeExcludeList.size  > 0">
+			      AND aux3.name_type NOT IN
+			      <foreach collection="nameTypeExcludeList" item="item" open="(" close=")" separator="," index="idx">
+			       #{item}
+			     </foreach>
+			     </if>
+			     )
+			   </if>
+   			<if test="wipoLocalId != null">
+				AND EXISTS (
+					SELECT 0
+					FROM interested_party aux_interested_party
+					INNER JOIN interested_party_identifier aux_ip_ident ON aux_ip_ident.fk_interested_party = aux_interested_party.id_interested_party
+					INNER JOIN identifier aux_identifier ON aux_identifier.id_identifier = aux_ip_ident.fk_identifier
+					WHERE aux_interested_party.id_interested_party = interested_party.id_interested_party
+					AND aux_identifier.code = '${@org.wipo.connect.shared.exchange.enumerator.IdentifierTypeEnum@WIPO_CONNECT_LOCAL_ID.name()}'
+						AND aux_ip_ident.value = #{wipoLocalId})
+
+			</if>
+			<if test="idToExcludeList != null and idToExcludeList.size  > 0">
+				AND (interested_party.id_interested_party NOT IN
+				<foreach collection="idToExcludeList" item="id" open="(" close=")" separator="" index="idx">
+					#{id}
+					<choose>
+						<when test="(idx > 0) and (idToExcludeList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+							) AND interested_party.id_interested_party NOT IN (
+						</when>
+						<when test="idToExcludeList.size - idx - 1 == 0">
+
+						</when>
+						<otherwise>
+							,
+						</otherwise>
+					</choose>
+		        </foreach>
+		        )
+			</if>
+ 		</trim>
+	</sql>
+	
+	
+	<sql id="baseConditionsIdOnly">
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="idList != null and idList.size  > 0">
+				AND (interested_party.id_interested_party IN
+				<foreach collection="idList" item="id" open="(" close=")" separator="" index="idx">
+					#{id}
+					<choose>
+						<when test="(idx > 0) and (idList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+							) OR interested_party.id_interested_party IN (
+						</when>
+						<when test="idList.size - idx - 1 == 0">
+
+						</when>
+						<otherwise>
+							,
+						</otherwise>
+					</choose>
+		        </foreach>
+		        )
+			</if>
+			<if test="identifier != null">
+				AND (interested_party.main_id = #{identifier}
+				<if test="onlyMainId == false">
+					OR interested_party_identifier.value = #{identifier} OR name.main_id = #{identifier}
+				</if>
+				)
+			</if>
+
+			<if test="lastCompanyName != null">
+				<bind name="lastName_like" value="'%' + lastCompanyName + '%'" />
+				AND EXISTS (SELECT 		0
+			             	FROM 		interested_party aux1
+                  			LEFT JOIN 	interested_party_name aux2 ON aux2.fk_interested_party = aux1.id_interested_party
+		                  	LEFT JOIN 	name aux3 ON aux2.fk_name = aux3.id_name
+				            WHERE 		aux1.id_interested_party = interested_party.id_interested_party and aux3.name LIKE #{lastName_like})
+			</if>
+			<if test="firstName != null">
+				<bind name="firstName_like" value="'%' + firstName + '%'" />
+				AND EXISTS (SELECT 		0
+			             	FROM 		interested_party aux1
+	                  		LEFT JOIN 	interested_party_name aux2 ON aux2.fk_interested_party = aux1.id_interested_party
+				            LEFT JOIN 	name aux3 ON aux2.fk_name = aux3.id_name
+				            WHERE 		aux1.id_interested_party = interested_party.id_interested_party and aux3.first_name LIKE #{firstName_like})
+			</if>
+			<if test="nameType != null">
+				<bind name="nameType_like" value="'%' + nameType + '%'" />
+				AND name.first_name LIKE #{nameType_like}
+			</if>
+			<if test="birthFoundationDate != null">
+				AND interested_party.birth_date = #{birthFoundationDate:DATE}
+			</if>
+			<if test="gender != null">
+				AND interested_party.sex = #{gender}
+			</if>
+			<if test="type != null">
+				AND interested_party.type = #{type}
+			</if>
+			<if test="birthPlace != null">
+				<bind name="birthPlace_like" value="'%' + birthPlace + '%'" />
+				AND interested_party.birth_place LIKE #{birthPlace_like}
+			</if>
+
+			 <if test="birthCountryCode != null">
+				<bind name="birthCountryCode_like" value="'%' + birthCountryCode + '%'" />
+				AND terr.code LIKE #{birthCountryCode_like}
+			</if>
+
+			<if test="statusCode != null">
+				AND interested_party_status.code = #{statusCode}
+			</if>
+			<if test="(isToShowDeleted == false) and (statusCode == null)">
+				AND interested_party_status.code NOT IN ('${@org.wipo.connect.shared.exchange.enumerator.InterestedPartyStatusEnum@DELETED.name()}')
+			</if>
+			<if test="forceValidStatus != null and forceValidStatus==true">
+				AND interested_party_status.code = '${@org.wipo.connect.shared.exchange.enumerator.InterestedPartyStatusEnum@VALID.name()}'
+			</if>
+			<if test="creationDate != null">
+				AND interested_party.creation_date = #{creationDate:TIMESTAMP}
+			</if>
+			<if test="dateFrom != null">
+				AND interested_party.creation_date &gt;= #{dateFrom:TIMESTAMP}
+			</if>
+			<if test="dateTo != null">
+				AND interested_party.creation_date &lt;= #{dateTo:TIMESTAMP}
+			</if>
+
+			<if test="citizenship != null">
+				<bind name="countryCitizenship" value="'%' + citizenship + '%'" />
+				AND territory.code LIKE #{countryCitizenship}
+			</if>
+
+			<if test="cmoAcronym != null">
+				<bind name="cmoOfAffiliation" value="'%' + cmoAcronym + '%'" />
+				AND EXISTS (SELECT 0
+                 			FROM 	interested_party aux1
+                    		LEFT 	JOIN affiliation aux2 ON aux2.fk_interested_party = aux1.id_interested_party
+                      		LEFT 	JOIN cmo aux3 ON aux2.fk_cmo = aux3.id_cmo
+                			WHERE  	aux1.id_interested_party = interested_party.id_interested_party
+                     		AND 	aux3.code LIKE #{cmoOfAffiliation})
+			</if>
+			<if test="creationClassCodeList != null and creationClassCodeList.size  > 0">
+			 	AND EXISTS (
+			 		SELECT 0
+			 		FROM affiliation_domain aux_a_d
+			 		JOIN affiliation 		aux_a 	ON aux_a.id_affiliation = aux_a_d.fk_affiliation
+			 		JOIN creation_class 	aux_cc	ON aux_cc.id_creation_class = aux_a_d.fk_creation_class
+			 		WHERE aux_a.fk_interested_party = interested_party.id_interested_party
+			 		AND aux_cc.code IN
+					 	<foreach collection="creationClassCodeList" item="cc_code" open="(" close=")" separator="" index="idx">
+					 		#{cc_code}
+					 		<choose>
+								<when test="creationClassCodeList.size - idx - 1 == 0">
+
+								</when>
+								<otherwise>
+									,
+								</otherwise>
+							</choose>
+						</foreach>
+				)
+			</if>
+			<if test="disableOriginCheck==null or disableOriginCheck==false">
+				 <include refid="org.wipo.connect.shared.persistence.mapping.ClientInfoMapper.ipWhereCondition" />
+			</if>
+   			<if test="nameMainIdList != null and nameMainIdList.size  > 0">
+			    AND name.main_id IN 
+			    <foreach collection="nameMainIdList" item="item" open="(" close=")" separator="," index="idx">
+			    	#{item}
+			    </foreach>
+
+			    <if test="nameTypeExcludeList != null and nameTypeExcludeList.size  > 0">
+			    	AND name.name_type NOT IN
+			    	<foreach collection="nameTypeExcludeList" item="item" open="(" close=")" separator="," index="idx">
+			    		#{item}
+			   		</foreach>
+			    </if>
+			</if>
+   			<if test="wipoLocalId != null">
+				AND identifier.code = '${@org.wipo.connect.shared.exchange.enumerator.IdentifierTypeEnum@WIPO_CONNECT_LOCAL_ID.name()}'
+				AND interested_party_identifier.value = #{wipoLocalId}
+			</if>			
+			<if test="idToExcludeList != null and idToExcludeList.size  > 0">
+				AND (interested_party.id_interested_party NOT IN
+				<foreach collection="idToExcludeList" item="id" open="(" close=")" separator="" index="idx">
+					#{id}
+					<choose>
+						<when test="(idx > 0) and (idToExcludeList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+							) AND interested_party.id_interested_party NOT IN (
+						</when>
+						<when test="idToExcludeList.size - idx - 1 == 0">
+
+						</when>
+						<otherwise>
+							,
+						</otherwise>
+					</choose>
+		        </foreach>
+		        )
+			</if>
+			<if test="orderByExpression == @org.wipo.connect.enumerator.OrderByExpressionEnum@RO_MAIN_NAME.getFieldAsc() or
+						orderByExpression == @org.wipo.connect.enumerator.OrderByExpressionEnum@RO_MAIN_NAME.getFieldDesc()">
+				AND name.name_type = '${@org.wipo.connect.shared.exchange.enumerator.NameTypeEnum@PA.name()}'
+			</if>
+ 		</trim>
+	</sql>
+	
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+			interested_party.id_interested_party = #{idInterestedParty}
+	</select>
+
+	<select id="findInterestedPartyById" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+			interested_party.id_interested_party = #{id}
+			<include refid="org.wipo.connect.shared.persistence.mapping.ClientInfoMapper.ipWhereCondition" />
+	</select>
+
+	<select id="findByIdList" resultMap="resMap">
+		<choose>
+			<when test="map['lightSearch'] != null and map['lightSearch'] == true">
+				<include refid="lightBaseSelect" />
+			</when>
+			<otherwise>
+				<include refid="baseSelect" />
+			</otherwise>
+		</choose>
+		<choose>
+        	<when test="idList !=null and idList.size  > 0">
+				WHERE (interested_party.id_interested_party IN
+						<foreach collection="idList" item="id" open="(" close=")" separator="" index="idx">
+							#{id}
+							<choose>
+								<when test="(idx > 0) and (idList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+									) OR interested_party.id_interested_party IN (
+								</when>
+								<when test="idList.size - idx - 1 == 0">
+		
+								</when>
+								<otherwise>
+									,
+								</otherwise>
+							</choose>
+				        </foreach>
+				        )
+			</when>
+			<otherwise>
+				WHERE interested_party_status.code NOT IN ('${@org.wipo.connect.local.exchange.enumerator.InterestedPartyStatusEnum@DELETED.name()}')
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="map['orderByExpression'] != null">
+	    		ORDER BY ${map['orderByExpression']}
+	    	</when>
+	    	<otherwise>
+	    		ORDER BY interested_party.id_interested_party
+	    	</otherwise>
+	    </choose>
+	</select>
+
+	<select id="findInterestedParty" resultMap="resMap">
+		<choose>
+			<when test="lightSearch != null and lightSearch == true">
+				<include refid="lightBaseSelect" />
+				<include refid="baseConditions"></include>
+			</when>
+			<otherwise>
+				<include refid="baseSelect" />
+				<include refid="baseConditions"></include>
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="orderByExpression != null">
+	    		ORDER BY ${orderByExpression}
+	    	</when>
+	    	<otherwise>
+	    		ORDER BY interested_party.id_interested_party
+	    	</otherwise>
+	    </choose> 
+	</select>
+
+	<select id="findIdsPageForReindex" resultType="java.lang.Long">
+		SELECT DISTINCT interested_party.id_interested_party
+		FROM interested_party
+
+		<trim prefix="WHERE" prefixOverrides="AND">
+			AND  interested_party.fk_status NOT IN (SELECT id_interested_party_status from interested_party_status aux_ip_status where aux_ip_status.code = '${@org.wipo.connect.shared.exchange.enumerator.InterestedPartyStatusEnum@DELETED.toString()}')
+		</trim>
+	</select>
+
+	<select id="findInterestedPartyForReindex" resultMap="resMapReindex">
+		SELECT
+			<include refid="fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.InterestedPartyIdentifierFlatMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.NameMapper.fields"/>,
+			interested_party_status.code AS IP_STATUS_code
+		FROM
+			interested_party
+			LEFT OUTER JOIN interested_party_status ON interested_party.fk_status = interested_party_status.id_interested_party_status
+       		LEFT OUTER JOIN interested_party_identifier ON interested_party_identifier.fk_interested_party = interested_party.id_interested_party
+       		LEFT OUTER JOIN identifier ON interested_party_identifier.fk_identifier = identifier.id_identifier
+       		LEFT OUTER JOIN interested_party_name ON interested_party_name.fk_interested_party = interested_party.id_interested_party
+       		LEFT OUTER JOIN name ON interested_party_name.fk_name = name.id_name
+			LEFT OUTER JOIN affiliation ip_aff ON ip_aff.fk_interested_party = interested_party.id_interested_party AND ip_aff.start_date &lt;= now() AND (ip_aff.end_date IS NULL OR ip_aff.end_date &gt;= now())
+			LEFT OUTER JOIN affiliation_domain ip_aff_dom ON ip_aff.id_affiliation = ip_aff_dom.fk_affiliation
+			LEFT OUTER JOIN creation_class ip_aff_cc ON ip_aff_cc.id_creation_class = ip_aff_dom.fk_creation_class
+		    LEFT OUTER JOIN cmo cmo_aff ON cmo_aff.id_cmo = ip_aff.fk_cmo
+		    LEFT OUTER JOIN cmo cmo_orig ON interested_party.fk_cmo = cmo_orig.id_cmo
+
+		<trim prefix="WHERE" prefixOverrides="AND">
+			AND (interested_party.id_interested_party IN
+				<foreach collection="idList" item="id" open="(" close=")" separator="" index="idx">
+					#{id}
+					<choose>
+						<when test="(idx > 0) and (idList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+							) OR interested_party.id_interested_party IN (
+						</when>
+						<when test="idList.size - idx - 1 == 0">
+
+						</when>
+						<otherwise>
+							,
+						</otherwise>
+					</choose>
+		        </foreach>
+		        )
+		</trim>
+	</select>
+
+	<select id="countInterestedParty" resultType="int">
+		SELECT COUNT (DISTINCT interested_party.id_interested_party)
+		<include refid="baseFromIdOnly" />
+		<include refid="baseConditionsIdOnly"></include>
+	</select>
+
+	<select id="findInterestedPartiesByNameMainId" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+	 			 interested_party.id_interested_party IN
+	 			   (SELECT aux2.fk_interested_party
+	 			 	FROM  interested_party_name aux2
+	 			 	INNER JOIN 	name aux3 ON aux2.fk_name = aux3.id_name
+	 			 	WHERE aux3.main_id=#{nameMainId})
+			AND  interested_party_status.code NOT IN ('${@org.wipo.connect.shared.exchange.enumerator.InterestedPartyStatusEnum@DELETED.toString()}')
+	</select>
+	
+<!-- 	<select id="findInterestedPartyIdByMainId" resultType="java.lang.Long">
+		SELECT interested_party.id_interested_party
+		FROM interested_party
+		WHERE	interested_party.main_id = #{mainId}
+		AND interested_party.dummy = 0
+		<if test="excludeDeleted == true">
+			AND	interested_party.deleted = 0
+		</if>
+		AND ROWNUM = 1
+	</select> -->
+    <select id="findInterestedPartyIdByMainId" resultType="java.lang.Long">
+		SELECT interested_party.id_interested_party
+		FROM interested_party
+		WHERE	interested_party.main_id = #{mainId}
+		AND interested_party.dummy = 0
+		<if test="excludeDeleted == true">
+			AND	interested_party.deleted = 0
+		</if>
+		LIMIT 1
+	</select>
+
+	<update id="updateByPrimaryKey" keyProperty="idInterestedParty">
+		UPDATE interested_party
+	   	SET
+	   		birth_date = #{birthDate},
+	   		sex = #{sex},
+	   		marital_status = #{maritalStatus},
+	   		birth_place = #{birthPlace},
+	       	birth_state = #{birthState},
+	   		fk_birth_country = #{fkBirthCountry},
+			type = #{type},
+			death_date = #{deathDate},
+			amendment_timestamp = #{amendmentTimestamp},
+			do_affiliation = #{doAffiliation},
+			is_affiliated = #{isAffiliated},
+			user_update = #{userUpdate},
+			date_Update = now(),
+			dummy=0,
+			sync_version =sync_version + 1
+	 	WHERE
+			interested_party.id_interested_party = #{idInterestedParty}
+	</update>
+
+	<update id="updateStatus" keyProperty="idInterestedParty">
+		UPDATE interested_party
+	   	SET
+	   		fk_status= (SELECT aux_interested_party_status.id_interested_party_status FROM interested_party_status aux_interested_party_status WHERE aux_interested_party_status.code = #{code})
+	 	WHERE
+			interested_party.id_interested_party = #{interestedPartyId}
+	</update>
+
+<insert id="insertDummy" useGeneratedKeys="true">
+
+	INSERT INTO interested_party(	main_id,
+									deleted,
+									dummy,
+									fk_status,
+									birth_date,
+									creation_date,
+									sex,
+									marital_status,
+									birth_place,
+									birth_state,
+									fk_birth_country,
+									type,
+									death_date,
+									amendment_timestamp,
+									do_affiliation,
+									is_affiliated,
+									user_insert,
+									date_insert,
+									date_update,
+									sync_version,
+									fk_cmo
+									)
+		VALUES (
+									#{mainId},
+									0,
+									1,
+									#{fkStatus},
+									#{birthDate},
+									now(),
+									#{sex},
+									#{maritalStatus},
+									#{birthPlace},
+									#{birthState},
+									#{fkBirthCountry},
+									#{type},
+									#{deathDate},
+									#{amendmentTimestamp},
+									#{doAffiliation},
+									#{isAffiliated},
+									#{userInsert},
+									now(),
+									now(),
+									0,
+									<choose>
+										<when test="cmoOriginCode != null">
+											(SELECT id_cmo FROM cmo aux_co WHERE aux_co.code = #{cmoOriginCode})
+										</when>
+										<otherwise>
+											#{cmoOriginCode}
+										</otherwise>
+									</choose>
+
+		)
+		<selectKey   resultType="long" keyProperty="idInterestedParty"    keyColumn="id_interested_party"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_INTERESTED_PARTY_SEQ'
+		</selectKey>	
+	</insert>
+
+
+	<insert id="insert_old" useGeneratedKeys="true" keyProperty="idInterestedParty"  keyColumn="id_interested_party">
+		INSERT INTO interested_party(
+			fk_status,
+		    birth_date,
+		    creation_date,
+		     sex,
+		     marital_status,
+		     birth_place,
+		     birth_state,
+		     fk_birth_country,
+		     type,
+		     death_date,
+		     amendment_timestamp,
+		     do_affiliation,
+		     is_affiliated,
+		     user_insert,
+		     date_insert,
+		     date_update,
+		     fk_cmo)
+		VALUES (
+			#{fkStatus},
+			#{birthDate},
+			now(),
+			#{sex},
+			#{maritalStatus},
+			#{birthPlace},
+			#{birthState},
+			#{fkBirthCountry},
+			#{type},
+			#{deathDate},
+			#{amendmentTimestamp},
+			#{doAffiliation},
+			#{isAffiliated},
+			#{userInsert},
+			now(),
+			now(),
+			<choose>
+				<when test="cmoOriginCode != null">
+					(SELECT id_cmo FROM cmo aux_co WHERE aux_co.code = #{cmoOriginCode})
+				</when>
+				<otherwise>
+					#{cmoOriginCode}
+				</otherwise>
+			</choose>
+			)
+
+	</insert>
+
+	<insert id="insertIPName" keyColumn="id_interested_party_name" useGeneratedKeys="true"   >
+		INSERT INTO interested_party_name
+				(fk_interested_party,fk_name)
+      	VALUES
+      			(#{interestedPartyId},#{nameId})
+
+	</insert>
+
+
+	<delete id="deleteIPCitizenship">
+	 	DELETE
+	 	FROM 		interested_party_territory
+	 	WHERE 		fk_interested_party = #{interestedPartyId}
+	 	<if test="citizenshipId != null">
+		AND 		fk_territory=#{citizenshipId}
+		</if>
+	 </delete>
+
+	 <insert id="insertIPCitizenship" keyColumn="id_interested_party_territory" useGeneratedKeys="true"   >
+		INSERT INTO interested_party_territory
+				(fk_interested_party,fk_territory)
+      	VALUES
+      			(#{interestedPartyId},#{territoryId})
+	</insert>
+
+	<delete id="deleteIPName">
+	 	DELETE
+	 	FROM 		interested_party_name
+	 	WHERE 		fk_interested_party = #{interestedPartyId}
+	 	<if test="nameId != null">
+		AND 		fk_name=#{nameId}
+		</if>
+	 </delete>
+
+
+
+	<select id="checkIfExistsAnotherIp" resultType="boolean">
+		SELECT COUNT(*) FROM DUAL WHERE EXISTS (
+			<include refid="lightBaseSelect" />
+			<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				<if test="nameMainId != null">
+		 			AND interested_party.id_interested_party IN
+		 			   (SELECT aux2.fk_interested_party
+		 			 	FROM  interested_party_name aux2
+		 			 	INNER JOIN 	name aux3 ON aux2.fk_name = aux3.id_name
+		 			 	WHERE aux3.main_id=#{nameMainId})
+					AND interested_party_status.code NOT IN ('${@org.wipo.connect.shared.exchange.enumerator.InterestedPartyStatusEnum@DELETED.name()}')
+				</if>
+				<if test="idIp != null">
+					AND interested_party.id_interested_party &lt;&gt; #{idIp}
+				</if>
+			</trim>
+		)
+	</select>
+
+	<select id="findIdsPage" resultType="java.lang.Long">
+		<!--  Changes here Devdyuti 
+		SELECT tmp.id_interested_party
+		FROM (
+		-->
+			SELECT
+				interested_party.id_interested_party
+				<!--
+				interested_party.id_interested_party, 
+				row_number() over (partition by interested_party.id_interested_party order by NULL) AS counter  -->
+		
+			<include refid="baseFromIdOnly" />
+			<include refid="baseConditionsIdOnly"></include>
+			
+			<choose>
+				<when test="orderByExpression != null">
+		    		ORDER BY ${orderByExpression}
+		    	</when>
+		    	<otherwise>
+		    		ORDER BY interested_party.id_interested_party
+		    	</otherwise>
+		    </choose> 
+		<!--
+		) tmp
+	    WHERE tmp.counter = 1
+	    -->
+	</select>
+
+	<update id="markAsDeleted" keyProperty="idInterestedParty">
+		UPDATE interested_party
+		   SET dummy=0,
+		   	   deleted=1
+		WHERE
+			interested_party.id_interested_party = #{idInterestedParty}
+	</update>
+
+	<delete id="deleteDummy">
+		DELETE FROM interested_party
+		WHERE dummy=1 and id_interested_party=#{idInterestedParty}
+	</delete>
+
+	<sql id="groupFields">
+		PG_NAME.id_name AS PG_id_name,
+		PG_NAME.main_id AS PG_main_id,
+		PG_NAME.name AS PG_name,
+		PG_NAME.first_name AS PG_first_name,
+		PG_NAME.name_type AS PG_name_type
+	</sql>
+	<sql id="groupDetailsFields">
+		PA_NAME.id_name AS PA_id_name,
+		IP.id_interested_party AS PA_IP_id,
+		PA_NAME.main_id AS PA_main_id,
+		PA_NAME.name AS PA_name,
+		PA_NAME.first_name AS PA_first_name,
+		PA_NAME.name_type AS PA_name_type
+	</sql>
+
+	<resultMap id="resMapGroup" type="GroupDTO">
+		<result property="idGroup" column="PG_id_name" />
+		<result property="name" column="PG_name" />
+		<result property="firstName" column="PG_first_name" />
+		<result property="nameType" column="PG_name_type"/>
+		<result property="mainId" column="PG_main_id" />
+ 		<collection property="groupDetails" ofType="GroupDetailDTO" resultMap="resMapGroupDetail" />
+ 	</resultMap>
+
+ 	<resultMap id="resMapGroupDetail" type="GroupDetailDTO">
+		<id property="idGroup" column="PA_id_name" />
+		<result property="interestedPartyId" column="PA_IP_id" />
+		<result property="name" column="PA_name" />
+		<result property="firstName" column="PA_first_name" />
+		<result property="nameType" column="PA_name_type"/>
+		<result property="mainId" column="PA_main_id" />
+	</resultMap>
+
+	<sql id="baseGroupSelect" >
+		FROM			name PG_NAME
+		LEFT OUTER JOIN interested_party_name IP_NAME ON IP_NAME.fk_name = PG_NAME.id_name
+		LEFT OUTER JOIN interested_party IP ON IP_NAME.fk_interested_party = IP.id_interested_party
+
+		LEFT OUTER JOIN interested_party_name ON interested_party_name.fk_interested_party = IP.id_interested_party
+		LEFT OUTER JOIN name PA_NAME ON interested_party_name.fk_name = PA_NAME.id_name and PA_NAME.deleted=0
+
+	</sql>
+
+	<sql id="whereGroupCondition">
+		<trim prefix="WHERE" prefixOverrides="AND">
+			AND PA_NAME.name_type  = '${@org.wipo.connect.shared.exchange.enumerator.NameTypeEnum@PA.name()}'
+				<if test="map['valueForm'] != null">
+					<bind name="value_like" value="'%' + map['valueForm'] + '%'" />
+					AND (
+
+						PG_NAME.name LIKE #{value_like}
+
+							OR
+
+						PG_NAME.first_name LIKE #{value_like}
+
+						OR
+
+						PG_NAME.main_id LIKE #{value_like}
+					)
+				</if>
+				<if test="map['idName'] != null">
+					<bind name="id_name" value="'%' + map['idName'] + '%'" />
+					AND (
+						PG_NAME.id_name LIKE #{id_name}
+					)
+				</if>
+				<if test="map['name'] != null">
+					<bind name="name_bind" value="'%' + map['name'] + '%'" />
+					AND (
+						PG_NAME.name LIKE #{name_bind}
+					)
+				</if>
+				<if test="map['firstName'] != null">
+					<bind name="first_name" value="'%' + map['firstName'] + '%'" />
+					AND (
+						PG_NAME.first_name LIKE #{first_name}
+					)
+				</if>
+				<if test="map['nameTypeList'] != null and map['nameTypeList'].size > 0">
+					AND ( PG_NAME.name_type in
+					<foreach item="item" index="idx" collection="map['nameTypeList']"  open="(" separator="," close=")">
+					  	 #{item}
+				    </foreach>
+					)
+
+				</if>
+
+
+			</trim>
+	</sql>
+
+	<sql id="groupGroupByCondition">
+		GROUP BY PG_NAME.id_name, PG_NAME.main_id , PG_NAME.name , PG_NAME.first_name , PG_NAME.name_type , PA_NAME.id_name , IP.id_interested_party, PA_NAME.main_id , PA_NAME.name , PA_NAME.first_name , PA_NAME.name_type
+	</sql>
+	
+	<select id="findNameGroupByIdList" resultMap="resMapGroup">
+		SELECT
+   		<include refid="groupFields" />,
+   		<include refid="groupDetailsFields" />
+   		<include refid="baseGroupSelect" />
+   		
+   		<if test="idList != null and idList.size  > 0">
+			WHERE (PG_NAME.id_name IN
+			<foreach collection="idList" item="id" open="(" close=")" separator="" index="idx">
+				#{id}
+				<choose>
+					<when test="(idx > 0) and (idList.size - idx - 1 > 0) and ((idx+1) % 100 == 0)">
+						) OR PG_NAME.id_name IN (
+					</when>
+					<when test="idList.size - idx - 1 == 0">
+
+					</when>
+					<otherwise>
+						,
+					</otherwise>
+				</choose>
+	        </foreach>
+	        )
+		</if>
+   		
+   		
+   		<include refid="groupGroupByCondition" />
+	</select>
+	
+	<select id="findNameGroupIdList" resultType="java.lang.Long">
+		<!--  SELECT tmp.PG_id_name
+		FROM (-->
+			SELECT DISTINCT (PG_NAME.id_name) 	AS PG_id_name,
+				PG_NAME.main_id 				AS PG_main_id,
+				PG_NAME.name 					AS PG_name,
+				PG_NAME.first_name 				AS PG_first_name,
+				PA_NAME.name 					AS PA_name,
+				PA_NAME.first_name 				AS PA_first_name
+				<!--  row_number() over (partition by PG_NAME.id_name order by PG_NAME.id_name) as rn -->
+		
+			<include refid="baseGroupSelect" />
+			<include refid="whereGroupCondition" />
+		<!--  ) tmp
+		WHERE rn = 1-->
+			
+		<choose>
+			<when test="map['pageInfo'] != null and map['pageInfo'].orderByExpression != null">
+				ORDER BY ${map['pageInfo'].orderByExpression}
+			</when>
+	    	<otherwise>
+	    		ORDER BY PG_id_name
+	    	</otherwise>
+	    </choose>
+	
+	</select>
+	
+	<select id="countNameGroup" resultType="java.lang.Integer">
+		SELECT COUNT(DISTINCT(PG_NAME.id_name))
+		<include refid="baseGroupSelect" />
+		<include refid="whereGroupCondition" />
+	</select>
+
+	<select id="selectGroups" resultMap="resMapGroup">
+		SELECT
+   		<include refid="groupFields" />,
+   		<include refid="groupDetailsFields" />
+   		<include refid="baseGroupSelect" />
+   		<include refid="whereGroupCondition" />
+   		<include refid="groupGroupByCondition" />
+	</select>
+
+	<select id="selectGroupById" resultMap="resMapGroup">
+		SELECT
+   		<include refid="groupFields" />
+   		<include refid="baseGroupSelect" />
+		<trim prefix="WHERE" prefixOverrides="AND">
+   		<if test="nameTypeList != null">
+			AND ( PG_NAME.name_type in
+			<foreach item="item" index="idx" collection="nameTypeList"  open="(" separator="," close=")">
+  	 			#{item}
+		  	</foreach>
+			)
+
+		</if>
+		</trim>
+		and PG_NAME.id_name=#{idGroup}
+	</select>
+
+	<select id="selectGroupDetailsByIdGroup" resultMap="resMapGroupDetail">
+		SELECT
+   		<include refid="groupDetailsFields" />
+   		FROM 			interested_party IP
+
+		LEFT OUTER JOIN interested_party_name A ON A.fk_interested_party = IP.id_interested_party
+		LEFT OUTER JOIN name PA_NAME ON A.fk_name = PA_NAME.id_name and PA_NAME.deleted=0
+
+		LEFT OUTER JOIN interested_party_name ON interested_party_name.fk_interested_party = IP.id_interested_party
+		LEFT OUTER JOIN name PG_NAME ON interested_party_name.fk_name = PG_NAME.id_name
+
+        WHERE
+			EXISTS (SELECT 0
+					FROM interested_party aux1
+					LEFT JOIN interested_party_name aux2 ON aux2.fk_interested_party = aux1.id_interested_party
+		            left join name aux3 on aux3.id_name=aux2.fk_name
+					WHERE aux3.name_type='PG')
+
+		<if test="nameTypeList != null">
+			AND ( PG_NAME.name_type in
+			<foreach item="item" index="idx" collection="nameTypeList"  open="(" separator="," close=")">
+			  	 #{item}
+		  	</foreach>
+			)
+
+		</if>
+		and PA_NAME.name_type='PA'
+		and PG_NAME.id_name=#{idGroup}
+	</select>
+
+
+	<select id="findByName" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+			 interested_party.id_interested_party IN (
+					SELECT aux2.fk_interested_party
+					FROM interested_party_name aux2
+					WHERE aux2.fk_name = #{idName}
+				)
+	</select>
+
+
+	<sql id="lightBaseSelect">
+		SELECT
+			<include refid="fields" /> ,
+			interested_party_status.code 	AS IP_STATUS_code,
+			NULL 							AS citizenshipCodeList,
+			NULL							AS fk_territory,
+			<include refid="org.wipo.connect.shared.persistence.mapping.InterestedPartyIdentifierFlatMapper.fields" /> ,
+			<include refid="org.wipo.connect.shared.persistence.mapping.NameMapper.fields"/>
+			<include refid="lightBaseFrom" />
+	</sql>
+
+	<sql id="lightBaseFrom">
+		FROM
+			interested_party
+
+       		LEFT OUTER JOIN interested_party_identifier ON interested_party_identifier.fk_interested_party = interested_party.id_interested_party
+       		LEFT OUTER JOIN identifier ON interested_party_identifier.fk_identifier = identifier.id_identifier
+
+       		LEFT OUTER JOIN interested_party_name ON interested_party_name.fk_interested_party = interested_party.id_interested_party
+       		LEFT OUTER JOIN name ON interested_party_name.fk_name = name.id_name
+
+       		LEFT JOIN interested_party_status ON interested_party_status.id_interested_party_status = interested_party.fk_status
+
+			LEFT OUTER JOIN affiliation ip_aff on ip_aff.fk_interested_party = interested_party.id_interested_party AND ip_aff.start_date &lt;= now() AND (ip_aff.end_date IS NULL OR ip_aff.end_date &gt;= now())
+		    LEFT OUTER JOIN affiliation_domain ip_aff_dom ON ip_aff.id_affiliation = ip_aff_dom.fk_affiliation
+			LEFT OUTER JOIN creation_class ip_aff_cc ON ip_aff_cc.id_creation_class = ip_aff_dom.fk_creation_class
+		    LEFT OUTER JOIN cmo cmo_aff ON cmo_aff.id_cmo = ip_aff.fk_cmo
+		    LEFT OUTER JOIN cmo cmo_orig ON interested_party.fk_cmo = cmo_orig.id_cmo
+	</sql>
+
+	<select id="selectCountFindInterestedParty" resultType="java.lang.Integer">
+		SELECT COUNT(DISTINCT interested_party.id_interested_party)
+		<include refid="baseFromIdOnly" />
+		<include refid="baseConditionsIdOnly"></include>
+	</select>
+	
+	<select id="findInterestedPartyByMainId" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE interested_party.main_id = #{mainId}
+		AND	interested_party.deleted = 0
+	</select>
+
+</mapper>

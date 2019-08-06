@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+
+	<typeAliases>
+		<package name="org.wipo.connect.shared.exchange.dto.impl"/>
+		<package name="org.wipo.connect.common.report.bean"/>
+		<package name="org.wipo.connect.common.logging"/>
+	</typeAliases>
+
+	<typeHandlers>
+		<typeHandler handler="org.wipo.connect.shared.persistence.customtypehandler.CustomStringTypeHandler" />
+	</typeHandlers>
+
+	<mappers>
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/TranslationFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/ReferenceFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/ReferenceTypeFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/AccountMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/InterestedPartyMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/ContactMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/NameMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/TerritoryMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/TerritoryIdentifierFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/TerritoryNameMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/TerritoryNameIdentifierFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/AddressMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/BankAccountMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/IdentifierMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/IdentifierFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/InterestedPartyIdentifierFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/InterestedPartyStatusFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/IpiRoleFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/TitleMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/WorkIdentifierFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/WorkMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/WorkStatusFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/DerivedViewMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/IpTaskMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/WorkTaskMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/WorkPerformerMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/CmoMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/AffiliationMapper.xml" />
+	 	<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/DerivedWorkMapper.xml" />
+	 	<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/IpiRightTypeFlatMapper.xml" />
+	 	<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/RightTypeFlatMapper.xml" />
+	 	<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/CreationClassFlatMapper.xml" />
+	 	<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/RoleFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/ClientInfoMapper.xml" />
+
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/WorkImportMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/WorkImportDetailMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/ImportStatusFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/ImportDetailStatusFlatMapper.xml" />
+
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/IpImportMapper.xml" />
+
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/WorkIndexQueueMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/IpIndexQueueMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/AccountIdentifierFlatMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/PermissionMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/SecGroupMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/UiLanguageMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/ExternalSiteMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/IdentifierManagerMapper.xml" />
+
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/GeneralParametersManagementMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/WorkDateMapper.xml" />
+
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/IssueLogMapper.xml" />
+		<mapper resource="mybatis/sql-map/org/wipo/connect/shared/persistence/mapping/BIMapper.xml" />
+	</mappers>
+</configuration>

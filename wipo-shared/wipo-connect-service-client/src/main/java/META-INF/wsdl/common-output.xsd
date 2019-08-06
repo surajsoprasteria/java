@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://output.common.connect.wipo.org" attributeFormDefault="unqualified"
+	elementFormDefault="qualified" targetNamespace="http://output.common.connect.wipo.org">
+
+	<xsd:complexType name="ErrorType">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" name="errorCode" type="xsd:string" />
+			<xsd:element minOccurs="1" name="errorType" type="xsd:string" />
+			<xsd:element minOccurs="1" name="errorMessage" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+</xsd:schema>

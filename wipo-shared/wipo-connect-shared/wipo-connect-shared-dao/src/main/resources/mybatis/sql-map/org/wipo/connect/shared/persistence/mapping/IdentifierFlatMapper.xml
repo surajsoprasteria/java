@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.IdentifierFlatMapper">
+
+	<resultMap id="resMap" type="IdentifierFlat">
+		<id property="idIdentifier" 		column="IDF_id_identifier" />
+        <result property="acronym" 			column="IDF_acronym" />
+        <result property="code" 			column="IDF_code" />
+        <result property="linkedEntity"		column="IDF_linked_entity" />
+        <result property="fkName" 			column="IDF_fk_name" />
+        <result property="name" 			column="IDF_name" />
+        <result property="hideFromUi" 		column="IDEN_hide" />
+
+        <collection property="fkCcList" 	ofType="java.lang.Long">
+			<result column="IDF_fk_creation_class" />
+		</collection>
+	</resultMap>
+
+	<sql id="fields">
+   		identifier.id_identifier 			AS IDF_id_identifier,
+	    identifier.acronym 					AS IDF_acronym,
+	    identifier.code 					AS IDF_code,
+	    identifier.linked_entity			AS IDF_linked_entity,
+	    identifier.fk_label					AS IDF_fk_name,
+	    identifier_class.fk_creation_class	AS IDF_fk_creation_class,
+	    tr_name.default_value 				AS IDF_name,
+		identifier.hide_from_ui 			AS IDEN_hide
+	</sql>
+
+	<sql id="baseSelect">
+	   SELECT
+			<include refid="fields" />
+		  FROM identifier
+		  LEFT OUTER JOIN identifier_class ON identifier_class.fk_identifier = identifier.id_identifier
+		  LEFT OUTER JOIN translation tr_name ON tr_name.id_translation = identifier.fk_label
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+			identifier.id_identifier = #{idIdentifier}
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		ORDER BY identifier.code
+	</select>
+
+	<select id="findByCode" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+			identifier.code = #{code}
+	</select>
+
+
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO identifier (
+			code,
+			acronym,
+			fk_label,
+			linked_entity
+		) VALUES (
+			#{code},
+			#{acronym},
+			#{fkName},
+			#{linkedEntity}
+		)
+		<selectKey   resultType="long" keyProperty="idIdentifier"    keyColumn="id_identifier"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_IDENTIFIER_SEQ'
+		</selectKey>	
+	</insert>
+
+	<update id="updateByPrimaryKey" keyProperty="idIdentifier">
+		UPDATE identifier
+	   	SET
+	   		fk_label					= #{fkName},
+	   		acronym 					= #{acronym}
+	 	WHERE
+			identifier.id_identifier 	= #{idIdentifier}
+	</update>
+
+
+	<select id="exsistIdentifierCode" resultType="boolean" parameterType="map">
+		SELECT  COUNT(id_identifier) AS result
+		FROM  identifier
+		WHERE code = #{code}
+			<if test="idToExclude != null">
+				AND identifier.id_identifier != #{idToExclude}
+			</if>
+	</select>
+
+
+	<insert id="insertIdentifierCreationClass">
+		INSERT INTO identifier_class (
+			fk_identifier,
+			fk_creation_class
+		) VALUES (
+			#{fkIdentifier},
+			#{fkCreationClass}
+		)
+	</insert>
+
+
+	<select id="isIdentifierUsedInAnyEntity"  resultType="boolean">
+
+	</select>
+
+</mapper>

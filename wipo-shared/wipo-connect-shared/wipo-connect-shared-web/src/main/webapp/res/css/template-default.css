@@ -1,0 +1,205 @@
+body {
+  padding-top: 65px;
+}
+
+/*************************
+	NAVBAR
+*************************/
+
+.navbar .navbar-text.brand,
+.navbar .navbar-text.brand a{
+	color: #FFFFFF;
+	font-size: 26px;
+	margin: 7px 0 0 0;
+	text-decoration: none;
+}
+.navbar .logo-brand{
+	height: 28px;
+	float: left;
+	margin: 4px 15px 0px 10px;
+}
+
+.navbar .caret{
+	margin-left: 5px;
+}
+
+.navbar-default .navbar-first-row .navbar-nav > li > a {
+  color: #FFFFFF;
+}
+.navbar-default .navbar-first-row .navbar-nav > li > a:hover,
+.navbar-default .navbar-first-row .navbar-nav > li > a:focus {
+  color: #E7E7E7;
+  background-color: transparent;
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle:focus{
+	outline-color: rgb(77, 144, 254);
+	outline-offset: -2px;
+	outline-style: auto;
+	outline-width: 5px;
+}
+.navbar-first-row{
+	background-color: #205081;
+	color: #FFFFFF;
+}
+.navbar-default .navbar-first-row .navbar-nav .open .dropdown-menu > li > a{
+	color: #FFFFFF;
+}
+.navbar-default .navbar-first-row .navbar-nav .open .dropdown-menu > li > a:HOVER,
+.navbar-default .navbar-first-row .navbar-nav .open .dropdown-menu > li > a:FOCUS{
+	color: #E7E7E7;
+	background-color: transparent;
+}
+.navbar-default .navbar-first-row .navbar-toggle .icon-bar{
+	background-color: #FFFFFF;
+}
+
+.navbar-default .navbar-first-row .navbar-nav > .open > a,
+.navbar-default .navbar-first-row .navbar-nav > .open > a:hover,
+.navbar-default .navbar-first-row .navbar-nav > .open > a:focus{
+	color: #E7E7E7;
+	background-color: #245B93;
+}
+.navbar-second-row .nav > li > a {
+	padding: 3px 5px;
+	line-height: 34px;
+}
+.navbar-second-row p.navbar-text.page-info{
+	font-size: 20px;
+	margin-top: 13px;
+	margin-bottom: 13px;
+	font-family: "lato";
+	text-transform: uppercase;
+	display: none;
+}
+.navbar-second-row .navbar-nav .open .dropdown-menu li.dropdown-header{
+	display: none;
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico{
+	display: inline-block;
+	width: 34px;
+	height: 34px;
+	margin-bottom: -12px;
+	background-color: #507091;
+	border: 1px solid #507091;
+	border-radius: 9px;
+	background-size: 21px 21px;
+	background-repeat: no-repeat;
+	background-position: center;
+	-moz-transition: all 0.2s;
+	-o-transition: all 0.2s;
+	-webkit-transition: all 0.2s;
+	transition: all 0.2s;
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.selected{
+	background-color: #007EFF;
+	border: 1px solid #007EFF;
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-desc{
+	display: inline-block;
+	margin: 0 5px;
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle:FOCUS .main-menu-ico,
+.navbar-default .navbar-nav > li > a.dropdown-toggle:ACTIVE .main-menu-ico,
+.navbar-default .navbar-nav > li > a.dropdown-toggle:HOVER .main-menu-ico{
+	box-shadow: 0px 0px 6px 0px rgba(20,50,81,1);
+	border-collapse: separate;
+	border-radius: 0px;
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.interested-party{
+	background-image: url("../img/members-21.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.work{
+	background-image: url("../img/works-21.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.business-intelligence{
+	background-image: url("../img/business-intelligence-21.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.agreement{
+	background-image: url("../img/agreements.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.catalogue{
+	background-image: url("../img/catalogues-21.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.licensee{
+	background-image: url("../img/users-21.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.licensing{
+	background-image: url("../img/licenses-21.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.license{
+	background-image: url("../img/licenses-21.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.collection{
+	background-image: url("../img/collections-21.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.matching{
+	background-image: url("../img/collections-21.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.distribution{
+	background-image: url("../img/distributions-21.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.administration{
+	background-image: url("../img/parameters-21.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.reference{
+	background-image: url("../img/list.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.debug{
+	background-image: url("../img/star.png");
+}
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico.screenshot{
+	background-image: url("../img/screenshot.png");
+}
+
+.navbar-default .navbar-nav > li > a .header-menu-ico{
+	display: inline-block;
+	width:18px;
+	height:18px;
+	margin-bottom: -3px;
+	background-size: 18px 18px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.navbar-default .navbar-nav > li > a .header-menu-desc{
+	display: inline-block;
+	margin: 0 5px;
+}
+.navbar-default .navbar-nav > li > a .header-menu-ico.home{
+	background-image: url("../img/home-18.png");
+}
+
+.navbar-default .navbar-nav span.glyphicon{
+	font-size: 16px;
+}
+
+@media ( min-width : 768px) {
+	body {
+	  padding-top: 120px;
+	}
+	.navbar-second-row p.navbar-text.page-info {
+		display: block;
+	}
+	.navbar-default .navbar-nav>li>a.dropdown-toggle .main-menu-desc {
+		display: none;
+	}
+	.navbar-second-row .nav>li>a {
+		padding: 10px 5px;
+	}
+	.navbar-default .navbar-first-row .navbar-nav .open .dropdown-menu {
+		background-color: #245B93;
+		color: #FFFFFF;
+	}
+	.navbar-default .navbar-nav > li > a .header-menu-ico{
+		display: inline-block;
+	}
+	.navbar-default .navbar-nav > li > a .header-menu-desc{
+		display: none;
+	}
+	.navbar-second-row .nav > li > a > .caret{
+		display: none;
+	}
+
+	.navbar-second-row .navbar-nav .open .dropdown-menu li.dropdown-header{
+		display: block;
+	}
+}

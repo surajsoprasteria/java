@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.ReferenceFlatMapper">
+	
+	<resultMap id="resMap" type="ReferenceFlat">
+		<id 	property="idReference" 		column="REFFL_id_reference" />
+		<result property="code" 			column="REFFL_code" />
+		<result property="fkName" 			column="REFFL_fk_name" />
+		<result property="name" 			column="REFFL_name" />
+		<result property="fkDescription" 	column="REFFL_fk_description" />
+		<result property="description" 		column="REFFL_description" />
+		<result property="fkRefType" 		column="REFFL_fk_ref_type" />
+		<result property="refType" 			column="REFFL_ref_type" />
+
+	</resultMap>
+	
+	<sql id="fields">
+		reference.id_reference 		AS REFFL_id_reference,
+		reference.code 				AS REFFL_code,
+		reference.fk_value			AS REFFL_fk_name,
+		reference.fk_description	AS REFFL_fk_description,
+		reference.fk_ref_name 		AS REFFL_fk_ref_type,
+		reference_type.code 		AS REFFL_ref_type,
+		tr_value.default_value		AS REFFL_name,
+		tr_desc.default_value 		AS REFFL_description
+		
+	</sql>
+	
+	<sql id="baseSelect">
+		SELECT		<include refid="fields" />
+		FROM 		reference
+		LEFT OUTER JOIN	reference_type on reference_type.id_reference_type = reference.fk_ref_name
+		LEFT OUTER JOIN	translation tr_value ON tr_value.id_translation = reference.fk_value
+		LEFT OUTER JOIN translation tr_desc ON tr_desc.id_translation = reference.fk_description
+	</sql>
+	
+
+	
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE 		reference.id_reference = #{idReference}
+		ORDER BY 	tr_value.default_value
+	</select>
+
+	<select id="findByCode" resultMap="resMap" >
+		<include refid="baseSelect" />
+		WHERE 		reference_type.code = #{code}
+		ORDER BY 	tr_value.default_value
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		order by tr_value.default_value
+	</select>
+
+
+	<select id="existReferenceCode"  resultType="boolean">
+		SELECT COUNT(reference.id_reference) AS result
+		FROM reference
+		LEFT OUTER JOIN	reference_type on reference_type.id_reference_type = reference.fk_ref_name
+		WHERE reference.code = #{code} AND reference_type.code = #{refCode}
+			<if test="idToExclude != null">
+				AND reference.id_reference != #{idToExclude}
+			</if>
+	</select>
+	
+
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO reference(
+			fk_ref_name,
+			fk_value,
+			code,
+			fk_description
+		) VALUES (
+			#{fkRefType},
+			#{fkName},
+			#{code},
+			#{fkDescription}
+		)
+		<selectKey   resultType="long" keyProperty="idReference"    keyColumn="id_reference"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_REFERENCE_SEQ'
+		</selectKey>	
+	</insert>
+	
+	<update id="updateByPrimaryKey" keyProperty="idReference">
+		UPDATE reference 
+		SET 
+			code 			= #{code},
+			fk_value 		= #{fkName},
+			fk_description 	= #{fkDescription}
+		WHERE 
+			id_reference 	= #{idReference}
+	</update>
+	
+	
+	
+
+
+</mapper>

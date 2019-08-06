@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.TerritoryIdentifierFlatMapper">
+
+	<resultMap id="resMap" type="TerritoryIdentifierFlat">
+		<id property="idTerritoryIdentifier" column="id_territory_identifier" />
+		<result property="fkTerritory" column="fk_territory" />
+		<result property="fkIdentifier" column="fk_identifier" />
+		<result property="value" column="value" />
+		<result property="code" column="TR_code" />
+	</resultMap>
+
+	<sql id="fields">
+		territory_identifier.id_territory_identifier,
+        territory_identifier.fk_territory,
+        territory_identifier.fk_identifier,
+        territory_identifier.value,
+        identifier.code TR_code
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" />
+		  FROM territory_identifier
+		  INNER JOIN identifier ON identifier.id_identifier = territory_identifier.fk_identifier
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+			territory_identifier.id_territory_identifier = #{idTerritoryIdentifier}
+	</select>
+	
+	<update id="update" keyProperty="idTerritoryIdentifier">
+		UPDATE territory_identifier
+		SET 
+			value 				= #{value}
+		WHERE 
+			fk_territory	 	= #{idTerritory}
+	</update>
+
+	<insert id="insert">
+		INSERT INTO territory_identifier(fk_territory, fk_identifier, value)
+		VALUES (#{idTerritory},
+		        (SELECT id_identifier FROM identifier WHERE code = #{code}),
+		        #{value})
+	</insert>
+
+</mapper>

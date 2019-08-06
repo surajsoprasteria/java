@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.BIMapper">
+
+	<select id="findQueryCodeList" resultType="java.lang.String">
+		SELECT	query_name
+		FROM	query_import
+	</select>
+
+
+	<select id="findQueryParameters" resultType="java.lang.String">
+		SELECT	query_parameter
+		FROM	query_import
+		where 	query_name=#{queryCode}
+	</select>
+	
+	<select id="findQuerySql" resultType="java.lang.String">
+		SELECT	query_sql
+		FROM	query_import
+		where 	query_name=#{queryCode}
+	</select>
+	
+	<insert id="insertQuery"  useGeneratedKeys="true">
+		INSERT INTO query_import
+		(query_name,query_sql,query_parameter,checksum)
+		VALUES
+		(#{queryName},#{querySql},#{queryParameter},#{checksum})
+	</insert>
+	
+	<delete id="deleteAllQuery" >
+		DELETE FROM	 query_import
+	</delete>
+	
+	
+	<select id="findExistChecksum" resultType="boolean">
+		SELECT COUNT(*) 
+		FROM DUAL 
+		WHERE EXISTS (
+			SELECT id_query_import 
+			FROM query_import 
+			WHERE checksum = #{checksum}
+		)
+	</select>
+	
+</mapper>

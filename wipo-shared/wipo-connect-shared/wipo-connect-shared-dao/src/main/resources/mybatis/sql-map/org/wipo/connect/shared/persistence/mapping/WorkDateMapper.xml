@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.WorkDateMapper">
+
+	<sql id="fields">
+		work_date.id_work_date,
+		work_date.fk_work,
+		work_date.code AS date_type_code,
+		work_date.date_value
+	</sql>
+
+	<resultMap id="resMap" type="WorkDate">
+		<id property="idWorkDate" column="id_work_date" />
+		<result property="fkWork" column="fk_work" />
+		<result property="dateTypeCode" column="date_type_code" />
+		<result property="dateValue" column="date_value" />
+	</resultMap>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" />
+		  FROM work_date
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			work_date.id_work_date = #{idWorkDate}
+	</select>
+
+	<select id="findByWork" resultMap="resMap">
+		<include refid="baseSelect" />
+
+		WHERE
+			work_date.fk_work = #{idWork}
+	</select>
+
+
+
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO work_date
+			(fk_work, code, date_value )
+		VALUES
+			(#{fkWork}, #{dateTypeCode}, #{dateValue})
+			
+		<selectKey   resultType="long" keyProperty="idWorkDate"    keyColumn="id_work_date"   order="BEFORE" >		
+		select next from _sequences where name = 'ID_WORK_DATE_SEQ'
+		</selectKey>			
+	</insert>
+
+	<update id="update" useGeneratedKeys="true" keyProperty="idWorkDate"  keyColumn="id_work_date">
+		update	work_date
+		set
+				fk_work=#{fkWork},
+				code=#{dateTypeCode},
+				date_value=#{dateValue}
+		WHERE
+			work_date.id_work_date = #{idWorkDate}
+	</update>
+
+	<delete id="deleteByPrimaryKey">
+		DELETE FROM work_date
+		WHERE id_work_date = #{idWorkdate}
+	</delete>
+
+
+</mapper>

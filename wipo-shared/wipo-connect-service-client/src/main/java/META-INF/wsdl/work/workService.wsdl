@@ -1,0 +1,118 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://workService.work.connect.wipo.org" targetNamespace="http://workService.work.connect.wipo.org"
+	xmlns:input="http://request.work.connect.wipo.org" xmlns:output="http://response.work.connect.wipo.org">
+
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:import 	namespace="http://response.work.connect.wipo.org" schemaLocation="work-response-output.xsd" />
+			<xs:import 	namespace="http://request.work.connect.wipo.org" schemaLocation="work-request-input.xsd" />
+		</xs:schema>
+	</wsdl:types>
+
+	<!-- Message for getWorkList operation  -->
+	<wsdl:message name="WorkListRequest">
+		<wsdl:part element="input:WorkListRequest" name="WorkListRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="WorkListResponse">
+		<wsdl:part element="output:WorkListResponse" name="WorkListResponse"></wsdl:part>
+	</wsdl:message>
+
+	<!-- Message for getWorkDetail operation  -->
+	<wsdl:message name="WorkDetailRequest">
+		<wsdl:part element="input:WorkDetailRequest" name="WorkDetailRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="WorkDetailResponse">
+		<wsdl:part element="output:WorkDetailResponse" name="WorkDetailResponse"></wsdl:part>
+	</wsdl:message>
+	
+	<!-- Message for InternationallyRegister operation  -->
+	<wsdl:message name="InternationallyRegisterRequest">
+		<wsdl:part element="input:InternationallyRegisterRequest" name="internationallyRegisterRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="InternationallyRegisterResponse">
+		<wsdl:part element="output:InternationallyRegisterResponse" name="internationallyRegisterResponse"></wsdl:part>
+	</wsdl:message>
+
+	<!-- Message for getResult operation  -->
+	<wsdl:message name="ElaborationResultRequest">
+		<wsdl:part element="input:IRWorkElaborationRequest" name="IRElaborationResultRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ElaborationResultResponse">
+		<wsdl:part element="output:IRWorkElaborationResponse" name="IRElaborationResponse"></wsdl:part>
+	</wsdl:message>
+	
+	<wsdl:portType name="WorkServicePort">
+		<wsdl:operation name="getWorkList">
+			<wsdl:input message="tns:WorkListRequest" name="WorkListRequestInput"></wsdl:input>
+			<wsdl:output message="tns:WorkListResponse" name="WorkListResponseOutput"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getWorkDetail">
+			<wsdl:input message="tns:WorkDetailRequest" name="WorkDetailRequestInput"></wsdl:input>
+			<wsdl:output message="tns:WorkDetailResponse" name="WorkDetailResponseOutput"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="registerInternationally">
+			<wsdl:input message="tns:InternationallyRegisterRequest" name="InternationallyRegisterRequestInput"></wsdl:input>
+			<wsdl:output message="tns:InternationallyRegisterResponse" name="InternationallyRegisterResponseOutput"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getElaborationResult">
+			<wsdl:input message="tns:ElaborationResultRequest" name="ElaborationResultRequestInput"></wsdl:input>
+			<wsdl:output message="tns:ElaborationResultResponse" name="ElaborationResultResponseOutput"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="WorkServiceBinding" type="tns:WorkServicePort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+
+		<wsdl:operation name="getWorkList">
+			<soap:operation
+				soapAction="http://workService.connect.wipo.org/WorkService/getWorkList" />
+			<wsdl:input name="WorkListRequestInput" >
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="WorkListResponseOutput">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getWorkDetail">
+			<soap:operation
+				soapAction="http://workService.connect.wipo.org/WorkService/getWorkDetail" />
+			<wsdl:input name="WorkDetailRequestInput">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="WorkDetailResponseOutput">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="registerInternationally">
+			<soap:operation
+				soapAction="http://workService.connect.wipo.org/WorkService/registerInternationally" />
+			<wsdl:input name="InternationallyRegisterRequestInput">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="InternationallyRegisterResponseOutput">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="getElaborationResult">
+			<soap:operation
+				soapAction="http://workService.connect.wipo.org/WorkService/getElaborationResult" />
+			<wsdl:input name="ElaborationResultRequestInput">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="ElaborationResultResponseOutput">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+	</wsdl:binding>
+
+	<wsdl:service name="WorkService">
+		<wsdl:port binding="tns:WorkServiceBinding" name="WorkServicePortBinding">
+			<soap:address location="REPLACE_WITH_ACTUAL_URL" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.RightTypeFlatMapper">
+	<resultMap id="resMap" type="RightTypeFlat">
+		<id property="idRightType" 			column="RITYF_id_right_type" />
+		<result property="code" 			column="RITYF_code" />
+		<result property="fkName" 			column="RITYF_fk_name" />
+		<result property="name" 			column="RITYF_name" />
+		<result property="fkDescription" 	column="RITYF_fk_description" />
+		<result property="description" 		column="RITYF_description" />
+		<result property="example" 			column="RITYF_example" />
+		<collection property="creationClassList" ofType="CreationClassFlat" resultMap="org.wipo.connect.shared.persistence.mapping.CreationClassFlatMapper.resMap"/>
+		<collection property="fkCcList" 	ofType="java.lang.Long">
+			<result column="RITYF_fk_creation_class" />
+		</collection> 
+	</resultMap>
+
+	<sql id="fields">
+		right_type.id_right_type 				AS RITYF_id_right_type,
+		right_type.code 						AS RITYF_code,
+		right_type.fk_name 						AS RITYF_fk_name,
+		right_type.fk_description 				AS RITYF_fk_description,
+		right_type_class.fk_creation_class		AS RITYF_fk_creation_class,
+		tr_name.default_value 					AS RITYF_name,
+		tr_desc.default_value 					AS RITYF_description,
+		tr_exam.default_value 					AS RITYF_example
+	</sql>
+
+	<sql id="baseSelect">
+     	SELECT
+     		<include refid="fields" />,
+     		<include refid="org.wipo.connect.shared.persistence.mapping.CreationClassFlatMapper.fields" />
+		FROM right_type
+		LEFT OUTER JOIN right_type_class ON right_type_class.fk_right_type = right_type.id_right_type
+		LEFT OUTER JOIN creation_class ON right_type_class.fk_creation_class = creation_class.id_creation_class
+		LEFT OUTER JOIN translation tr_name ON tr_name.id_translation = right_type.fk_name
+		LEFT OUTER JOIN translation tr_desc ON tr_desc.id_translation = right_type.fk_description
+		LEFT OUTER JOIN translation tr_exam ON tr_exam.id_translation = right_type.fk_examples
+	</sql>
+
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE right_type.id_right_type = #{idRightType}
+	</select>
+
+	<select id="findByCode" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE right_type.code = #{code}
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		ORDER BY right_type.code
+	</select>
+	
+	
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO right_type (
+				code,
+				fk_name,
+				fk_description
+			) VALUES (
+				#{code},
+				#{fkName},
+				#{fkDescription}
+			)
+		<selectKey   resultType="long" keyProperty="idRightType"    keyColumn="id_right_type"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_RIGHT_TYPE_SEQ'
+		</selectKey>			
+	</insert>
+	
+	<update id="updateByPrimaryKey" keyProperty="idIpiRightType">
+		UPDATE right_type
+		SET
+			fk_name 			= #{fkName},
+			fk_description		= #{fkDescription}
+		WHERE 
+			id_right_type 	= #{idRightType}
+	</update>
+	
+	
+	<select id="exsistRightTypeCode" resultType="boolean" parameterType="map">
+		SELECT  COUNT(id_right_type) AS result 
+		FROM  right_type 
+		WHERE code = #{code}
+			<if test="idToExclude != null">
+				AND right_type.id_right_type != #{idToExclude}
+			</if>
+	</select>
+	
+	
+	<insert id="insertRightTypeCreationClass">
+		INSERT INTO right_type_class (
+			fk_right_type,
+			fk_creation_class
+		) VALUES (
+			#{fkRightType},
+			#{fkCreationClass}
+		)
+	</insert>
+	
+	<select id="findRightTypeListByCC" resultMap="org.wipo.connect.shared.persistence.mapping.RightTypeFlatMapper.resMap">
+		<include refid="baseSelect" />
+		<trim prefix="WHERE" prefixOverrides="AND">
+		<if test="ccCodeList != null">
+			AND ( creation_class.code in
+			<foreach item="item" index="idx" collection="ccCodeList"  open="(" separator="," close=")">
+  	 			#{item}
+		  	</foreach>
+			)
+
+		</if>
+		</trim>
+	</select>
+
+</mapper>

@@ -1,0 +1,70 @@
+<style>
+    .md-tooltip, md-tooltip  {padding: 12px 12px 12px 12px;white-space: normal;text-align:center;line-height:1.4;width:40%;height:auto;font-size: 15px;font-familly:Roboto;font-weight: 300;color: white;background-color: rgba(0,66,96,0.9);}
+    
+    table.reference { border-collapse: separate; border-spacing: 0;width: 80%;}
+
+    table.reference tbody tr td, table.reference thead tr td { padding : 8px 8px 8px 8px;text-align: center;font-size: 16px;border:solid 1px #C0C0C0;border-style:none solid solid none;text-transform: lowercase;white-space: nowrap;}
+
+    table.reference thead tr:first-child td:first-child { border-top-left-radius: 4px; }
+    
+    table.reference thead tr:first-child td:last-child { border-top-right-radius: 4px; }
+    
+    table.reference tbody tr:last-child td:first-child { border-bottom-left-radius: 4px; }
+    
+    table.reference tbody tr:last-child td:last-child { border-bottom-right-radius: 4px; }
+    
+    table.reference thead tr:first-child td { border-top-style: solid; }
+    
+    table.reference tbody tr td:first-child, table.reference thead tr td:first-child { border-left-style: solid; }
+
+    table.reference thead tr td.head {padding-left: 40px; background-color: rgba(128,128,128,0.4);	text-transform: uppercase;}
+
+    table.reference thead tr td.glyph,table.reference thead tr td.code, table.reference thead tr td.name  {background-color: rgba(128,128,128,0.2);}
+
+    table.reference tbody tr:hover {background-color: rgba(0,133,193,0.08);transition: background-color 0.1s ease;}
+
+    table.reference tbody tr {transition: background-color 0.1s ease;}
+
+    table.reference thead tr td.code {width: 30%;}
+
+    table.reference thead tr td.glyph {width: 70px;}
+
+    table.reference tbody tr td.code-value { text-transform: uppercase;}
+
+    table.reference thead tr td.name {width: 70%;}
+
+    span.small-icon {padding: 6px 6px 6px 6px;font-size: 13px;transition: background-color 0.2s ease;position: relative;left: 0%;}
+
+    span.small-icon:hover {transition: background-color 0.2s ease;background-color: rgba(255,255,255,0.2);}
+
+    span.wipo-glyph {color: white;background-color: #004260;padding: 7px 7px 7px 7px;margin-right: 10px;border-radius: 3px;}
+
+</style>
+
+<br/><br/>
+
+<span ng-if='reference.name !== undefined' style='font-size: 16px;width:80%;text-align: justify;display: inline-block;'>
+    {{ reference.description}}<br/><br/>
+</span>
+
+<table class='reference' ng-if='reference.name !== undefined'>
+    <thead>
+        <tr>
+            <td colspan='2' class='head'><span style='font-weight:bold;position:relative;'>{{ reference.name }}</span>&nbsp;&nbsp;<span class='small-icon' ng-click='DownloadJSON(reference, reference.name)'><span class="glyphicon glyphicon-download-alt"></span></span></td>
+            <tr>
+                <td class='code'>code</td>
+                <td class='name'>name</td>
+            </tr>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat='(iditem, item) in reference.data'>
+            <td class='code-value'>
+                 <span class='glyphicon {{item.glyph}} wipo-glyph' ng-if="keys(reference.data)[0] !== undefined && reference.data[keys(reference.data)[0]].glyph !== undefined"></span>
+                {{ item.code }}</td>
+            <td ng-style="{'cursor': (item.description.length > 0 ?'help':'default')}">
+                <md-tooltip md-direction='top' md-delay='500' ng-if='item.description.length > 0'>{{item.description}}</md-tooltip>{{ item.name}}
+            </td>
+        </tr>
+    </tbody>
+</table>

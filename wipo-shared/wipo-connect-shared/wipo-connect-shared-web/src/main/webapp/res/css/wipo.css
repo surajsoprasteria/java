@@ -1,0 +1,178 @@
+/**
+	WIPO CUSTOM
+**/
+
+div.creation-class-icon {
+    width: 25px;
+    height: 25px;
+}
+
+
+.pagination > li:first-child > a, .pagination > li:first-child > span {
+    margin-left: 0;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+
+.pagination > li > a, .pagination > li > span {
+    padding: 3px 6px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+
+.pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus, .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {
+    border-color: #d0d0d0;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    border-color: #d0d0d0;
+}
+
+.pagination > li > a, .pagination > li > span {
+    border: 1px solid #d0d0d0;
+}
+
+
+.panel-heading {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+.navbar-second-row p.navbar-text.page-info {
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.navbar-second-row .nav > li > a {
+    padding: 5px 5px;
+}
+
+.navbar-second-row .nav > li > a {
+    line-height: 26px;
+}
+
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico {
+    width: 26px;
+    height: 26px;
+    background-size: 14px 16px;
+}
+
+
+.container {
+    width: 95%;
+}
+
+.navbar-nav > li > a {
+    padding-top: 12px;
+    padding-bottom: 10px;
+}
+
+.navbar .navbar-text.brand, .navbar .navbar-text.brand a {
+    color: #FFFFFF;
+    font-size: 22px;
+    /*margin: 0px 0 0 0*/;
+    text-decoration: none;
+}
+
+
+.navbar .logo-brand {
+    height: 22px;
+    float: left;
+    margin: 4px 15px 0px 10px;
+}
+
+
+body {
+    font-size: 12px;
+}
+
+.panel {
+    border-radius: 0px;
+}
+
+.navbar-default .navbar-nav > li > a.dropdown-toggle .main-menu-ico {
+    border-radius: 0px;
+}
+
+.bootstrap-tagsinput {
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.form-control {
+    padding: 4px 4px;
+    font-size: 12px;
+    line-height: 1;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.btn-lg, .btn-group-lg > .btn {
+    line-height: 1;
+    border-radius: 0px;
+}
+
+.navbar-default .navbar-nav > li > a.dropdown-toggle:focus {
+    outline-width: 0px;
+}
+
+.btn {
+    border-radius: 0px;
+}
+
+.btn-xs, .btn-group-xs > .btn {
+    padding: 1px 3px 1px 4px;
+    font-size: 9px;
+}
+
+.panel-title {
+    margin-bottom: 3px;
+    font-size: 14px;
+}
+
+div.tab-content {
+    border: none;
+    border-radius: 0 0 0px 0px;
+    padding: 5px 0 0 0;
+}
+
+.form-inline .form-group > input[type="file"] {
+    padding: 0;
+    border: 0;
+    outline: 1px solid #ccc;
+    outline-offset: -2px;
+}
+
+.form-inline .form-group > input[type="file"]::-webkit-file-upload-button {
+	height: 100%;
+	border: 1px solid #fff;
+}
+
+.form-inline .form-group > input[type="file"]::-webkit-file-upload-button:focus,
+.form-inline .form-group > input[type="file"]::-webkit-file-upload-button:hover {
+	cursor:pointer;
+	background-color: #eaeaea;
+	outline: 0;
+}
+
+.form-inline .form-group > input[readonly="readonly"][type="text"] {
+    border: none;
+	background-color: transparent;
+}
+
+
+.navbar-first-row {
+ background-color: ##7FFFD4;
+}
+
+.dt-column-ellipsis {
+	white-space: nowrap; 
+	overflow: hidden; 
+	text-overflow: ellipsis; 
+}

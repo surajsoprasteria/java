@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.TranslationFlatMapper">
+	
+	<resultMap id="resMap" type="Translation">
+		<id 	property="idTranslation" 	column="TR_id_translation" />
+		<result property="defaultValue" 	column="TR_default_value" />
+	</resultMap>
+
+
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO 	translation
+						(default_value)
+		VALUES
+						(#{defaultValue})
+	<selectKey   resultType="long" keyProperty="idTranslation"    keyColumn="id_translation"   order="BEFORE" >		
+		select next from _sequences where name = 'ID_TRANSLATION_SEQ'
+		</selectKey>						
+	</insert>
+
+	<delete id="delete" >
+		DELETE FROM 	translation
+		WHERE 			id_translation = #{idTranslation}
+	</delete>
+
+	<update id="updateByPrimaryKey" keyProperty="idTranslation">
+		UPDATE translation
+	   	SET
+	   		default_value = #{defaultValue}
+	 	WHERE
+			translation.id_translation = #{idTranslation}
+	</update>
+
+</mapper>

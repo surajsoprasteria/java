@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.WorkStatusFlatMapper">
+
+	<resultMap id="resMap" type="WorkStatusFlat">
+		<id property="idWorkStatus" column="WRSTF_id_work_status" />
+		<result property="code" column="WRSTF_code" />
+		<result property="value" column="WRSTF_default_value" />
+		<result property="sortOrder" column="WRSTF_sort_order" />
+	</resultMap>
+
+	<sql id="fields">
+		work_status.id_work_status AS WRSTF_id_work_status,
+		work_status.code AS WRSTF_code,
+        translation.default_value AS WRSTF_default_value,
+        work_status.sort_order AS WRSTF_sort_order
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" />
+		FROM work_status
+       		INNER JOIN translation ON translation.id_translation = work_status.fk_value
+	</sql>
+
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE work_status.id_work_status = #{idWorkStatus}
+	</select>
+
+	<select id="findByCode" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE work_status.code = #{code}
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		ORDER BY work_status.sort_order
+	</select>
+
+</mapper>

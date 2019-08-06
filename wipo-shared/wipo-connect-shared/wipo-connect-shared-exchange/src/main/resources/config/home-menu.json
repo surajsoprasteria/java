@@ -1,0 +1,62 @@
+[
+	{
+		"name": "ro-menu",
+		"cssClass": "interested-party",
+		"i18n": "functions.interestedParty",
+		"menuItemList": [
+			{
+				"url": "/interestedParty/search",
+				"i18n": "functions.interestedParty-list"
+			}
+		]
+	},
+	{
+		"name": "work-menu",
+		"cssClass": "work",
+		"i18n": "functions.work",
+		"menuItemList": [
+			{
+				"url": "/work/search",
+				"i18n": "functions.work-list"
+			}
+		]
+	},
+	{
+		"name": "reference-menu",
+		"cssClass": "reference",
+		"i18n": "functions.reference",
+		"menuItemList": [
+			{
+				"url": "/reference/cmo/search",
+				"i18n": "reference.cmo"
+			},
+			{
+				"url": "/reference/territories/search",
+				"i18n": "reference.territories"
+			},
+			{
+				"url": "/reference/referenceTable/search",
+				"i18n": "reference.reference-table"
+			}
+		]
+	},
+	{
+		"name": "administration-menu",
+		"cssClass": "administration",
+		"i18n": "functions.administration",
+		"menuItemList": [
+			{
+				"url": "/administration/externalSite/detail",
+				"i18n": "functions.external-site"
+			},
+			{
+				"url": "/administration/dataAccess/start",
+				"i18n": "functions.data-access"
+			},
+			{
+				"url": "/administration/parametersManagement/detail",
+				"i18n": "functions.params-manag"
+			}
+		]
+	}
+]

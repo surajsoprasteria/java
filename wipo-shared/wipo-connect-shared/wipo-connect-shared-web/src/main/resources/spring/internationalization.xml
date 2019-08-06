@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+                           http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+
+
+	<!-- Internationalization -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="en" />
+	</bean>
+	<bean id="messageSource" class="org.wipo.connect.common.i18n.CustomReloadableResourceBundleMessageSource">
+		<property name="fallbackToSystemLocale" value="false"></property>
+		<property name="basenames">
+			<array>
+				<value>file:///#{configProperties['path.i18n-dir']}/ui-messages</value>
+				<value>file:///#{configProperties['path.i18n-dir']}/ui-formats</value>
+				<value>classpath:i18n/ui-messages</value>
+				<value>classpath:i18n/ui-formats</value>
+			</array>
+		</property>
+		<property name="defaultEncoding" value="UTF-8"/>
+		<property name="cacheSeconds" value="30" />
+	</bean>
+
+	<bean id="msg" class="org.wipo.connect.common.i18n.MessageSourceMapAdapter">
+		<property name="messageSource" ref="messageSource"></property>
+	</bean>
+
+</beans>

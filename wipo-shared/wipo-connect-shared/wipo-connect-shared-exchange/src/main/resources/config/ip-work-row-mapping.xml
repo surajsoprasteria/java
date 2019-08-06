@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<configuration>
+   		<date-format>YYYYMMdd</date-format>
+  	</configuration>
+
+	<!-- INTERESTED PARTY -->
+	<!-- MAIN ROW MAPPING -->
+	<mapping type="one-way">
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.InterestedParty</class-a>
+		<class-b>org.wipo.connect.common.import_model.IpRow</class-b>
+
+		<field>
+			<a>mainId</a>
+			<b>mainId</b>
+		</field>
+		<field>
+			<a>birthCountryCode</a>
+			<b>countryOfBirth</b>
+		</field>
+		<field>
+			<a>citizenshipCodeList</a>
+			<b>citizenshipList</b>
+		</field>
+	</mapping>
+
+	<!-- NAME ROW MAPPING -->
+	<mapping type="one-way">
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.Name</class-a>
+		<class-b>org.wipo.connect.common.import_model.IpRow</class-b>
+
+		<field>
+			<a>mainId</a>
+			<b>mainId</b>
+		</field>
+		<field>
+			<a>name</a>
+			<b>lastCompanyName</b>
+		</field>
+	</mapping>
+
+	<!-- AFFILIATION ROW MAPPING -->
+	<mapping type="one-way">
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.Affiliation</class-a>
+		<class-b>org.wipo.connect.common.import_model.IpRow</class-b>
+
+		<field>
+			<a>startDate</a>
+			<b>affiliationFrom</b>
+		</field>
+		<field>
+			<a>endDate</a>
+			<b>affiliationTo</b>
+		</field>
+		<field>
+			<a>shareValue</a>
+			<b>share</b>
+		</field>
+		<field>
+			<a>territoryFormula</a>
+			<b>territory</b>
+		</field>
+		<field>
+			<a>cmo.code</a>
+			<b>cmo</b>
+		</field>
+
+	</mapping>
+
+	<mapping type="one-way">
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.AffiliationDomain</class-a>
+		<class-b>org.wipo.connect.common.import_model.IpRow</class-b>
+
+		<field>
+			<a>creationClassCode</a>
+			<b>creationClass</b>
+		</field>
+		<field>
+			<a>ipiRightTypeCode</a>
+			<b>rightType</b>
+		</field>
+		<field>
+			<a>ipiRoleCode</a>
+			<b>role</b>
+		</field>
+
+	</mapping>
+
+	<!-- IDENTIFIER ROW MAPPING -->
+	<mapping type="one-way">
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.InterestedPartyIdentifierFlat</class-a>
+		<class-b>org.wipo.connect.common.import_model.IpRow</class-b>
+
+		<field>
+			<a>code</a>
+			<b>type</b>
+		</field>
+	</mapping>
+
+	<!--  WORK  -->
+	<!-- MAIN ROW MAPPING -->
+	<mapping type="one-way">
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.Work</class-a>
+		<class-b>org.wipo.connect.common.import_model.WorkRow</class-b>
+
+		<field>
+			<a>mainId</a>
+			<b>workMainId</b>
+		</field>
+		<field>
+			<a>genreCode</a>
+			<b>genre</b>
+		</field>
+		<field>
+			<a>typeCode</a>
+			<b>workType</b>
+		</field>
+
+	</mapping>
+
+	<!-- TITLE ROW MAPPING -->
+	<mapping type="one-way">
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.Title</class-a>
+		<class-b>org.wipo.connect.common.import_model.WorkRow</class-b>
+
+		<field>
+			<a>typeCode</a>
+			<b>type</b>
+		</field>
+		<field>
+			<a>description</a>
+			<b>workTitle</b>
+		</field>
+	</mapping>
+
+	<!-- IDENTIFIER ROW MAPPING -->
+	<mapping type="one-way">
+		<class-a>org.wipo.connect.shared.exchange.dto.impl.WorkIdentifierFlat</class-a>
+		<class-b>org.wipo.connect.common.import_model.WorkRow</class-b>
+
+		<field>
+			<a>code</a>
+			<b>type</b>
+		</field>
+		<!-- <field>
+			<a>value</a>
+			<b>identifierValue</b>
+		</field> -->
+	</mapping>
+
+
+</mappings>

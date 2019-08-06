@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.SecGroupMapper">
+	<sql id="fields">
+		sec_group.id_sec_group SECG_id_sec_group,
+        sec_group.code SECG_code,
+        sec_group.description SECG_description,
+        sec_group.note SECG_note
+	</sql>
+
+	<sql id="fieldsPermission">
+		permission.id_permission SECP_id_permission ,
+        permission.code SECP_code ,
+        permission.fk_description SECP_fk_description,
+        t1.default_value AS SECP_description_perm,
+        permission.permission_name AS SECP_permission_name
+  	</sql>
+
+	<resultMap id="resMapPermission" type="Permission">
+		<id property="idPermission" column="SECP_id_permission" />
+		<result property="code" column="SECP_code" />
+		<result property="fkDescription" column="SECP_fk_description" />
+		<result property="descriptionPerm" column="SECP_description_perm" />
+		<result property="descriptionCode" column="SECP_permission_name" />
+	</resultMap>
+
+	<resultMap id="resMap" type="SecGroup">
+		<id property="idSecGroup" column="SECG_id_sec_group" />
+		<result property="code" column="SECG_code" />
+		<result property="description" column="SECG_description" />
+		<result property="note" column="SECG_note" />
+		<collection property="permissionList" ofType="Permission" resultMap="resMapPermission" />
+		<collection property="accountList" ofType="Account" resultMap="org.wipo.connect.shared.persistence.mapping.AccountMapper.resMap" />
+	</resultMap>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		SELECT
+		<include refid="fields" />,
+		<include refid="fieldsPermission" />,
+		<include refid="org.wipo.connect.shared.persistence.mapping.AccountMapper.fields" />,
+		<include refid="org.wipo.connect.shared.persistence.mapping.AccountIdentifierFlatMapper.fields" />
+		FROM
+		sec_group
+
+		LEFT JOIN sec_group_permission ON sec_group_permission.fk_sec_group=sec_group.id_sec_group
+		LEFT JOIN permission ON sec_group_permission.fk_permission=permission.id_permission
+		LEFT OUTER JOIN translation t1 ON t1.id_translation = permission.fk_description
+		LEFT JOIN account_sec_group ON account_sec_group.fk_sec_group=sec_group.id_sec_group
+		LEFT JOIN account ON account_sec_group.fk_account=account.id_account
+		LEFT OUTER JOIN account_identifier on account_identifier.fk_account = account.id_account
+		LEFT OUTER JOIN identifier ON identifier.id_identifier = account_identifier.fk_identifier
+		WHERE
+		sec_group.id_sec_group = #{idSecGroup}
+	</select>
+
+	<update id="updateByPrimaryKey" keyProperty="idSecGroup">
+		UPDATE sec_group
+		SET
+		code = #{code},
+		description=#{description},
+		note = #{note}
+		WHERE
+		id_sec_group = #{idSecGroup}
+	</update>
+
+	<insert id="insert" keyProperty="idSecGroup" useGeneratedKeys="true">
+		INSERT INTO sec_group
+		(
+		code,
+		description,
+		note)
+		VALUES
+		(
+		#{code},
+		#{description},
+		#{note})
+
+	</insert>
+
+	<select id="findAll" resultMap="resMap">
+		SELECT
+		<include refid="fields" />,
+		<include refid="fieldsPermission" />,
+		<include refid="org.wipo.connect.shared.persistence.mapping.AccountMapper.fields" />,
+		<include refid="org.wipo.connect.shared.persistence.mapping.AccountIdentifierFlatMapper.fields" />
+		FROM
+		sec_group
+		LEFT JOIN sec_group_permission ON sec_group_permission.fk_sec_group=sec_group.id_sec_group
+		LEFT JOIN permission ON sec_group_permission.fk_permission=permission.id_permission
+		LEFT OUTER JOIN translation t1 ON t1.id_translation = permission.fk_description
+		LEFT JOIN account_sec_group ON account_sec_group.fk_sec_group=sec_group.id_sec_group
+		LEFT JOIN account ON account_sec_group.fk_account=account.id_account
+		LEFT OUTER JOIN account_identifier on account_identifier.fk_account = account.id_account
+		LEFT OUTER JOIN identifier ON identifier.id_identifier = account_identifier.fk_identifier
+	</select>
+
+	<delete id="deleteByPrimaryKey">
+	 	DELETE
+	 	FROM 		sec_group
+	 	WHERE 		id_sec_group = #{idSecGroup}
+	 </delete>
+
+	 <select id="findSecGroupByIdAccount" resultMap="resMap">
+		SELECT
+		<include refid="fields" />,
+		<include refid="fieldsPermission" />,
+		<include refid="org.wipo.connect.shared.persistence.mapping.AccountMapper.fields" />,
+		<include refid="org.wipo.connect.shared.persistence.mapping.AccountIdentifierFlatMapper.fields" />
+		FROM
+		sec_group
+
+		LEFT JOIN sec_group_permission ON sec_group_permission.fk_sec_group=sec_group.id_sec_group
+		LEFT JOIN permission ON sec_group_permission.fk_permission=permission.id_permission
+		LEFT OUTER JOIN translation t1 ON t1.id_translation = permission.fk_description
+		LEFT JOIN account_sec_group ON account_sec_group.fk_sec_group=sec_group.id_sec_group
+		LEFT JOIN account ON account_sec_group.fk_account=account.id_account
+		LEFT OUTER JOIN account_identifier on account_identifier.fk_account = account.id_account
+		LEFT OUTER JOIN identifier ON identifier.id_identifier = account_identifier.fk_identifier
+		WHERE
+		account_sec_group.fk_account = #{fkAccount}
+	</select>
+</mapper>

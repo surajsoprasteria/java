@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
+ 
+    <persistence-unit name="rightowners">
+     <description>Rightowners Persistence Unit</description>
+     <provider>com.objectdb.jpa.Provider</provider>
+<!--      <mapping-file>META-INF/mappingFile.xml</mapping-file>
+     <jar-file>packedEntity.jar</jar-file> -->
+     <class>org.wipo.suite.modules.rightowners.dal.entity.Account</class>
+     <class>org.wipo.suite.modules.rightowners.dal.entity.Cmo</class>
+     <class>org.wipo.suite.modules.rightowners.dal.entity.RightOwners</class>
+     <class>org.wipo.suite.modules.rightowners.dal.entity.RightOwnersStatus</class>
+     <class>org.wipo.suite.modules.rightowners.dal.entity.Territory</class>
+     <properties>
+       <property name="javax.persistence.jdbc.url"
+                 value="jdbc:mysql://localhost:3306/wipo_shared"/>
+       <property name="javax.persistence.jdbc.user" value="root"/>
+       <property name="javax.persistence.jdbc.password" value="Password@1"/>
+     </properties>
+   </persistence-unit>
+ 
+ 
+</persistence>

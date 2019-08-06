@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WIPO Connect services</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/png" href="/img/icon.png">
+	<link rel="icon" type="image/png" href="/img/icon.png">
+	
+
+	<!-- wipo connect -->	
+	<link href="/connect/res/css/bootstrap.css" rel="stylesheet"/>
+	<link href="/connect/res/css/template-default.css" rel="stylesheet"/>
+	<link href="/connect/res/css/wipo.css" rel="stylesheet"/>
+	<link href="/connect/mvc/common/external.css" rel="stylesheet"/>
+
+	<link href="./css/connect.css" rel="stylesheet"/>
+
+
+	<!-- angular -->
+	<link rel="stylesheet" href="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.10/angular-material.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-animate.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-aria.min.js"></script>
+	<script src="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.10/angular-material.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-sanitize.js"></script>
+
+
+	<!-- d3.js -->
+	<script src="/vendor/d3.js"></script>
+	<script src="/vendor/d3-geom.js"></script>
+	<script src="/vendor/d3-layout.js"></script>
+
+
+	<!-- antipod -->
+	<script type="text/javascript" src="/js/a.js"></script>
+
+
+	<!-- custom -->
+	<script type="text/javascript" src="/js/connect.js"></script>
+	<script type="text/javascript" src="/js/help.js"></script>
+
+
+	<STYLE>
+
+		.navbar {margin-bottom:0px;}
+
+		div.navbar-first-row {height: 80px;padding-right:20px;}
+
+		.navbar-fixed-top, .navbar-fixed-bottom {z-index: 0;}
+
+		.md-open-menu-container {margin-top: 2px;}
+		
+		.a-main { height: 100%;}
+
+		ul { list-style-type: none;	}
+
+		ul > li:before { content: "-"; position: absolute; margin-left: -1.1em;	}
+
+		.a-content {height: calc(100% - 100px);min-height: calc(100% - 100px);background: linear-gradient(rgba(255,255,255,.95), rgba(255,255,255,.95)), url("img/wipo-logo.png") no-repeat;background-size: 80%;background-position: center;top: 80px;position: absolute;width: 100%;}
+		
+		.main-content {text-align: justify;width: 100%;padding: 5px 15px 5px 10px;background: none;color: black;}
+
+		help-title {font-size: 24px;font-weight:bold;}
+	
+		section-title { font-size: 18px; font-weight: bold;}
+	
+		img.help-img {max-width: 800px;margin-left: 0;display: block;margin-left: auto;margin-right: auto;}
+
+		.help-content-full  {padding: 0px 0px 0px 0px;font-size: 16px;}
+		
+		div.navbar-first-row {height: 80px;}
+
+		.login {background-color: #0062A0;border: 2px solid #0062A0;color: white;}
+		
+		.login:hover, .register:hover {background-color: #004260;border: 2px solid #004260;color: white;}
+
+		.register {border: 2px solid #0062A0; color: #0062A0;}
+		
+		/*.register:hover {background-color:  #0062A0;color: white;}*/
+
+		.button-small {box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);cursor:pointer;padding: 8px 2px 7px 2px;font-size: 14px;border-radius: 2px;text-align:center;transition:0.3s;width: 90px;display: inline-block;font-weight: 300;}
+
+
+		.button {cursor:pointer;padding: 7px 5px 7px 5px;font-size: 18px;border-radius: 3px;text-align:center;transition:0.3s;width: 120px;display: inline-block;font-weight: 400;}
+
+		table.help-content {text-align: center;margin-left: 20px;margin-right:20px; width:calc(100% - 40px);}
+
+		div.help-content {position: absolute;top: 80px;font-size: 14px;width: 100%;height: calc(100% - 80px);padding-left:50px;padding-right:50px;z-index:0;}
+		
+		md-dialog { max-width: 95%;}
+	
+		md-dialog md-dialog-content {text-align:center;}
+		
+		div.help-top {margin-top: 80px;text-align:center;font-size:25px;height: calc(60% - 80px);width: 50%;display: table-cell;}
+		
+		div.help-bottom {display: table-cell;bottom: 0px;position: absolute;text-align: center;width: 100%;height: 40%;background-color: rgba(0,133,193,0.7);}
+
+		div.help-bottom a { font-size: 12px; position:absolute;bottom: 10px; left:50px; right:0px;}
+		
+		div.help-bottom a:hover {text-decoration:none; color:#000;} 
+		
+		div.table {display: table;width: 100%; top: 80px;position: absolute; height:calc( 60% - 80px);}	
+	
+		div.table div {display: table-cell;width: 50%;vertical-align: middle;}
+
+		div.help-left { 	text-align: left; padding-left:15%; padding-right: 5%;font-size: 32px;}
+
+		div.help-right 	{ text-align: center;padding-left:40px;padding-right: 40px;font-size: 24px;}
+		
+		.jumpto {z-index: 2;position: fixed;right: 40px;top: 13px;}
+
+		@-moz-keyframes blink {0% {opacity:1;}50% {opacity:0;}100% {opacity:1;}} 
+		
+		@-webkit-keyframes blink {0% {opacity:1;}50% {opacity:0;}100% {opacity:1;}}
+		
+		@-ms-keyframes blink {0% {opacity:1;}50% {opacity:0;}100% {opacity:1;}} 
+		
+		@keyframes blink {0% {opacity:1;}50% {opacity:0;}100% {opacity:1;}} 
+
+		.blink-image {width: 100px;-moz-animation: blink normal 1.5s infinite ease-in-out;-webkit-animation: blink normal 1.5s infinite ease-in-out;-ms-animation: blink normal 1.5s infinite ease-in-out;animation: blink normal 1.5s infinite ease-in-out;}
+		
+		.md-sidenav-right, md-sidenav {top:80px;height:calc (100vh - 80px);}
+
+		.nav-bar-item {width:240px;text-align:left;padding: 0px 15px 0px 15px;margin: 0px 5px 0px 5px;}
+
+		hr {margin-top: 4px;margin-bottom: 4px;}		
+
+		md-toolbar:not(.md-menu-toolbar) {min-height: 40px !important;background-color: #0085C1;color: rgba(255,255,255,0.87);}
+
+		.nav-button {position:fixed;right:10px;top:10px;z-index:100;min-width: 40px;box-shadow: none;}
+
+		.md-button.md-raised {background-color: rgba(255,255,255,0);color: white;}
+		
+		.md-button.md-raised:hover {color: black;}
+
+		.glyphicon {margin: 0px 0px 0px 0px;}
+
+		.nav-bar-icon {margin-right: 5px;}
+
+		.section-card {background-color: rgba(255,255,255,0);}
+
+		table {width: 100%;}
+		table tbody tr td {text-align: center; padding: 8px 8px 8px 8px;}
+		table thead tr td {text-align: center;background-color:#a0a0a0;font-weight:400;padding: 8px 8px 8px 8px;}
+
+
+		#c-web, #c-back, #c-database, #c-solr, #c-shared {
+			border: solid 2px black;
+			display: table-cell;
+			padding: 10px 10px 10px 10px;
+			text-align:center;
+			vertical-align: middle;
+		}
+
+	</STYLE>
+
+
+    <script type='text/javascript'>
+		
+		// angular application
+		var helpApplication = angular.module('helpApplication', ['ngMaterial', 'ngSanitize', 'ngAnimate']);
+
+		
+
+		// controller
+		helpApplication.controller('helpController', function($scope, $timeout,$sce, $mdDialog, $mdSidenav, $location,$http) {
+	
+			
+			$scope.GetHealth = function() {
+				$http.get('http://localhost:3000/health')
+				.then(function(response) {
+					//console.log(response);
+					$scope.components = response.data;							
+				}, function(response) {
+					console.log("error");
+					console.log(response);
+				});
+				//$scope.toggle(false);
+				setTimeout($scope.GetHealth,2000);
+			}
+
+			$scope.components = {};
+
+
+			$scope.CallService = function(service, callback) {
+				$http.get(service)
+				.then(function(response) {
+					//console.log(response);
+					$scope.data = response.data;	
+					$scope.service = service;									
+				}, function(response) {
+					console.log("error");
+					console.log(response);
+				});
+				//$scope.toggle(false);
+			}
+
+
+			$scope.GetColor = function(status) {
+				return {'background-color':(status !== "success" ? (status === 'error' ? "#FF0000" : "#0000FF") : "#00FF00")};
+			}
+
+		
+			$scope.data={};
+
+			$scope.service = null;
+			
+			$scope.navigate = function (path) { $location.path( path );};
+
+			$scope.page = null;
+
+			$scope.navbar = false;
+
+			$scope.toggle = function(show) {if(show === undefined||($scope.navbar && !show)||(!$scope.navbar && show)) {$mdSidenav('nav-bar').toggle();$scope.navbar = !$scope.navbar;}};
+   
+			$scope.article = null;
+
+			$scope.template = template;
+
+			$scope.highlight = null;
+
+			$scope.jumpto = false;
+
+			$scope.JumpTo = function(visible) {$scope.jumpto = visible;}
+
+			$scope.showAlert = function(ev, section) {$mdDialog.show({controller: DialogController,targetEvent: ev,template: '<md-dialog aria-label="{{article.title}}" ng-click="closeDialog()"><md-toolbar><div class="md-toolbar-tools"><h3>{{article.title}} > {{section}}</h3></div></md-toolbar><md-dialog-content style="vertical-align: center;"><img src="{{article[section].image}}" style="max-width: 100%;"/></md-dialog-content></md-dialog>', clickOutsideToClose:true,parent: angular.element(document.body),locals: {article: $scope.article,section: section,}});}
+
+			function DialogController($scope, $mdDialog, article, section) {$scope.article = article;$scope.section = section;$scope.closeDialog = function() { $mdDialog.hide();}}
+			
+			$scope.GetHTMLHeader = function(title,url) {return $sce.trustAsHtml(connect.GetHTMLHeader(title,url));}
+
+			$scope.loadArticle = function(articleTitle) { if(articleTitle===undefined) $scope.article=null;else $scope.article = articles[articleTitle];$scope.toggle(false);}
+			
+			$scope.randomHighlight = function() {var articleIds = Object.keys(articles);var index = Math.floor(Math.random() * articleIds.length);$scope.highlight = articles[articleIds[index]];$scope.$apply();setTimeout($scope.randomHighlight, 10000);}
+
+			// entry point when the page is loaded and angular ready
+			angular.element(document).ready(function () {
+				$scope.randomHighlight();
+			});
+
+		});
+		
+			
+	</script>
+  </head>
+  
+	<body>
+		<div ng-app="helpApplication" ng-controller="helpController" class='a-main'>
+
+			<div ng-bind-html='GetHTMLHeader("WIPO Connect Services","/services.html")'></div>
+
+			<div class='jumpto' ng-if='jumpto'><img src='img/arrow.png' width='70px' class='blink-image'/></div>
+
+			<md-button ng-click="toggle()" class="md-raised nav-button" aria-label="nav bar"><span class="glyphicon glyphicon-menu-hamburger"></md-button>
+
+
+			<md-sidenav class="md-sidenav-right" md-component-id="nav-bar" md-disable-backdrop="" md-whiteframe="4" style='width:250px;overflow-x:hidden;'>
+				<md-toolbar style="background-color: #0085C1;color:white;min-height:40px;padding-left: 0px;padding-top:13px;padding-bottom:13px;margin-bottom:5px;text-align:center;">
+					quick access
+				</md-toolbar>
+				<md-content>
+					<md-button ng-href='./index.html' class='nav-bar-item'>
+						<span class="glyphicon glyphicon-home nav-bar-icon"></span>
+						wipo connect home
+					</md-button>
+					<md-button ng-href='./help.html' class='nav-bar-item'>
+						<span class="glyphicon glyphicon-question-sign nav-bar-icon"></span>
+						wipo connect help
+					</md-button>
+					<hr/>
+					<md-button ng-click='service=null;data={};toggle(false);GetHealth();' class='nav-bar-item'>
+						<span class="glyphicon glyphicon-heart-empty nav-bar-icon"></span>
+						WIPO CONNECT HEALTH
+					</md-button>
+					<md-button ng-click='toggle(false);CallService("http://localhost:3000/config");' class='nav-bar-item'>
+						<span class="glyphicon glyphicon-cog nav-bar-icon"></span>
+						CONFIG
+					</md-button>
+					<hr/>
+					<md-button ng-click='toggle(false);CallService("http://localhost:3000/identifiers");' class='nav-bar-item'>
+						<span class="glyphicon glyphicon-italic nav-bar-icon"></span>
+						IDENTIFIERS
+					</md-button>
+					<hr/>
+				</md-content>
+			</md-sidenav>
+
+			
+
+			<md-content flex layout-padding style='padding-left:50px;padding-right:50px;left: 0px;right:0px;bottom: 0px;top:80px;position:absolute;'>
+				<div style='font-size:7px;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;'>&nbsp;</div>
+				<div class='help-content-full title'>
+					<help-title>{{service !== null ? service : 'wipo connect health'}}</help-title>
+				</div>
+
+				<span>
+					<div class='help-content-full'>
+
+						<div ng-if='service === null' ng-repeat='(key, component) in components'>
+							<div id='c-web' ng-style='GetColor(component.status)'>
+								wipo connect {{key}} <br/>{{ component.status !== "success" ? (component.status === 'error' ? "#FF0000" : "#0000FF") : "#00FF00"}}
+							</div>
+							<br/>
+						</div>
+
+						<table>
+							<thead>
+								<tr>
+									<td ng-repeat='(fieldid, field) in data.head'>
+										{{field}}
+									</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat='(rowid, row) in data.rows'>
+									<td ng-repeat='(fieldid, field) in row'>
+										{{field}}
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</span>
+			</md-content>
+					
+		</div>
+	</body>	
+</html>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.CmoMapper">
+	<sql id="fields">
+		cmo.id_cmo 				AS CMO_id_cmo,
+		cmo.name 				AS CMO_name,
+		cmo.code 				AS CMO_code,
+		cmo.acronym 			AS CMO_acronym,
+		cmo.fk_origin_country 	AS CMO_fk_origin_country,
+		cmo.contact 			AS CMO_contact,
+		cmo.description 		AS CMO_description,
+		cmo.international_name 	AS CMO_international_name,
+		cmo.fk_cmo_type 		AS CMO_fk_type,
+		cmo.is_data_source 		AS CMO_isds
+	</sql>
+
+	<sql id="fieldsCmoDomain">
+		cmo_domain.id_cmo_domain as CMODM_id_cmo_domain,
+		cmo_domain.fk_cmo as CMODM_fk_cmo,
+		cmo_domain.fk_ipi_role as CMODM_fk_ipi_role,
+		cmo_domain.fk_creation_class as CMODM_fk_creation_class,
+		cmo_domain.fk_ipi_right_type as CMODM_fk_ipi_right_type
+	</sql>
+
+	<resultMap id="resMap" type="Cmo">
+		<id property="idCmo" 	column="CMO_id_cmo" />
+        <result property="name" column="CMO_name" />
+        <result property="code" column="CMO_code" />
+        <result property="acronym" column="CMO_acronym" />
+        <result property="fkOriginCountry" column="CMO_fk_origin_country" />
+        <result property="contact" column="CMO_contact" />
+        <result property="description" column="CMO_description" />
+        <result property="internationalName" column="CMO_international_name" />
+        <result property="fkType" column="CMO_fk_type" />
+        <result property="isDataSource" column="CMO_isds" />
+
+        <!-- <collection property="cmoDomainList" ofType="CmoDomain" resultMap="resMapCmoDomain" /> -->
+	</resultMap>
+
+	<resultMap id="resMapCmoDomain" type="CmoDomain">
+		<id property="idCmoDomain" column="CMODM_id_cmo_domain" />
+
+        <result property="fkCmo" column="CMODM_fk_cmo" />
+        <result property="fkIpiRole" column="CMODM_fk_ipi_role" />
+        <result property="fkCreationClass" column="CMODM_fk_creation_class" />
+        <result property="fkIpiRightType" column="CMODM_fk_ipi_right_type" />
+	</resultMap>
+	
+	<resultMap id="resMapCmoType" type="ReferenceFlat">
+		<id property="idReference" column="REF_id_reference" />
+        <result property="code" column="REF_code" />
+	</resultMap>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" /> 
+		FROM cmo 
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE cmo.id_cmo = #{idCmo}
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO cmo(
+			name,
+			code,
+			acronym,
+			fk_cmo_type,
+			fk_origin_country,
+			is_data_source
+		) VALUES (
+			#{name},
+			#{code},
+			#{acronym},
+			#{fkType},
+			#{fkOriginCountry},
+			#{isDataSource}
+		)
+		<selectKey   resultType="long" keyProperty="idCmo"    keyColumn="id_cmo"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_CMO_SEQ'
+		</selectKey>	
+	</insert>
+	
+	<update id="updateByPrimaryKey" keyProperty="idCmo">
+		UPDATE cmo
+		SET 
+			name 				= #{name},
+			acronym				= #{acronym},
+			fk_cmo_type 		= #{fkType},
+			fk_origin_country 	= #{fkOriginCountry}
+		WHERE 
+			id_cmo 	= #{idCmo}
+	</update>
+
+	<select id="findByCode" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE cmo.code = #{code}
+	</select>
+
+	<select id="findByAcronym" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE cmo.acronym = #{acronym}
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE cmo.code != '${@org.wipo.connect.shared.exchange.enumerator.SpecialCmoEnum@CMO999.getValue()}'
+		ORDER BY cmo.acronym
+	</select>
+
+	<select id="findDataSource" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE cmo.is_data_source = 1
+
+		ORDER BY cmo.acronym
+	</select>
+
+	<select id="findCmo" resultMap="resMap">
+		<include refid="baseSelect" />
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="onlyDataSources == true">
+				AND cmo.is_data_source = 1
+			</if>
+			<if test="exclusionList != null and exclusionList.size  > 0">
+				AND cmo.id_cmo NOT IN
+				<foreach collection="exclusionList" item="id" open="(" close=")" separator=",">
+		             #{id}
+		        </foreach>
+			</if>
+			<if test="filterClientInfo == true">
+				AND cmo.id_cmo NOT IN (SELECT aux.fk_cmo FROM client_info aux
+					<if test="currentClientInfo != null">
+						WHERE aux.id_client_info &lt;&gt; #{currentClientInfo}
+					</if>
+				)
+			</if>
+				AND cmo.code != '${@org.wipo.connect.shared.exchange.enumerator.SpecialCmoEnum@CMO999.getValue()}'
+		</trim>
+		ORDER BY cmo.acronym
+	</select>
+
+	<select id="findByAffiliatedName" resultMap="resMap">
+		<include refid="baseSelect" />
+		INNER JOIN affiliation ON affiliation.fk_cmo = cmo.id_cmo
+		WHERE affiliation.fk_name = #{idName}
+	</select>
+	
+	<select id="findCmoType" resultMap="resMapCmoType">
+		SELECT 
+		DISTINCT id_reference 	AS REF_id_reference, 
+		code 					AS REF_code
+		FROM reference 
+		WHERE fk_ref_name = 5
+	</select>
+	
+	<select id="exsistCmoCode" resultType="boolean" parameterType="map">
+		SELECT  COUNT(id_cmo) AS result 
+		FROM  cmo 
+		WHERE code = #{code}
+			<if test="idToExclude != null">
+				AND cmo.id_cmo != #{idToExclude}
+			</if>
+	</select>
+
+</mapper>

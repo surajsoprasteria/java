@@ -1,0 +1,19 @@
+{
+  "name": "health",
+  "version": "1.0.0",
+  "description": "provides information and control on the health of wipo connect local",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "wipo",
+    "connect",
+    "health"
+  ],
+  "author": "Mamy, Sebastien",
+  "license": "ISC",
+  "engines": {
+    "node": "10.15.2"
+  }
+}

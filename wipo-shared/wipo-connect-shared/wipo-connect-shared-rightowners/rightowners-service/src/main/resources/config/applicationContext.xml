@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                           http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/task
+    					   http://www.springframework.org/schema/task/spring-task.xsd">
+
+
+	<context:annotation-config />
+	<context:component-scan base-package="org.wipo.connect, org.wipo.suite.modules.rightowners" />
+
+
+	<import resource="classpath*:spring/spring-exchange.xml" />
+	<import resource="classpath*:spring/spring-context-DAO.xml" />
+	
+	
+	
+	  <bean id="persistenceDataSource" class="java.lang.String">
+ 		<constructor-arg value="java:comp/env/jdbc/wccSharedDS" />
+	    </bean>
+<!-- Data source configuration using jndi  -->
+	<bean id="dataSource"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>#{persistenceDataSource}</value> 
+		</property>
+	</bean>
+
+
+<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="jpaVendorAdapter">
+		<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" p:showSql="true" p:generateDdl="true"/>
+		</property>
+	</bean>
+	
+	<!-- Transaction  -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" p:entityManagerFactory-ref="entityManagerFactory" />
+	
+	
+<!-- 	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean id="logParamsHandlerInterceptor"	class="org.wipo.suite.modules.rightowners.service.interceptor.LogParamsHandlerInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean id="contextUserInfoInterceptor"	class="org.wipo.suite.modules.rightowners.service.interceptor.ContextUserInfoInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors> -->
+	    
+    
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+                <!-- <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.FormHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter"/> -->
+            </list>
+        </property>
+    </bean>
+
+</beans>

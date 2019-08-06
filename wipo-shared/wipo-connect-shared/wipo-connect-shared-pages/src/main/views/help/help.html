@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WIPO Connect help</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/png" href="../../img/icon.png">
+	<link rel="icon" type="image/png" href="../../img/icon.png">
+	
+
+	<!-- wipo connect -->	
+	<link href="../../css/bootstrap.css" rel="stylesheet"/>
+	<link href="../../css/template-default.css" rel="stylesheet"/>
+	<link href="../../css/wipo.css" rel="stylesheet"/>
+
+	
+	<!-- angular -->
+	<link rel="stylesheet" href="../../lib/angular-material.css">
+	<script type="text/javascript" src="../../lib/angular.js"></script> 
+	<script type="text/javascript" src="../../lib/angular-animate.js"></script> 
+	<script type="text/javascript" src="../../lib/angular-aria.js"></script> 
+	<script type="text/javascript" src="../../lib/angular-material.js"></script> 
+	<script type="text/javascript" src="../../lib/angular-sanitize.js"></script> 
+
+
+	<!-- antipod -->
+	<script type="text/javascript" src="../../lib/a.js"></script>
+
+
+	<!-- custom -->
+	<script type="text/javascript" src="../../lib/connect.js"></script>
+	<script type="text/javascript" src="help.js"></script>
+
+
+	<STYLE>
+		
+		md-card.md-default-theme, md-card {
+			background-color: rgba(255,255,255,0.8);
+		}
+	</STYLE>
+
+
+    <script type='text/javascript'>
+		
+		// angular application
+		var helpApplication = angular.module('helpApplication', ['ngMaterial', 'ngSanitize', 'ngAnimate']);
+
+		// controller
+		helpApplication.controller('helpController', function($scope, $timeout,$sce, $mdDialog, $mdSidenav) {
+		
+			$scope.externalHtml = null;
+
+			$scope.navbar = false;
+
+			$scope.toggle = function(show) {if(show === undefined||($scope.navbar && !show)||(!$scope.navbar && show)) {$mdSidenav('nav-bar').toggle();$scope.navbar = !$scope.navbar;}};
+   
+			$scope.article = null;
+
+			$scope.custom = null;
+
+			$scope.template = template;
+
+			$scope.highlight = null;
+
+			$scope.references = null;
+
+			$scope.showAlert = function(ev, section) {$mdDialog.show({controller: DialogController,targetEvent: ev,template: '<md-dialog aria-label="{{article.title}}" ng-click="closeDialog()"><md-toolbar><div class="md-toolbar-tools"><h3>{{article.title}} > {{section}}</h3></div></md-toolbar><md-dialog-content style="vertical-align: center;"><img src="{{article[section].image}}" style="max-width: 100%;"/></md-dialog-content></md-dialog>', clickOutsideToClose:true,parent: angular.element(document.body),locals: {article: $scope.article,section: section,}});}
+
+			function DialogController($scope, $mdDialog, article, section) {$scope.article = article;$scope.section = section;$scope.closeDialog = function() { $mdDialog.hide();}}
+			
+			$scope.GetHTMLHeader = function(title,url) {return $sce.trustAsHtml(connect.GetHTMLHeader(title,url));}
+
+			$scope.loadCustom = function() {$scope.article=null;$scope.externalHtml=null;$scope.custom = '';$scope.toggle(false);}
+
+			$scope.loadArticle = function(articleTitle) {if(articleTitle===undefined) $scope.article=null;else {$scope.article = articles[articleTitle];$scope.externalHtml=null;$scope.custom = null;}$scope.toggle(false);}
+			
+			$scope.randomHighlight = function() {var articleIds = Object.keys(articles);var index = Math.floor(Math.random() * articleIds.length);$scope.highlight = articles[articleIds[index]];$scope.$apply();setTimeout($scope.randomHighlight, 10000);}
+
+			// entry point when the page is loaded and angular ready
+			angular.element(document).ready(function () {
+				$_$.LoadJSON('references.json', function(json) {$scope.references = angular.fromJson(json);$scope.$apply();});
+				$scope.randomHighlight();
+			})
+
+		}).directive('reference', function() {
+			  return {
+				template: "<ng-include src='LoadTemplate(\"templates/reference.html\")'/>",
+				scope: {  reference: '=data'},
+				transclude: true,
+				controller: function($scope) {
+				  $scope.DownloadJSON = $_$.DownloadJSON; 
+				  $scope.keys = Object.keys;
+				  $scope.LoadTemplate = function(url) { return url; };
+				}
+		}});;
+		
+			
+	</script>
+  </head>
+  
+	<body>
+		<div ng-app="helpApplication" ng-controller="helpController" class='a-main'>
+
+			<div ng-bind-html='GetHTMLHeader("WIPO Connect HELP","/help.html#")'></div>
+
+			<md-button ng-click="toggle()" class="md-raised nav-button" aria-label="nav bar"><span class="glyphicon glyphicon-menu-hamburger"></md-button>
+
+
+			<md-sidenav class="md-sidenav-right wipo" md-component-id="nav-bar" md-disable-backdrop="" md-whiteframe="4">
+				<md-toolbar style="background-color: #0085C1;color:white;min-height:40px;padding-left: 0px;padding-top:13px;padding-bottom:13px;margin-bottom:5px;text-align:center;">
+					HELP
+				</md-toolbar>
+				<md-content>
+					<md-button ng-href='/index.html' class='nav-bar-item'>
+						<span class="glyphicon glyphicon-home nav-bar-icon"></span>
+						wipo connect home
+					</md-button>
+					<md-button onclick='location.href="/connect/mvc/common/home";' class='nav-bar-item'>
+						<span class="glyphicon glyphicon-log-in nav-bar-icon"></span>
+						login
+					</md-button>
+					<md-button onclick='location.href="/connect/mvc/sign-up/user-info";' class='nav-bar-item'>
+						<span class="glyphicon glyphicon-pencil nav-bar-icon"></span>
+						sign-up
+					</md-button>
+					<hr/>	
+					<md-button ng-click="loadCustom();" class='nav-bar-item'>
+						<span class="glyphicon glyphicon-list nav-bar-icon"></span>
+						codes and references
+					</md-button>
+					<hr/>					
+					<md-button ng-click="loadArticle('initial configuration: creation classes');" class='nav-bar-item'>
+						<span class="glyphicon glyphicon-cog nav-bar-icon"></span>
+						configuration: creation class
+					</md-button>
+					<md-button ng-click="loadArticle('initial configuration: territory');" class='nav-bar-item'>
+						<span class="glyphicon glyphicon-cog nav-bar-icon"></span>
+						configuration: territories
+					</md-button>
+					<md-button ng-click="loadArticle('initial configuration: right split');" class='nav-bar-item'>
+						<span class="glyphicon glyphicon-cog nav-bar-icon"></span>
+						configuration: right splits
+					</md-button>
+					<hr/>
+					<md-button ng-click="loadArticle('affiliation update');" class='nav-bar-item'>
+						<span class="glyphicon glyphicon-user nav-bar-icon"></span>
+						affiliation update
+					</md-button>
+					<hr/>
+					<md-button ng-click="loadArticle('to be corrected');" class='nav-bar-item'>
+						<span class="glyphicon glyphicon-music nav-bar-icon"></span>
+						to be corrected
+					</md-button>
+					<md-button ng-click="loadArticle('suspend');" class='nav-bar-item'>
+						<span class="glyphicon glyphicon-music nav-bar-icon"></span>
+						suspend
+					</md-button>
+					<hr/>
+				</md-content>
+			</md-sidenav>
+			<div ng-if='article === null && externalHtml === null && custom === null'  class='bg-table'></div>
+			<div ng-if='article === null && externalHtml === null && custom === null'  class='table'>
+				<div class='help-left'>					
+					how do it with <b>WIPO Connect</b>?<br/>
+					<span ng-mouseleave="JumpTo(false)" ng-mouseover="JumpTo(true)" >Jump to the answers
+				</div>
+				<div class='help-right'>
+					<md-card md-theme="default" md-theme-watch style='width:40vw;'>
+						<md-card-content>
+							<br/><span style="font-size: 30px;">discover today</span><br/>
+							<b>{{highlight.title}}</b><br/><br/>
+							{{highlight.summary}}<br/><br/>			
+							<span class='button-small login' ng-click='loadArticle(highlight.id);'>LET ME KNOW <span class="glyphicon glyphicon-share-alt" style='font-size:13px;color:#ffffff;'></span></span>
+							<br/><br/>
+						</md-card-content>
+					</md-card>
+				</div>
+			</div>
+
+			<div class='help-bottom' ng-if='article ===null && externalHtml === null && custom === null'>
+				<br/><br/><br/>
+				<span class='button login' onclick='location.href="/connect/mvc/common/home";'>LOG IN</span>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<span class='button register' onclick='location.href="/connect/mvc/sign-up/user-info";'>SIGN-UP</span>
+				<a href='terms-and-conditions.html'>terms and conditions</a>
+			</div>
+
+			
+			<md-content  flex layout-padding style='padding-left:50px;padding-right:50px;left: 0px;right:0px;bottom: 0px;top:80px;position:absolute;' ng-if='article !== null'>
+				<div style='font-size:7px;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;'>&nbsp;</div>
+				<div class='help-content-full title'>
+					<help-title>{{article.title}}</help-title>
+				</div>
+
+				<span>
+					<div class='help-content-full' ng-repeat='section in template'>
+						<section-title>{{section}}</section-title><br/>
+						<section-content ng-bind-html="article[section].content"></section-content>						
+						<img class='help-img' ng-if='article[section].image !== undefined' ng-src='{{article[section].image}}' ng-click="showAlert($event, section)"/>
+						<br/>
+					</div>
+				</span>
+			</md-content>
+
+			<md-content flex layout-padding style='overflow-y: scroll;padding-left:50px;padding-right:50px;left: 0px;right:0px;bottom: 0px;top:80px;position:absolute;' ng-if='custom !== null'>
+				<center>
+					<span style='font-size: 26px;'>REFERENCES</span><br/><br/>
+					<span style='font-size: 16px;width:80%;text-align: justify;display: inline-block;' ng-if='custom.name === undefined'>
+						The references are common data used widely, that describes the main types of the collective management elements.
+						Select the type of reference you want to access.<br/><br/>
+					</span>					
+					<select class='wipo-select' ng-model="custom" ng-options="x.name for x in references"></select>
+					<reference data="custom" ></reference>					
+					</div>
+				</center>
+			</md-content>
+
+			<div ng-include="externalHtml" ng-if='externalHtml !== null'></div>
+					
+		</div>
+	</body>	
+</html>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.TitleMapper">
+	<sql id="fields">
+		title.id_title AS TITL_id_title ,
+		title.fk_type AS TITL_fk_type ,
+		title.description AS TITL_description ,
+		title.date_insert AS TITL_date_insert ,
+		title.date_update AS TITL_date_update ,
+		title.user_insert AS TITL_user_insert ,
+		title.user_update AS TITL_user_update
+	</sql>
+
+	<resultMap id="resMap" type="Title">
+		<id property="idTitle" column="TITL_id_title" />
+
+		<result property="fkType" column="TITL_fk_type" />
+		<result property="description" column="TITL_description" />
+
+        <result property="userInsert" column="TITL_user_insert" />
+        <result property="dateInsert" column="TITL_date_insert" />
+        <result property="userUpdate" column="TITL_user_update" />
+        <result property="dateUpdate" column="TITL_date_update" />
+        <result property="typeCode" column="TITY_code"/>
+	</resultMap>
+
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		SELECT
+		<include refid="fields" /> ,
+		ref_titletype.code AS TITY_code
+
+		FROM
+			title
+			INNER JOIN reference ref_titletype ON ref_titletype.id_reference = title.fk_type
+		WHERE
+		title.id_title = #{idTitle}
+	</select>
+
+	<update id="updateByPrimaryKey" keyProperty="idTitle">
+		UPDATE title
+		   SET fk_type = #{fkType},
+		       description = #{description},
+		       user_update = #{userUpdate},
+		       date_update = SYSTIMESTAMP
+		 WHERE
+			title.id_title = #{idTitle}
+	</update>
+
+<!-- 
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idTitle"  keyColumn="id_title">
+		INSERT INTO title(fk_type,
+                            description,
+                            user_insert,
+                            date_insert)
+		VALUES (#{fkType},
+		        #{description},
+		        #{userInsert},
+		        SYSTIMESTAMP)
+
+	</insert> -->
+	<insert id="insert" useGeneratedKeys="true">
+		INSERT INTO title(fk_type,
+                            description,
+                            user_insert,
+                            date_insert)
+		VALUES (#{fkType},
+		        #{description},
+		        #{userInsert},
+		        CURRENT_TIMESTAMP)
+
+		<selectKey   resultType="long" keyProperty="idTitle"    keyColumn="id_title"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_TITLE_SEQ'
+		</selectKey>		      
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey">
+		DELETE FROM title WHERE id_title = #{idTitle}
+	</delete>
+
+
+</mapper>

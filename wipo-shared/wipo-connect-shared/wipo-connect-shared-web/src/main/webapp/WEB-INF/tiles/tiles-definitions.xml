@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+
+<tiles-definitions>
+
+	<definition name="defaultTemplate" template="/WEB-INF/tiles/template/default/template.jsp" >
+		<put-attribute name="title" value="" />
+		<put-attribute name="navigation">
+			<definition template="/WEB-INF/tiles/template/default/navigation.jsp">
+				<put-attribute name="mainMenu" value="/WEB-INF/tiles/template/default/mainMenu.jsp" />
+				<put-attribute name="topRightMenu" value="/WEB-INF/tiles/template/default/topRightMenu.jsp" />
+			</definition>
+		</put-attribute>
+		<put-attribute name="content">
+			<definition name="contentTemplate" template="/WEB-INF/tiles/template/default/content.jsp">
+				<put-attribute name="pageScript" value="" />
+				<put-attribute name="body" value="" />
+			</definition>
+		</put-attribute>
+		<put-attribute name="pageInfo" value="" cascade="true" />
+	</definition>
+
+	<definition name="homeTemplate" template="/WEB-INF/tiles/template/default/template.jsp" >
+		<put-attribute name="title" value="" />
+		<put-attribute name="navigation">
+			<definition template="/WEB-INF/tiles/template/default/navigation.jsp">
+				<put-attribute name="mainMenu" value="" />
+			</definition>
+		</put-attribute>
+		<put-attribute name="content">
+			<definition name="contentTemplate" template="/WEB-INF/tiles/template/default/content.jsp">
+				<put-attribute name="pageScript" value="" />
+				<put-attribute name="body" value="" />
+			</definition>
+		</put-attribute>
+		<put-attribute name="pageInfo" value="" cascade="true" />
+		<put-attribute name="topRightMenu" value="/WEB-INF/tiles/template/default/topRightMenu.jsp" cascade="true" />
+	</definition>
+
+	<definition name="simpleTemplate" template="/WEB-INF/tiles/template/default/template.jsp" >
+		<put-attribute name="title" value="" />
+		<put-attribute name="navigation" value=""/>
+		<put-attribute name="content">
+			<definition name="contentTemplate" template="/WEB-INF/tiles/template/default/content.jsp">
+				<put-attribute name="pageScript" value="" />
+				<put-attribute name="body" value="" />
+			</definition>
+		</put-attribute>
+		<put-attribute name="pageInfo" value="" cascade="true" />
+	</definition>
+
+	<definition name="simpleHeaderTemplate" template="/WEB-INF/tiles/template/default/template.jsp" >
+		<put-attribute name="title" value="" />
+		<put-attribute name="navigation">
+			<definition template="/WEB-INF/tiles/template/default/navigation.jsp">
+				<put-attribute name="mainMenu" value="" />
+			</definition>
+		</put-attribute>
+		<put-attribute name="pageInfo" value="" cascade="true" />
+		<put-attribute name="topRightMenu" value="" cascade="true" />
+	</definition>
+	
+	<definition name="fullScreenDetailTemplate" template="/WEB-INF/tiles/template/default/template.jsp" >
+		<put-attribute name="title" value="" />
+		<put-attribute name="navigation">
+			<definition template="/WEB-INF/tiles/template/default/navigation.jsp">
+				<put-attribute name="topRightMenu" value="/WEB-INF/tiles/template/default/topRightMenu.jsp" />
+				<put-attribute name="mainMenu" value="/WEB-INF/tiles/template/default/utilityMenu.jsp" />
+			</definition>
+		</put-attribute>
+		<put-attribute name="pageInfo" value="" cascade="true" />
+	</definition>
+
+</tiles-definitions>

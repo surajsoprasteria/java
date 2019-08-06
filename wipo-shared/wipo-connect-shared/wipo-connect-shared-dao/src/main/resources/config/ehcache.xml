@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://www.ehcache.org/v3'
+    xmlns:jsr107='http://www.ehcache.org/v3/jsr107'
+    xsi:schemaLocation="
+        http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
+        http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+
+    <service>
+        <jsr107:defaults default-template="main-cache-template" enable-management="true" enable-statistics="false" />
+    </service>
+    
+    <persistence directory="${java.io.tmpdir}/wcc-shared"></persistence>
+    
+    <thread-pools>
+        <thread-pool alias="defaultDiskPool" min-size="1" max-size="3" default="true"/>
+    </thread-pools>
+    
+    <cache alias="mainCache" uses-template="main-cache-template"/>
+    <cache alias="default" uses-template="default-cache-template"/>
+
+    <cache-template name="main-cache-template">
+        <expiry>
+            <none/>
+        </expiry>
+        <resources>
+            <heap unit="entries">10000</heap>
+            <offheap unit="MB">100</offheap>
+            <disk persistent="true" unit="MB">512</disk>
+        </resources>
+    </cache-template>
+    
+    <cache-template name="entity-cache-template">
+        <expiry>
+            <ttl unit="minutes">60</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">10000</heap>
+            <offheap unit="MB">100</offheap>
+            <disk persistent="true" unit="MB">512</disk>
+        </resources>
+    </cache-template>
+    
+    
+    <cache-template name="default-cache-template">
+		<expiry>
+			<none/>
+		</expiry>
+		<resources>
+            <heap unit="entries">1000</heap>
+            <offheap unit="MB">10</offheap>
+        </resources>
+	</cache-template>
+</config>

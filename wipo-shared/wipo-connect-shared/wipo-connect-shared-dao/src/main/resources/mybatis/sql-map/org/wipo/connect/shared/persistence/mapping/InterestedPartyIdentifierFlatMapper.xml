@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.InterestedPartyIdentifierFlatMapper">
+
+	<resultMap id="resMap" type="InterestedPartyIdentifierFlat">
+		<id property="idInterestedPartyIdentifier" column="id_interested_party_identifier" />
+		<result property="fkInterestedParty" column="fk_interested_party" />
+		<result property="fkIdentifier" column="fk_identifier" />
+		<result property="value" column="value" />
+		<result property="code" column="IPIDFL_code" />
+	</resultMap>
+
+	<sql id="fields">
+		interested_party_identifier.id_interested_party_identifier,
+        interested_party_identifier.fk_interested_party,
+        interested_party_identifier.fk_identifier,
+        interested_party_identifier.value,
+        identifier.code IPIDFL_code
+	</sql>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" />
+		  FROM interested_party_identifier
+		  INNER JOIN identifier ON identifier.id_identifier = interested_party_identifier.fk_identifier
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+			interested_party_identifier.id_interested_party_identifier = #{idInterestedPartyIdentifier}
+	</select>
+
+	<select id="findByIP" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+			interested_party_identifier.fk_interested_party = #{idInterestedParty}
+			<if test="code != null">
+				AND identifier.code = #{code}
+			</if>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO interested_party_identifier(fk_interested_party, fk_identifier, value)
+		VALUES (#{idInterestedParty},
+		        (SELECT id_identifier FROM identifier WHERE code = #{code}),
+		        #{value})
+	</insert>
+	
+	<delete id="deleteIpIdentifierByIp">
+		DELETE FROM interested_party_identifier
+		WHERE fk_interested_party = #{idInterestedParty}
+	</delete>
+	
+	<delete id="deleteIpIdentifierById">
+		DELETE FROM interested_party_identifier
+		WHERE id_interested_party_identifier = #{idIdentifier}
+	</delete>
+	
+	<select id="findByValueAndType" resultMap="resMap" >
+		<include refid="baseSelect" />
+		INNER JOIN interested_party ON interested_party.id_interested_party = interested_party_identifier.fk_interested_party
+		WHERE 	interested_party_identifier.value = #{value}
+		AND 	interested_party_identifier.fk_identifier = (SELECT id_identifier FROM identifier WHERE code = #{type})
+		AND  	interested_party.fk_status NOT IN (SELECT id_interested_party_status from interested_party_status aux_ip_status where aux_ip_status.code = '${@org.wipo.connect.shared.exchange.enumerator.InterestedPartyStatusEnum@DELETED.toString()}')
+	</select>
+	
+	<select id ="isIdentifierValueAlreadyPresent" resultType="boolean">
+		SELECT count(*)
+		FROM interested_party_identifier
+		INNER JOIN identifier ON identifier.id_identifier = interested_party_identifier.fk_identifier
+		INNER JOIN interested_party ON interested_party.id_interested_party = interested_party_identifier.fk_interested_party
+		
+		WHERE interested_party.fk_status NOT IN (SELECT id_interested_party_status from interested_party_status aux_ip_status where aux_ip_status.code = '${@org.wipo.connect.shared.exchange.enumerator.InterestedPartyStatusEnum@DELETED.toString()}')
+		AND identifier.code=#{code}
+		AND interested_party_identifier.value=#{value}
+		<if test="idIp != null">
+			AND interested_party.id_interested_party &lt;&gt; #{idIp}
+		</if>
+	</select>
+
+</mapper>
