@@ -85,7 +85,7 @@
 		</trim>
 	</select>
 
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idAccount"    keyColumn="id_account">
 
 		INSERT INTO account
 		( email, password, type, active,
@@ -94,10 +94,6 @@
 		(
 		#{email},#{password}, #{type}, #{active}, #{userInsert}, now(),
 		null,
-		null)
-
-		<selectKey   resultType="long" keyProperty="idAccount"    keyColumn="id_account"   order="BEFORE" >		
-		select next from _sequences where name = 'ID_ACCOUNT_SEQ'
-		</selectKey>	
+		null)	
 	</insert>
 </mapper>

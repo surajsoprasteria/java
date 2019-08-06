@@ -50,7 +50,7 @@
 		LEFT OUTER JOIN translation t4 ON (t4.id_translation = territory_name.fk_unofficial_name)
 	</sql>
 	
-	<insert id="insert" useGeneratedKeys="true">	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idTerritoryName"    keyColumn="id_territory_name">	
 		INSERT INTO territory_name(
 			fk_territory,
 			fk_name,
@@ -62,9 +62,7 @@
 			#{startDate},
 			#{endDate}
 		)
-		<selectKey   resultType="long" keyProperty="idTerritoryName"    keyColumn="id_territory_name"   order="BEFORE">				
-		select next from _sequences where name = 'ID_TERRITORY_NAME_SEQ'
-		</selectKey>
+		
 	</insert>
 	
 	<update id="updateByPrimaryKey" keyProperty="idTerritoryName">

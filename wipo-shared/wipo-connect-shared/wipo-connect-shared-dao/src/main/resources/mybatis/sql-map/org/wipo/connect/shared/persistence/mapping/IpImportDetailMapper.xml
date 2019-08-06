@@ -56,14 +56,12 @@
 	</update>
 
 
-	<insert id="insertIpImportDetail" useGeneratedKeys="true" flushCache="true">
+	<insert id="insertIpImportDetail" useGeneratedKeys="true" flushCache="true" keyProperty="idIpImportDetail"    keyColumn="id_ip_import_detail">
 		INSERT INTO ip_import_detail
 					( fk_ip_import,fk_interested_party,row_number,row_id,transaction,rowtype,result)
 		VALUES 		(#{fkIpImport},#{fkInterestedParty},#{rowNumber},#{rowId},#{transaction},#{rowType},#{result})
 		
-		<selectKey   resultType="long" keyProperty="idIpImportDetail"    keyColumn="id_ip_import_detail"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_IP_IMPORT_DETAIL_SEQ'
-		</selectKey>	
+			
 	</insert>
 	
 	<update id="updateImportDetailByFkIp">

@@ -105,23 +105,19 @@
 		where id_ip_import = #{idIpImport}
 	</update>
 
-	<insert id="insertIpImport" useGeneratedKeys="true" flushCache="true">
+	<insert id="insertIpImport" useGeneratedKeys="true" flushCache="true" keyProperty="idIpImport"    keyColumn="id_ip_import">
 		INSERT INTO ip_import
 					(import_code, fk_status, start_date, end_date)
 		VALUES 		(#{importCode},#{fkStatus}, #{startDate:TIMESTAMP}, #{endDate:TIMESTAMP})
 		
-		<selectKey   resultType="long" keyProperty="idIpImport"    keyColumn="id_ip_import"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_IP_IMPORT_SEQ'
-		</selectKey>	
+			
 	</insert>
 
-	<insert id="insertIpImportFile" useGeneratedKeys="true" flushCache="true">
+	<insert id="insertIpImportFile" useGeneratedKeys="true" flushCache="true" keyProperty="idIpImportFile"    keyColumn="id_ip_import_file">
 		INSERT INTO ip_import_file
 					(fk_ip_import,file_type,filename,filesize,content_type)
 		VALUES 		(#{fkIpImport},#{fileType},#{fileName},#{fileSize},#{contentType})
-		<selectKey   resultType="long" keyProperty="idIpImportFile"    keyColumn="id_ip_import_file"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_IP_IMPORT_FILE_SEQ'
-		</selectKey>
+		
 	</insert>
 
 	<update id="updateIpImportFromStatus" useGeneratedKeys="true" keyColumn="id_ip_import" keyProperty="idIpImport">

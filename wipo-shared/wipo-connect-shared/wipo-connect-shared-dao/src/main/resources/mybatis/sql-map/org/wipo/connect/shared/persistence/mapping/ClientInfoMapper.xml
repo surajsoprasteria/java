@@ -89,16 +89,14 @@
 		WHERE id_client_info = #{idClientInfo}
 	</update>
 
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idClientInfo"    keyColumn="id_client_info">
 		INSERT INTO client_info(fk_cmo,
                             client_key,
                             notes)
 		VALUES (#{fkCmo},
 		        #{clientKey},
 		        #{notes})
-		<selectKey   resultType="long" keyProperty="idClientInfo"    keyColumn="id_client_info"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_CLIENT_INFO_SEQ'
-		</selectKey>			        
+				        
 	</insert>
 
 	<insert id="insertClientPermission">

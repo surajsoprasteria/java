@@ -43,7 +43,7 @@
 		WHERE territory.id_territory = #{id}
 	</select>
 
-	<insert id="insert" useGeneratedKeys="true" >		
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idTerritory"    keyColumn="id_territory" >		
 		INSERT INTO territory(
 			code,
 			fk_type,
@@ -56,9 +56,7 @@
 			#{endDate}
 		)
 		
-		<selectKey   resultType="long" keyProperty="idTerritory"    keyColumn="id_territory"   order="BEFORE" >		
-		select next from _sequences where name = 'ID_TERRITORY_SEQ'
-		</selectKey>		
+				
 	</insert>
 
 	<update id="updateByPrimaryKey" keyProperty="idTerritory">

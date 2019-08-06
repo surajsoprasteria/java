@@ -58,7 +58,7 @@
 	</select>
 	
 	
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idRightType"    keyColumn="id_right_type">
 		INSERT INTO right_type (
 				code,
 				fk_name,
@@ -68,9 +68,7 @@
 				#{fkName},
 				#{fkDescription}
 			)
-		<selectKey   resultType="long" keyProperty="idRightType"    keyColumn="id_right_type"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_RIGHT_TYPE_SEQ'
-		</selectKey>			
+				
 	</insert>
 	
 	<update id="updateByPrimaryKey" keyProperty="idIpiRightType">

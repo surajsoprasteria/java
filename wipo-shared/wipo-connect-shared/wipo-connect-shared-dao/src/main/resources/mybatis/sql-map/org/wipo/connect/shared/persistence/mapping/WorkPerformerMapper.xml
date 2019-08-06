@@ -41,15 +41,13 @@
 
 
 
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idWorkPerformer"    keyColumn="id_work_performer">
 		INSERT INTO work_performer
 			(fk_work, performer_name )
 		VALUES
 			(#{fkWork}, #{performerName})
 			
-		<selectKey   resultType="long" keyProperty="idWorkPerformer"    keyColumn="id_work_performer"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_WORK_PERFORMER_SEQ'
-		</selectKey>			
+				
 	</insert>
 
 	<update id="update" useGeneratedKeys="true" keyProperty="idWorkPerformer"  keyColumn="id_work_performer">

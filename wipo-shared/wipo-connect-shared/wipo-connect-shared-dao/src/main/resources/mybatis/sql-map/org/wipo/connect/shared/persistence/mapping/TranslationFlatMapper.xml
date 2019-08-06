@@ -11,14 +11,12 @@
 	</resultMap>
 
 
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idTranslation"    keyColumn="id_translation">
 		INSERT INTO 	translation
 						(default_value)
 		VALUES
 						(#{defaultValue})
-	<selectKey   resultType="long" keyProperty="idTranslation"    keyColumn="id_translation"   order="BEFORE" >		
-		select next from _sequences where name = 'ID_TRANSLATION_SEQ'
-		</selectKey>						
+						
 	</insert>
 
 	<delete id="delete" >

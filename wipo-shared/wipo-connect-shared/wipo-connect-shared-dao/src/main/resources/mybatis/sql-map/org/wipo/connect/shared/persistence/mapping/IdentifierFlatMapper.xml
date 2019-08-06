@@ -56,7 +56,7 @@
 	</select>
 
 
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idIdentifier"    keyColumn="id_identifier">
 		INSERT INTO identifier (
 			code,
 			acronym,
@@ -68,9 +68,7 @@
 			#{fkName},
 			#{linkedEntity}
 		)
-		<selectKey   resultType="long" keyProperty="idIdentifier"    keyColumn="id_identifier"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_IDENTIFIER_SEQ'
-		</selectKey>	
+			
 	</insert>
 
 	<update id="updateByPrimaryKey" keyProperty="idIdentifier">

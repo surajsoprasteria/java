@@ -233,24 +233,20 @@
 	</sql>
 
 
-	<insert id="insertWorkTask" useGeneratedKeys="true" flushCache="true">
+	<insert id="insertWorkTask" useGeneratedKeys="true" flushCache="true" keyProperty="idWorkTask" keyColumn="id_work_task">
 		INSERT INTO work_task
 						(task_code, cmo_code)
 		VALUES
 						(#{taskCode}, #{cmoCode})
-		<selectKey   resultType="long" keyProperty="idWorkTask" keyColumn="id_work_task"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_WORK_TASK_SEQ'
-		</selectKey>							
+									
 	</insert>
 
-	<insert id="insertWorkTaskItem" useGeneratedKeys="true" flushCache="true">
+	<insert id="insertWorkTaskItem" useGeneratedKeys="true" flushCache="true" keyProperty="idWorkTaskItem" keyColumn="id_work_task_item">
 		INSERT INTO work_task_item
 					(fk_work_task,fk_work, item_status,progr,item_code)
 		VALUES
 					(#{fkWorkTask},#{fkWork},#{itemStatus},#{progr},#{itemCode})
-		<selectKey   resultType="long" keyProperty="idWorkTaskItem" keyColumn="id_work_task_item"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_WORK_TASK_ITEM_SEQ'
-		</selectKey>
+		
 	</insert>
 
 

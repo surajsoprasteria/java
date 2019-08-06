@@ -197,13 +197,11 @@
 			</trim>
 	</select>
 
-	<insert id="insertIpTask" useGeneratedKeys="true" flushCache="true">
+	<insert id="insertIpTask" useGeneratedKeys="true" flushCache="true" keyColumn="id_ip_task" keyProperty="idIpTask">
 		INSERT INTO ip_task(task_code, cmo_code)
 		VALUES (#{taskCode},#{cmoCode})
 				
-		<selectKey   resultType="long" keyColumn="id_ip_task" keyProperty="idIpTask" order="BEFORE">				
-		select next from _sequences where name = 'ID_IP_TASK_SEQ'
-		</selectKey>
+		
 	</insert>
 
 	<update id="updateTaskStatus" >
@@ -216,50 +214,40 @@
                 			AND 	ip_task_item.item_status != '${@org.wipo.connect.shared.exchange.enumerator.InterestedPartyTaskStatusEnum@COMPLETED.toString()}')
 	</update>
 
-	<insert id="insertIpTaskItem" useGeneratedKeys="true"  flushCache="true">
+	<insert id="insertIpTaskItem" useGeneratedKeys="true"  flushCache="true" keyColumn="id_ip_task_item" keyProperty="idIpTaskItem">
 		INSERT INTO ip_task_item(fk_ip_task,fk_interested_party, item_status,progr,item_code)
 		VALUES (#{fkIpTask},#{fkInterestedParty},#{itemStatus},#{progr},#{itemCode})
 		
-		<selectKey   resultType="long" keyColumn="id_ip_task_item" keyProperty="idIpTaskItem" order="BEFORE">				
-		select next from _sequences where name = 'ID_IP_TASK_ITEM_SEQ'
-		</selectKey>
+		
 	</insert>
 
-	<insert id="insertIpTaskItemDetail" useGeneratedKeys="true"  flushCache="true" >
+	<insert id="insertIpTaskItemDetail" useGeneratedKeys="true"  flushCache="true" keyColumn="id_ip_task_item_detail" keyProperty="idIpTaskItemDetail">
 		INSERT INTO ip_task_item_detail
 					(fk_ip_task_item, type, sex, birth_date, death_date, birth_place, birth_state, birth_country_code, marital_status,main_id,creation_date,amendment_timestamp)
 		VALUES 		(#{fkIpTaskItem},#{type},#{sex},#{birthDate},#{deathDate},#{birthPlace},#{birthState},#{birthCountryCode},#{maritalStatus}, #{mainId},#{creationDate},#{amendmentTimestamp})
 		
-		<selectKey   resultType="long" keyColumn="id_ip_task_item_detail" keyProperty="idIpTaskItemDetail" order="BEFORE">				
-		select next from _sequences where name = 'ID_IP_TASK_ITEM_DETAIL_SEQ'
-		</selectKey>
+		
 	</insert>
 
-	<insert id="insertIpTaskDetailAff" useGeneratedKeys="true" flushCache="true" >
+	<insert id="insertIpTaskDetailAff" useGeneratedKeys="true" flushCache="true" keyColumn="id_ip_task_detail_affiliation" keyProperty="idIpTaskDetailAffiliation" >
 		INSERT INTO ip_task_detail_affiliation(fk_ip_task_item_detail, cmo_code, start_date, end_date,share_value, signature_date,amendment_timestamp,territory_formula)
 		VALUES (#{fkIpTaskItemDetail}, #{cmoCode}, #{startDate},#{endDate},#{shareValue},#{signatureDate},#{amendmentTimestamp},#{territoryFormula})
 		
-		<selectKey   resultType="long" keyColumn="id_ip_task_detail_affiliation" keyProperty="idIpTaskDetailAffiliation" order="BEFORE">				
-		select next from _sequences where name = 'ID_IP_TASK_DET_AFF_SEQ'
-		</selectKey>
+		
 	</insert>
 
-	<insert id="insertIpTaskDetailAffDomain" useGeneratedKeys="true"  flushCache="true" >
+	<insert id="insertIpTaskDetailAffDomain" useGeneratedKeys="true"  flushCache="true" keyColumn="id_ip_task_detail_aff_domain" keyProperty="idIpTaskDetailAffiliationDomain" >
 		INSERT INTO ip_task_detail_aff_domain(fk_ip_task_item_detail, fk_ip_task_detail_affiliation, ipi_right_type_code, creation_class_code, ipi_role_code,is_excluded)
 		VALUES (#{fkIpTaskItemDetail}, #{fkIpTaskDetailAffiliation}, #{ipiRightTypeCode},#{creationClassCode},#{ipiRoleCode},#{isExcluded})
 		
-		<selectKey   resultType="long" keyColumn="id_ip_task_detail_aff_domain" keyProperty="idIpTaskDetailAffiliationDomain" order="BEFORE">				
-		select next from _sequences where name = 'ID_IP_TASK_DET_AFF_DOM_SEQ'
-		</selectKey>
+		
 	</insert>
 
-	<insert id="insertIpTaskDetailName" useGeneratedKeys="true"  flushCache="true" >
+	<insert id="insertIpTaskDetailName" useGeneratedKeys="true"  flushCache="true" keyColumn="id_ip_task_detail_name" keyProperty="idIpTaskDetailName" >
 		INSERT INTO ip_task_detail_name(fk_ip_task_item_detail, name, first_name, name_type, creation_timestamp,amendment_timestamp,main_id)
 		VALUES (#{fkIpTaskItemDetail}, #{name}, #{firstName},#{nameType},#{creationTimestamp},#{amendmentTimestamp},#{mainId})
 		
-		<selectKey   resultType="long" keyColumn="id_ip_task_detail_name" keyProperty="idIpTaskDetailName" order="BEFORE">				
-		select next from _sequences where name = 'ID_IP_TASK_DET_NAME_SEQ'
-		</selectKey>
+		
 	</insert>
 	
 
@@ -268,12 +256,10 @@
 		VALUES (#{fkIpTaskItemDetail}, #{code})
 	</insert>
 
-	<insert id="insertIpTaskDetailIdent" useGeneratedKeys="true" flushCache="true" >
+	<insert id="insertIpTaskDetailIdent" useGeneratedKeys="true" flushCache="true" keyColumn="id_ip_task_detail_ident" keyProperty="idIpTaskDetailIdent" >
 		INSERT INTO ip_task_detail_ident(fk_ip_task_item_detail, code, value)
 		VALUES (#{fkIpTaskItemDetail}, #{code}, #{value})
-		<selectKey   resultType="long" keyColumn="id_ip_task_detail_ident" keyProperty="idIpTaskDetailIdent" order="BEFORE">				
-		select next from _sequences where name = 'ID_IP_TASK_DET_IDENT_SEQ'
-		</selectKey>
+		
 	</insert>
 	<update id="updateTaskItemStatus" >
 		UPDATE 		ip_task_item

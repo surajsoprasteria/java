@@ -99,7 +99,7 @@
 		WHERE fk_derived_view = #{idDerivedView}
 	</select>
 
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idDerivedView"    keyColumn="id_derived_view">
 		INSERT INTO derived_view(
 		   fk_work,
 		   territory_formula
@@ -107,23 +107,19 @@
 		   #{fkWork},
 		   #{territoryFormula}
 		)
-		<selectKey   resultType="long" keyProperty="idDerivedView"    keyColumn="id_derived_view"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_DERIVED_VIEW_SEQ'
-		</selectKey>	
+			
 	</insert>
 
-	<insert id="insertDerivedViewName" useGeneratedKeys="true">
+	<insert id="insertDerivedViewName" useGeneratedKeys="true" keyProperty="idDerivedViewName"    keyColumn="id_derived_view_name" >
 		INSERT INTO derived_view_name(fk_derived_view, fk_name, fk_role,
 		creator_ref_index  ,  ref_index , fk_source_type)
 		VALUES (#{fkDerivedView}, #{name.idName}, #{fkRole},
 		#{creatorRefIndex} , #{refIndex},#{fkSourceType})
 		
-		<selectKey   resultType="long" keyProperty="idDerivedViewName"    keyColumn="id_derived_view_name"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_DERIVED_VIEW_NAME_SEQ'
-		</selectKey>	
+			
 	</insert>
 
-	<insert id="insertDerivedViewNameShare" useGeneratedKeys="true">
+	<insert id="insertDerivedViewNameShare" useGeneratedKeys="true" keyProperty="idDerivedViewNameShare"    keyColumn="id_derived_view_name_share">
 		INSERT INTO derived_view_name_share(fk_derived_view_name,
 		                                    fk_right_type,
 		                                    share_value)
@@ -137,9 +133,7 @@
 					</otherwise>
 				</choose>
 		 		#{shareValue})
-		<selectKey   resultType="long" keyProperty="idDerivedViewNameShare"    keyColumn="id_derived_view_name_share"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_DERIVED_VIEW_NAME_SHARE_SEQ'
-		</selectKey>
+		
 				
 	</insert>
 

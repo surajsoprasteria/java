@@ -785,7 +785,7 @@
 			work.id_work = #{idWork}
 	</update>
 
-	<insert id="insert_old" useGeneratedKeys="true">
+	<insert id="insert_old" useGeneratedKeys="true" keyProperty="idWork"    keyColumn="id_work">
 		INSERT INTO work(duration,
                          genre,
                          release_date,
@@ -839,9 +839,7 @@
 						#{language},
 						#{fkCreationClass},
 						#{componentPerc})
-		<selectKey   resultType="long" keyProperty="idWork"    keyColumn="id_work"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_WORK_SEQ'
-		</selectKey>						
+							
 
 	</insert>
 

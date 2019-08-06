@@ -51,7 +51,7 @@
 	</select>
 	
 	
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idReferenceType"    keyColumn="id_reference_type">
 		INSERT INTO reference_type(
 			code,
 			managed_by,
@@ -63,9 +63,7 @@
 			#{fkName},
 			#{fkDescription}
 		)
-		<selectKey   resultType="long" keyProperty="idReferenceType"    keyColumn="id_reference_type"   order="BEFORE" >		
-		select next from _sequences where name = 'ID_REFERENCE_TYPE_SEQ'
-		</selectKey>	
+			
 	</insert>
 
 	

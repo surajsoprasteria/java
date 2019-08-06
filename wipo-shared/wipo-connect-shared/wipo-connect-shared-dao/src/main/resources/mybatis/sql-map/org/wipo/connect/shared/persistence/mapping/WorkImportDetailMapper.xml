@@ -44,14 +44,12 @@
 	</update>
 
 
-	<insert id="insertWorkImportDetail" useGeneratedKeys="true" flushCache="true">
+	<insert id="insertWorkImportDetail" useGeneratedKeys="true" flushCache="true" keyProperty="idWorkImportDetail"    keyColumn="id_work_import_detail">
 		INSERT INTO work_import_detail
 					( fk_work_import,fk_work)
 		VALUES 		(#{fkWorkImport},#{fkWork})
 		
-		<selectKey   resultType="long" keyProperty="idWorkImportDetail"    keyColumn="id_work_import_detail"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_WORK_IMPORT_DETAIL_SEQ'
-		</selectKey>	
+		
 	</insert>
 	
 	<update id="updateImportDetailByFkWork">

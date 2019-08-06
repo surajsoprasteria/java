@@ -65,7 +65,7 @@
 		WHERE cmo.id_cmo = #{idCmo}
 	</select>
 	
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idCmo"    keyColumn="id_cmo">
 		INSERT INTO cmo(
 			name,
 			code,
@@ -81,9 +81,7 @@
 			#{fkOriginCountry},
 			#{isDataSource}
 		)
-		<selectKey   resultType="long" keyProperty="idCmo"    keyColumn="id_cmo"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_CMO_SEQ'
-		</selectKey>	
+			
 	</insert>
 	
 	<update id="updateByPrimaryKey" keyProperty="idCmo">

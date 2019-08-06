@@ -710,7 +710,7 @@
 			interested_party.id_interested_party = #{interestedPartyId}
 	</update>
 
-<insert id="insertDummy" useGeneratedKeys="true">
+<insert id="insertDummy" useGeneratedKeys="true" keyProperty="idInterestedParty"    keyColumn="id_interested_party">
 
 	INSERT INTO interested_party(	main_id,
 									deleted,
@@ -765,9 +765,7 @@
 									</choose>
 
 		)
-		<selectKey   resultType="long" keyProperty="idInterestedParty"    keyColumn="id_interested_party"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_INTERESTED_PARTY_SEQ'
-		</selectKey>	
+			
 	</insert>
 
 

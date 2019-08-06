@@ -102,7 +102,7 @@
 		
 	</select>
 
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idAffiliation"    keyColumn="id_affiliation">
 		INSERT INTO affiliation(fk_interested_party,
                                   fk_cmo,
                                   start_date,
@@ -119,9 +119,7 @@
 		        #{signatureDate},
 		        #{amendmentTimestamp},
 		        #{territoryFormula})
-		<selectKey   resultType="long" keyProperty="idAffiliation"    keyColumn="id_affiliation"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_AFFILIATION_SEQ'
-		</selectKey>			        
+					        
 	</insert>
 
 	<update id="updateByPrimaryKey" keyProperty="idAffiliation">

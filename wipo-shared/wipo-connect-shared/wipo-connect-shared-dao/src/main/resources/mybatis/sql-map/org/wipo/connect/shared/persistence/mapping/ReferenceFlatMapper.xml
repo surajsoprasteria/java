@@ -68,7 +68,7 @@
 	</select>
 	
 
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idReference"    keyColumn="id_reference">
 		INSERT INTO reference(
 			fk_ref_name,
 			fk_value,
@@ -80,9 +80,7 @@
 			#{code},
 			#{fkDescription}
 		)
-		<selectKey   resultType="long" keyProperty="idReference"    keyColumn="id_reference"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_REFERENCE_SEQ'
-		</selectKey>	
+			
 	</insert>
 	
 	<update id="updateByPrimaryKey" keyProperty="idReference">

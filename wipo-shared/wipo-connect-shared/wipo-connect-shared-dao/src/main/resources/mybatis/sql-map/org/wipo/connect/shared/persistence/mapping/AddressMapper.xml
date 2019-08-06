@@ -37,15 +37,12 @@
 		<result property="dateUpdate" column="address_date_update" />
 	</resultMap>
 
-	<insert id="insert" useGeneratedKeys="true" >
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idAddress"    keyColumn="id_address">
 		INSERT INTO address
 	    	(line_1,line_2,line_3,city,province,postcode,fk_country,address_type,user_insert,date_insert)
 	    VALUES
 	        (#{line1,jdbcType=VARCHAR},#{line2,jdbcType=VARCHAR},#{line3,jdbcType=VARCHAR},#{city,jdbcType=VARCHAR},
-	        #{province,jdbcType=BIGINT},#{postcode,jdbcType=BIGINT},#{fkCountry,jdbcType=BIGINT},#{addressType,jdbcType=VARCHAR},#{userInsert,jdbcType=VARCHAR},#{dateInsert,jdbcType=DATE})
-	   	<selectKey   resultType="long" keyProperty="idAddress"    keyColumn="id_address"   order="BEFORE" >		
-				select next from _sequences where name = 'ID_ADDRESS_SEQ'
-		</selectKey>	
+	        #{province,jdbcType=BIGINT},#{postcode,jdbcType=BIGINT},#{fkCountry,jdbcType=BIGINT},#{addressType,jdbcType=VARCHAR},#{userInsert,jdbcType=VARCHAR},#{dateInsert,jdbcType=DATE})	
 
 	</insert>
 

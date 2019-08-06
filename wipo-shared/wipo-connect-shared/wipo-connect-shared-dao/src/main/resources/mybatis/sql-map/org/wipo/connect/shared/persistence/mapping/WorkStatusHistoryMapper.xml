@@ -54,7 +54,7 @@
 		        now())
 	</insert>
 
-	<insert id="insert"  useGeneratedKeys="true" >
+	<insert id="insert"  useGeneratedKeys="true" keyProperty="idWorkStatusHistory"    keyColumn="id_work_status_history" >
 		INSERT INTO work_status_history(fk_work,
                                         fk_status,
                                         amendment_timestamp,
@@ -66,9 +66,7 @@
 		        #{userInsert},
 		        now())
 
-		<selectKey   resultType="long" keyProperty="idWorkStatusHistory"    keyColumn="id_work_status_history"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_WORK_STATUS_HISTORY_SEQ'
-		</selectKey>	
+			
 	</insert>
 
 </mapper>

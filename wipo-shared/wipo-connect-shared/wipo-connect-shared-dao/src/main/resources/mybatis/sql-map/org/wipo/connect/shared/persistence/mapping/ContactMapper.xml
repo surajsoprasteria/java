@@ -40,14 +40,12 @@
 		WHERE		contact.id_contact = #{idContact}
 	</update>
 
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idContact"    keyColumn="id_contact">
 		INSERT INTO 		contact
 							(contact_type, value,user_insert,date_insert)
 		VALUES
 							(#{contactType},#{value},#{userInsert},now())
-		<selectKey   resultType="long" keyProperty="idContact"    keyColumn="id_contact"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_CONTACT_SEQ'
-		</selectKey>								
+									
 
 	</insert>
 

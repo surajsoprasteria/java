@@ -231,17 +231,15 @@
 		WHERE ipn.fk_name=#{idName}
 	</select>
 
-	<insert id="insert_old" useGeneratedKeys="true">
+	<insert id="insert_old" useGeneratedKeys="true" keyProperty="idName"    keyColumn="id_name">
 		INSERT INTO name(name,first_name,name_type,creation_timestamp,amendment_timestamp,user_insert,date_insert)
 		VALUES (#{name},#{firstName},#{nameType},#{creationTimestamp},#{amendmentTimestamp},#{userInsert},now())
 		
-		<selectKey   resultType="long" keyProperty="idName"    keyColumn="id_name"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_NAME_SEQ'
-		</selectKey>
+		
 
 	</insert>
 
-	<insert id="insertDummy" useGeneratedKeys="true">
+	<insert id="insertDummy" useGeneratedKeys="true" keyProperty="idName"    keyColumn="id_name">
 		INSERT INTO name(	main_id,
 							name,
 							first_name,
@@ -262,9 +260,7 @@
 						now(),
 						1,
 						0)
-		<selectKey   resultType="long" keyProperty="idName"    keyColumn="id_name"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_NAME_SEQ'
-		</selectKey>							
+								
 	</insert>
 
 	<update id="updateByPrimaryKey" keyProperty="idName">

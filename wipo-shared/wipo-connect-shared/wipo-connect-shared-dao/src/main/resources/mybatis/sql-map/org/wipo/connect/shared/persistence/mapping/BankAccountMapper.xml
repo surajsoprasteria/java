@@ -26,14 +26,12 @@
 		<result property="typeOfPayment" column="type_of_payment" />
 	</resultMap>
 
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idAccount"    keyColumn="id_account">
 		INSERT INTO bank_account
 		( bank_name, branch, address, account_name,swift_code,ac_number, type_of_payment)
 		VALUES
 		(#{bankName},#{branch}, #{address}, #{accountName}, #{swiftCode}, #{acNumber}, #{typeOfPayment})
-		<selectKey   resultType="long" keyProperty="idAccount"    keyColumn="id_account"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_BANK_ACCOUNT_SEQ'
-		</selectKey>	
+		
 
 	</insert>
 

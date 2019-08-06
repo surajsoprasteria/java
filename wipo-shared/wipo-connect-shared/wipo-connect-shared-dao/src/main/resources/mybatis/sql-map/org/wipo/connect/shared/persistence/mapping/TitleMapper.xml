@@ -62,7 +62,7 @@
 		        SYSTIMESTAMP)
 
 	</insert> -->
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idTitle"    keyColumn="id_title">
 		INSERT INTO title(fk_type,
                             description,
                             user_insert,
@@ -72,9 +72,7 @@
 		        #{userInsert},
 		        CURRENT_TIMESTAMP)
 
-		<selectKey   resultType="long" keyProperty="idTitle"    keyColumn="id_title"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_TITLE_SEQ'
-		</selectKey>		      
+				      
 
 	</insert>
 

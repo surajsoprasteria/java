@@ -123,15 +123,13 @@
 			derived_work.fk_parent_work = #{idWork}
 	</select>
 
-	<insert id="insert" useGeneratedKeys="true">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="idDerivedWork"    keyColumn="id_derived_work">
 		INSERT INTO derived_work
 				(fk_work, fk_parent_work, weight, track_number)
 					VALUES
 				(#{fkWork}, #{fkParentWork}, #{weight}, #{trackNumber})
 				
-		<selectKey   resultType="long" keyProperty="idDerivedWork"    keyColumn="id_derived_work"   order="BEFORE" >		
-			select next from _sequences where name = 'ID_DERIVED_WORK_SEQ'
-		</selectKey>					
+						
 
 	</insert>
 
