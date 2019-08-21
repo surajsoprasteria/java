@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("org.wipo.connect.shared.identifierprocessor.repository")
-@PropertySource("classpath:database.properties")
+@PropertySource("classpath:application.properties")
 public class DataConfig {
 
 	private final String PROPERTY_DRIVER = "driver";
