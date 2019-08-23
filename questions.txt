@@ -1,0 +1,74 @@
+to_timestamp
+
+to_date
+
+
+Insert into DATABASECHANGELOG (ID,AUTHOR,FILENAME,DATEEXECUTED,ORDEREXECUTED,EXECTYPE,MD5SUM,DESCRIPTION,COMMENTS,TAG,LIQUIBASE) values ('1434458687301-118','fincons','0000-a-objects_tbl.xml',to_timestamp('2018-10-16 15:31:47','YYYY-MM-DD HH24:MI:SS'),1,'EXECUTED','7:eb13a8873418a73b885d4813f6a748d3','createTable',null,null,'3.3.5');
+
+Insert into DATABASECHANGELOG (ID,AUTHOR,FILENAME,DATEEXECUTED,ORDEREXECUTED,EXECTYPE,MD5SUM,DESCRIPTION,COMMENTS,TAG,LIQUIBASE) values ('1434458687301-118','fincons','0000-a-objects_tbl.xml', '2018-10-16 15:31:47',1,'EXECUTED','7:eb13a8873418a73b885d4813f6a748d3','createTable',null,null,'3.3.5');
+
+Insert into TERRITORY (ID_TERRITORY,CODE,FK_TYPE,START_DATE,END_DATE,USER_INSERT,DATE_INSERT,USER_UPDATE,DATE_UPDATE,MANAGED_BY_CMO) values (1,'0004',211,to_date('1000-01-01','YYYY-MM-DD'),to_date('3999-12-31','YYYY-MM-DD'),null,null,null,null,null);
+
+Insert into TERRITORY (ID_TERRITORY,CODE,FK_TYPE,START_DATE,END_DATE,USER_INSERT,DATE_INSERT,USER_UPDATE,DATE_UPDATE,MANAGED_BY_CMO) values (1,'0004',211,str_to_date('1000-01-01','%Y-%m-%d'),str_to_date('3999-12-31','%Y-%m-%d'),null,null,null,null,null);
+
+
+what is serialisation 
+
+how variables are prevented from serialisation 
+
+
+
+what is exception hirarchy 
+what is difference between checked and unchecked exception 
+why runtime exception is unchecked 
+
+try{
+File f = new File();
+f.getName();
+}finally{
+
+}
+can we write try with finally only in this try we have file related opration 
+
+public void show(String s)
+sop("String")
+public void show(Integer i)
+sop("Integer")
+public void show(Object o)
+sop("Object")
+is this case of overririding 
+show(null) then what is output 
+
+String s = null;
+sop(s.getName()) what is output 
+
+
+final int a;
+public void test()
+if(true){
+a = 30;
+}
+
+what is output
+
+
+final int a=20 ;
+public void test()
+if(true){
+a = 30;
+}
+what is output if exception occurs then it will be at compile time or runtime 
+
+
+what is @Version annotion in hibernate 
+
+Can we have final class in hibernate 
+
+how we can check which application has more load
+which application has 
+
+On which parameter we can trace the errors occured in miroservice if we have multiple microservice are up and running 
+
+
+draw your current project diagram 
+components of your project 

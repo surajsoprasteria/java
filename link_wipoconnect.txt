@@ -1,0 +1,182 @@
+
+
+
+CREATE SCHEMA `dbmigration2` DEFAULT CHARACTER SET utf8mb4 ;
+
+
+
+Queries used for getting details :
+Oracle : 
+select 
+   table_name, 
+   num_rows counter 
+from 
+   dba_tables 
+where 
+   owner = 'SYSTEM'
+order by 
+   table_name; 
+
+MySQL: 
+SELECT 
+    table_name, 
+    table_rows
+FROM
+    information_schema.tables
+WHERE
+    table_schema = 'dbmigration2'
+ORDER BY table_name;
+
+
+SET DEFINE OFF;
+
+
+
+keytool -import -alias wipo-suite-nexus -keystore "C:\Program Files\Java\jdk1.8.0_211\jre\lib\security\cacerts" -file wipo-suite-nexus.cer 
+
+keytool -import -alias wipo-suite-nexus -keystore "C:\Program Files\Java\jre1.8.0_191\lib\security\cacerts" -file wipo-suite-nexus.cer
+
+ipobsd.wipo.int.cer
+
+wipo-connect-shared\wipo-connect-shared-exchange\src\main\java\org\wipo\connect\shared\exchange\config
+SpringSharedExchangeConfig.java
+
+https://www.windowscentral.com/how-set-and-manage-ftp-server-windows-10
+
+
+
+
+http://localhost:8080/wipo-connect-shared-backend/rest/work/rebuildSolrIndex 
+
+
+http://localhost:8080/wipo-connect-shared-backend/rest/interestedParty/rebuildSolrIndex 
+
+
+http://hostname:8080/wipo-connect-shared-integration/EchoServicePort
+http://hostname:8080/wipo-connect-shared-integration/InterestedPartyServicePort
+http://hostname:8080/wipo-connect-shared-integration/WorkServicePort 
+
+
+
+wipo-connect/w1p0#web$ervice5
+connect@wipo.int/admin!wcc
+wipo-connet-rest/r3$t*ws-p4ss
+
+wipo-rest/w1p0@r3st!
+
+
+
+standalone tem
+
+
+
+wsBasicAuthUser=wipo-connect
+wsBasicAuthPass=w1p0#web$ervice5
+
+
+\\devsrv1\wipoconnect\offshore
+
+\\devsrv1\wipoconnect\offshore\test-shared-instance-4-suraj
+
+Good Morning,
+Please go to https://offshoreportal.wipo.int to change the password. 
+
+
+
+
+
+jboss.server.base.dir
+
+<paths>
+        <path name="deploy.dir" path="/usr/local/wildfly/standalone/"/>
+    </paths>
+
+#{PROP:base-dir}  replace with D:/data/connect
+
+
+
+
+@D:/software/exportshared2.8.3/exportshared2.8.3.sql
+
+
+
+mvn install:install-file -Dfile=D:/software/Devdyuti/jasperreports-html-component-6.3.0.jar -DgroupId=net.sf.jasperreports -DartifactId=jasperreports-html-component -Dversion=1.0.0 -Dpackaging=jar
+
+
+mvn install:install-file -Dfile=D:/software/Devdyuti/jasper-custom-fonts-1.0.0.jar -DgroupId=net.sf.jasperreports -DartifactId=jasper-custom-fonts -Dversion=1.0.0 -Dpackaging=jar 
+
+exception handling
+
+logger implementation 
+
+D:\WipoConnect\wipo-connect-shared\wipo-connect-shared-exchange\src\main\resources\config
+configuration.properties
+
+
+
+Ftp server: ipasftp.wipo.int
+Username: ipoffices
+Password: files4u
+
+
+jboss-web.xml 
+
+<resource-ref>
+        <res-ref-name>jdbc/wccLocalDS</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <jndi-name>java:/wccDSOracle</jndi-name>
+    </resource-ref>
+	
+	
+
+D:\WipoConnect\wipo-connect-shared\wipo-connect-shared-backend\src\main\webapp\META-INF
+context.xml
+
+     <Resource name="jdbc/wccSharedDS" auth="Container"
+        factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+       	type="javax.sql.DataSource"	driverClassName="oracle.jdbc.OracleDriver"
+		url="jdbc:oracle:thin:@192.168.0.77:1521:WCC" min-connections="2"
+		max-connections="10" defaultAutoCommit="false"
+		poolPreparedStatements="true" maxOpenPreparedStatements="50"
+		username="wipo_sprint_8" password="w1p0" maxActive="20" maxIdle="10"
+		maxWait="-1"/>
+		
+		
+		 <Resource name="jdbc/wccSharedDS" auth="Container"
+             type="javax.sql.DataSource"      driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/wipo_shared" min-connections="2"
+              max-connections="10" defaultAutoCommit="false"
+              poolPreparedStatements="true" maxOpenPreparedStatements="50"
+              username="root" password="Password@1" maxActive="20" maxIdle="10"
+              maxWait="-1"/> 
+			  
+			   <Resource name="jdbc/wccSharedDS" auth="Container"
+             type="javax.sql.DataSource"      driverClassName="oracle.jdbc.OracleDriver"
+              url="jdbc:oracle:thin:@localhost:1521:test" min-connections="2"
+              max-connections="10" defaultAutoCommit="false"
+              poolPreparedStatements="true" maxOpenPreparedStatements="50"
+              username="suraj" password="root" maxActive="20" maxIdle="10"
+              maxWait="-1"/>
+		
+		
+		
+wipo\SinghSu	
+Login: SinghSu
+Password: SiWi369147$
+Email: suraj.singh@wipo.int
+Password: SiWi369147$
+ 
+devsinghsu\12345@urwipoconnect		
+
+[ERROR]   The project org.wipo.suite.modules:rightowners-service:0.1-SNAPSHOT (D:\1Dev\RightOwners\rightowners-service\pom.xml) has 1 error
+[ERROR]     Non-resolvable parent POM for org.wipo.suite.modules:rightowners-service:0.1-SNAPSHOT: Could not transfer artifact org.springframework.boot:spring-boot-starter-parent:pom:2.0.5.RELEASE from/to WIPO (https://ipobsd.wipo.int/nexus/repository/wipo-suite/): Hostname ipobsd.wipo.int not verified:
+[ERROR]         certificate: sha256/qPGJfXGrQ413/jGwm9jtRqmsKnvo+bhobzWGSNO4dwk=
+[ERROR]         DN: EMAILADDRESS=sysadmin@wipo.int, CN=ipobsd.wipo.int, OU=PDS, O=WIPO, L=Geneva, ST=Geneva, C=CH
+[ERROR]         subjectAltNames: [] and 'parent.relativePath' points at wrong local POM @ line 7, column 10
+
+
+run application locally 
+1.jboss.xml
+2.context.xml
+3.standlone.xml
+3.Log param handler MD5 

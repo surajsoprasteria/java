@@ -1,0 +1,13 @@
+
+
+Find way to remove apinintializer class from identifireprocessor 
+
+remove "<provider>com.objectdb.jpa.Provider</provider>" from name and right owner service persistence.xml 
+
+find issue for >  name and right owner service "<provider>com.objectdb.jpa.Provider</provider>"
+Caused by: javax.persistence.PersistenceException: WFLYJPA0057: PersistenceProvider 'com.objectdb.jpa.Provider' not found
+
+
+update confluence for right owner microservice request response as named service 
+
+date format configuration for date know issue 1967 as 2067

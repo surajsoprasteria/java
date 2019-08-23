@@ -1,0 +1,127 @@
+
+
+
+
+
+22 August=====
+
+eclipse debugging configuration for code debug 
+
+@Scheduled(cron = "[Seconds] [Minutes] [Hours] [Day of month] [Month] [Day of week]")
+
+shared mainId dynamic value generate from UUID 
+
+migrate identifierprocessor code into springboot service 
+
+add java 8 features in exiting aplication and test 
+
+Explore ui configuration for jsp page mapping interestedPartySubmission/ip-submission
+
+enable sequrity feature and exiting feature in identifier processoer 
+
+2. 	Local >> right owner  1. >> submit 
+	                      2. >> synchronise 
+						 					  
+create cron which will print the latest sequence number from the database every 5 sec and desplay value on log file 
+
+implement cron on off 
+implement ro exiting functionality into processoer
+
+ro create in wcc local and validate for submit functionality cron feature 
+
+validate network shared folder access user/password 
+
+mop scheduleer implementation 
+
+jms implementation for mop 
+
+
+21 August=======
+
+
+crong enable 
+
+schedule job 
+
+schedule job switch for on off 
+
+
+20 August =========
+
+write junit test case for identifier processor 
+
+check all used class of identifier processor 
+
+
+logging enable in identifier processor 
+
+
+run main method from dos promt added in any project pacage  
+
+
+
+remove mysql connector from maven dependency and add in wildfly verson configuration for db connectivity 
+
+
+change the spring version to latest in identifier processor 
+
+https://howtodoinjava.com/spring-core/4-ways-to-schedule-tasks-in-spring-3-scheduled-example/
+
+
+https://www.concretepage.com/spring/spring-task-scheduler
+
+
+
+=======
+
+get request for next page data 
+
+for any specific page 
+
+caching implementation 
+
+validate unit test case 
+
+test api 
+
+
+proper error handling for inserting duplicate must give error for duplicate entry 
+
+find searching and sorting 
+
+
+/names
+
+
+/names/{mainId}
+
+
+difference between mainId and Id 
+
+which id we need to use for inserting new element 
+
+
+
+===============
+Java 1.8,
+
+Spring Boot,
+Microservices, 
+
+Restful API, 
+
+JSP, 
+
+Solr, 
+JS, 
+
+jQuery, 
+
+Hibernate 4.2.17, 
+
+MyBatis, 
+
+MySQL 8, 
+
+Eclipse, Jenkins
+
