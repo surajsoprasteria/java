@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wipo.connect.shared.persistence.mapping.IpImportMapper">
+
+	<sql id="fields">
+		ip_import.id_ip_import,
+		ip_import.import_code,
+		ip_import.fk_status,
+		ip_import.start_date,
+		ip_import.end_date,
+		ip_import.row_count,
+		ip_import.inserted_items,
+		ip_import.lines_with_errors
+	</sql>
+
+	<sql id="fieldsImportFile">
+		ip_import_file.id_ip_import_file,
+		ip_import_file.fk_ip_import,
+		ip_import_file.file_type,
+		ip_import_file.filename,
+		ip_import_file.filesize,
+		ip_import_file.content_type
+	</sql>
+
+
+	<resultMap id="importFileMap" type="IpImportFile">
+       <result property="idIpImportFile" column="id_ip_import_file" />
+       <result property="fkIpImport" column="fk_ip_import" />
+       <result property="fileType" column="file_type" />
+       <result property="fileName" column="filename" />
+       <result property="fileSize" column="filesize" />
+       <result property="contentType" column="content_type" />
+	</resultMap>
+
+	<resultMap id="resMap" type="IpImport">
+		<id property="idIpImport" column="id_ip_import" />
+		<result property="importCode" column="import_code" />
+		<result property="fkStatus" column="fk_status" />
+		<result property="startDate" column="start_date" />
+		<result property="endDate" column="end_date" />
+		<result property="rowCount" column="row_count" />
+		<result property="insertedItems" column="inserted_items" />
+		<result property="linesWithErrors" column="lines_with_errors" />
+		<collection property="ipImportFileList" ofType="IpImportFile" resultMap="org.wipo.connect.shared.persistence.mapping.IpImportMapper.importFileMap"/>
+	</resultMap>
+
+	<sql id="baseSelect">
+		SELECT
+			<include refid="fields" /> ,
+			<include refid="fieldsImportFile" />
+		FROM
+			ip_import
+			LEFT OUTER JOIN ip_import_file ON ip_import_file.fk_ip_import = ip_import.id_ip_import
+       		LEFT OUTER JOIN import_status ON import_status.id_import_status = ip_import.fk_status
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="resMap">
+		<include refid="baseSelect" />
+		WHERE
+			ip_import.id_ip_import = #{id}
+	</select>
+
+	<select id="findAll" resultMap="resMap">
+		<include refid="baseSelect" />
+		ORDER BY ip_import.id_ip_import desc
+	</select>
+
+	<select id="findIpImportFromStatus" resultMap="resMap">
+		 <include refid="baseSelect" />
+		WHERE	import_status.code = #{status}
+		ORDER BY ip_import.id_ip_import desc
+	</select>
+
+	<select id="findIpImportFileById" resultMap="importFileMap">
+		SELECT
+			<include refid="fieldsImportFile" />
+		from ip_import_file
+		WHERE ip_import_file.id_ip_import_file = #{id}
+	</select>
+
+	<update id="updateImportStatus">
+		update ip_import
+		   set fk_status = #{idStatus}
+		where id_ip_import = #{idIpImport}
+	</update>
+
+	<update id="updateImportStatusCode">
+		update ip_import
+		   set fk_status = (select id_import_status from import_status where code = #{statusCode})
+		where id_ip_import = #{idIpImport}
+	</update>
+
+	<update id="updateImportStartDate">
+		update ip_import
+		   set start_date = #{startDate:TIMESTAMP}
+		where id_ip_import = #{idIpImport}
+	</update>
+
+	<update id="updateImportEndDate">
+		update ip_import
+		   set end_date = #{endDate:TIMESTAMP}
+		where id_ip_import = #{idIpImport}
+	</update>
+
+	<insert id="insertIpImport" useGeneratedKeys="true" flushCache="true">
+		INSERT INTO ip_import
+					(import_code, fk_status, start_date, end_date)
+		VALUES 		(#{importCode},#{fkStatus}, #{startDate:TIMESTAMP}, #{endDate:TIMESTAMP})
+		
+		<selectKey   resultType="long" keyProperty="idIpImport"    keyColumn="id_ip_import"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_IP_IMPORT_SEQ'
+		</selectKey>	
+	</insert>
+
+	<insert id="insertIpImportFile" useGeneratedKeys="true" flushCache="true">
+		INSERT INTO ip_import_file
+					(fk_ip_import,file_type,filename,filesize,content_type)
+		VALUES 		(#{fkIpImport},#{fileType},#{fileName},#{fileSize},#{contentType})
+		<selectKey   resultType="long" keyProperty="idIpImportFile"    keyColumn="id_ip_import_file"   order="BEFORE" >		
+			select next from _sequences where name = 'ID_IP_IMPORT_FILE_SEQ'
+		</selectKey>
+	</insert>
+
+	<update id="updateIpImportFromStatus" useGeneratedKeys="true" keyColumn="id_ip_import" keyProperty="idIpImport">
+		UPDATE 		ip_import
+	   	SET			fk_status= (select id_import_status from import_status where code = #{status})
+	 	WHERE		ip_import.id_ip_import = #{idIpImport}
+	</update>
+
+	<update id="updateRowResult" keyColumn="id_ip_import" keyProperty="idIpImport">
+		UPDATE 		ip_import
+	   	SET			row_count=#{rowCount},
+	 				inserted_items=#{insertedItems},
+	 				lines_with_errors=#{linesWithErrors}
+	 	WHERE		ip_import.id_ip_import = #{idIpImport}
+	</update>
+
+
+	<resultMap id="resMapStatusFlat" type="ImportStatusFlat">
+		<id property="idImportStatus" column="id_import_status" />
+        <result property="value" column="default_value" />
+        <result property="code" column="code" />
+        <result property="sortOrder" column="sort_order" />
+	</resultMap>
+
+	<sql id="fieldsStatus">
+		import_status.id_import_status,
+		import_status.code,
+       	translation.default_value AS default_value,
+        import_status.sort_order sort_order
+	</sql>
+
+	<sql id="baseSelectStatus">
+		SELECT
+			<include refid="fieldsStatus" />
+		FROM import_status
+       	INNER JOIN translation ON translation.id_translation = import_status.fk_value
+	</sql>
+
+	<select id="findByCode" resultMap="resMapStatusFlat">
+		<include refid="baseSelectStatus" />
+		WHERE import_status.code = #{code}
+	</select>
+
+	<select id="countIpImportFileByName" resultType="java.lang.Long">
+	  	SELECT COUNT(*)
+		FROM ip_import_file
+		WHERE filename = #{fileName}
+	  </select>
+
+	<update id="markAllPendingAsError">
+		UPDATE 		ip_import
+	   	SET			fk_status= (select id_import_status from import_status where code = '${@org.wipo.connect.shared.exchange.enumerator.ImportStatusEnum@ERROR.toString()}')
+	 	WHERE		fk_status= (select id_import_status from import_status where code = '${@org.wipo.connect.shared.exchange.enumerator.ImportStatusEnum@IN_PROGRESS.toString()}')
+	</update>
+
+</mapper>
