@@ -3,6 +3,35 @@
 
 
 
+
+26 August ===============
+
+csv file add "Insert" in place of MA 
+
+
+logger implementation check for log file 
+
+
+
+
+
+23 August ===========
+
+
+public void importInterestedParty() throws IOException, WccException {}
+
+public void searchFilesToImport() throws WccException
+			>> public IpImport insertNewImportFile(IpImport ipImport) throws WccException
+		
+
+identify reusable method names and add in seudo code main method 
+Run method for flow implementation
+
+
+
+
+
+
 22 August=====
 
 eclipse debugging configuration for code debug 
