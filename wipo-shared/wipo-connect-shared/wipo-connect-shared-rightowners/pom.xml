@@ -32,7 +32,7 @@
 		<spring.mybatis.version>1.3.2</spring.mybatis.version>
 		<springfox.swagger>2.9.2</springfox.swagger>
 		<tomcat.version>9.0.14</tomcat.version>
-		<mysql.connector.version>8.0.15</mysql.connector.version>
+		<mysql.connector.version>8.0.16</mysql.connector.version>
 		<jackson.new.version>2.9.8</jackson.new.version>		
 	</properties>
 	
