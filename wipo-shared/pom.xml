@@ -91,7 +91,7 @@
 		<javax.jsp.version>2.3.3</javax.jsp.version>
 		<jstl.version>1.2</jstl.version>
 		<tiles.version>3.0.8</tiles.version>
-		<groovy.version>2.5.5</groovy.version>
+		<groovy.version>2.5.14</groovy.version>
 		<selenium.version>2.53.1</selenium.version>
 		<testng.version>6.8.5</testng.version>
 		<webdriver.firefox.version>2.49.0</webdriver.firefox.version>
