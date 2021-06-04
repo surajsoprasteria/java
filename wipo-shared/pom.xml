@@ -106,7 +106,7 @@
 		<jasper.custom.version>1.0.0</jasper.custom.version>
 		<xhtmlrenderer.version>R8</xhtmlrenderer.version>
 		<jtidy.version>4aug2000r7-dev</jtidy.version>
-		<httpclient.version>4.5.6</httpclient.version>
+		<httpclient.version>4.5.13</httpclient.version>
 		<apache.poi.version>3.17</apache.poi.version>
 		<javers.version>3.5.2</javers.version>
 		<jgrapht.version>1.0.1</jgrapht.version>
